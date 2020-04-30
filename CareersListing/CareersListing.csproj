@@ -11,9 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\" />
-    <Folder Include="View\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>
