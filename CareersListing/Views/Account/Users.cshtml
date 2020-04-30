@@ -1,0 +1,85 @@
+﻿@model IEnumerable<ApplicationUser>
+@inject UserManager<ApplicationUser> userMngr
+@{
+    ViewBag.Title = "Registered Users";
+    Layout = "../Administration/_AdminLayout";
+}
+
+
+
+    <div class="row pl-3 pr-3">
+
+        <!-- left column -->
+        <div class="col-sm-12">
+            <!-- general form elements -->
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <a class="btn btn-outline-primary"
+                           asp-action="CreateRole" asp-controller="Administration">CREATE ROLE</a>
+                    </h3>
+                </div>
+
+                @if (Model.Any())
+                {
+                    <table class="table table-striped projects">
+                        <thead>
+                            <tr>
+                                <th style="width: 50%">
+                                    Full Name (Lastname Firstname)
+                                </th>
+                                <th style="width: 30%">
+                                    Country
+                                </th>
+                                <th style="width: 20%">Manage Record</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var singleUser in Model)
+                            {
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <div class="text-right">
+                                            <form method="post" asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@singleUser.Id">
+                                                <a asp-action="Details" asp-controller="Administration" asp-route-id="@singleUser.Id" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-folder"></i> View
+                                                </a>
+
+                                                @if (userMngr.GetUserId(User) == singleUser.Id || User.IsInRole("Super Admin"))
+                                                {
+                                                    <a asp-action="Edit" asp-controller="Account" asp-route-id="@singleUser.Id" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </a>
+                                                }
+
+                                                @if (User.IsInRole("Super Admin"))
+                                                {
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                            onclick="return confirm('Please confirm your action! to delete : @singleUser.FirstName @singleUser.LastName');">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </button>
+                                                }
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    // this view did not recieve any roles
+                    <div>
+                        <div class="">
+                            No User created yet
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
