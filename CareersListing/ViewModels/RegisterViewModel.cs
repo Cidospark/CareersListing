@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using CareersListing.Models;
+using Microsoft.AspNetCore.Mvc;
+using CareersListing.Utilities;
 
 namespace CareersListing.ViewModels
 {
@@ -20,8 +22,8 @@ namespace CareersListing.ViewModels
         public AccountType AccountType { get; set; }
         [Required(ErrorMessage = "Email required")]
         [EmailAddress]
-        //[Remote(action: "IsEmailInUse", controller: "Account")]
-        //[ValidEmailDomain(allowedDomain: "sample.com", ErrorMessage = "Email domain must be 'sample.com'")]
+        [Remote(action: "IsEmailInUse", controller: "Account")]
+        [ValidEmailDomain(allowedDomain: "sample.com", ErrorMessage = "Email domain must be 'sample.com'")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password required")]

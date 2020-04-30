@@ -14,7 +14,7 @@
                 <div class="mb-3 text-center" style="font-size:24px; color:#ccc;"> - Register - </div>
             </div>
 
-            <form enctype="multipart/form-data" class="" method="post" asp-action="CreateUser" asp-controller="Account">
+            <form class="" method="post" asp-action="Register" asp-controller="Account">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div><small><span asp-validation-for="LastName" class="text-danger"></span></small></div>
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </div>
-                <div><small><span asp-validation-for="AccountType"></span></small></div>
+                <div><small><span asp-validation-for="AccountType" class="text-danger"></span></small></div>
                 <div class="input-group mb-3">
                     <div class="w-100 ">
                         <select asp-for="AccountType" asp-items="Html.GetEnumSelectList<AccountType>()" class="form-control">
