@@ -36,5 +36,12 @@ namespace CareersListing.ViewModels
         [Compare("Password", ErrorMessage = "Password and confirmation password does not match.")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
+        [MaxLength(100, ErrorMessage = "City must not be more than 100 characters")]
+        public string City { get; set; }
+
+        [Required]
+        public string Country { get; set; }
+
     }
 }
