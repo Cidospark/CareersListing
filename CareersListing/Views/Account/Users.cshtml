@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Registered Users";
     Layout = "../Administration/_AdminLayout";
+    var sn = 0;
 }
 
 
@@ -15,8 +16,8 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <a class="btn btn-outline-primary"
-                           asp-action="CreateRole" asp-controller="Administration">CREATE ROLE</a>
+                        <a class="btn btn-primary"
+                           asp-action="Register" asp-controller="Account">Register New User</a>
                     </h3>
                 </div>
 
@@ -24,22 +25,28 @@
                 {
                     <table class="table table-striped projects">
                         <thead>
-                            <tr>
-                                <th style="width: 50%">
-                                    Full Name (Lastname Firstname)
+                            <tr class="bg-navy text-white-50">
+                                <th style="width: 10%">#</th>
+                                <th style="width: 40%">
+                                    FULL NAME (Lastname Firstname)
                                 </th>
                                 <th style="width: 30%">
-                                    Country
+                                    COUNTRY
                                 </th>
-                                <th style="width: 20%">Manage Record</th>
+                                <th style="width: 20%"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-muted">
                             @foreach (var singleUser in Model)
                             {
+                                sn += 1;
                                 <tr>
-                                    <td></td>
+                                    <td>@sn</td>
                                     <td>
+                                        @singleUser.LastName.ToUpper() &nbsp; @singleUser.FirstName
+                                    </td>
+                                    <td>
+                                        @singleUser.Country
                                     </td>
                                     <td>
                                         <div class="text-right">
