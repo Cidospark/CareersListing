@@ -16,8 +16,6 @@ namespace CareersListing.Models
         [Required]
         public AccountType AccountType { get; set; }
 
-        [Required]
-        public string Nationality { get; set; }
         public string Street { get; set; }
 
         [Required]
@@ -33,5 +31,10 @@ namespace CareersListing.Models
 
         public Applicant Applicant { get; set; }
         public Employer Employer { get; set; }
+
+        public ApplicationUser()
+        {
+            DateRegistered = DateTime.Now;
+        }
     }
 }
