@@ -1,0 +1,91 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewBag.Title = "Register New Account";
+    Layout = "_AccountLayout";
+}
+
+
+<div class="register-box mt-3">
+    <div class="card">
+        <div class="card-body register-card-body">
+            <div class="">
+                <a href="#" style="font-size:41px; color:#0056B3;"><strong><i class="fa fa-briefcase"></i> Careers</strong>Listing</a>
+                <div class="mb-3 text-center" style="font-size:24px; color:#ccc;"> - Register - </div>
+            </div>
+
+            <form class="" method="post" asp-action="Register" asp-controller="Account">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div><small><span asp-validation-for="LastName" class="text-danger"></span></small></div>
+                <div class="input-group mb-3">
+                    <input asp-for="LastName" placeholder="Last Name" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <div><small><span asp-validation-for="FirstName" class="text-danger"></span></small></div>
+                <div class="input-group mb-3">
+                    <input asp-for="FirstName" placeholder="First Name" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <div><small><span asp-validation-for="AccountType" class="text-danger"></span></small></div>
+                <div class="input-group mb-3">
+                    <div class="w-100 ">
+                        <select asp-for="AccountType" asp-items="Html.GetEnumSelectList<AccountType>()" class="form-control">
+                            <option value="">---Select Gender---</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div><small><span asp-validation-for="Email" class="text-danger"></span></small></div>
+                <div class="input-group mb-3">
+                    <input asp-for="Email" placeholder="Email" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div><small><span asp-validation-for="Password" class="text-danger"></span></small></div>
+                <div class="input-group mb-3">
+                    <input asp-for="Password" class="form-control" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div><small><span asp-validation-for="ConfirmPassword" class="text-danger"></span></small></div>
+                <div class="input-group mb-3">
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+            <br />
+
+            <a asp-action="Login" asp-controller="Account"><small>Already a member? <span class="text-navy"><b>LOGIN</b></span></small></a>
+        </div>
+        <!-- /.form-box -->
+    </div><!-- /.card -->
+    <div class="text-muted text-center">
+        <small>Copyright &copy; @DateTime.Now.Year <a href="#">CareersListing</a>. All rights reserved.</small>
+    </div>
+</div>
