@@ -8,10 +8,10 @@
 
 
 
-    <div class="row pl-3 pr-3">
+    <div class="row  ml-5 mr-5 ">
 
         <!-- left column -->
-        <div class="col-sm-12">
+        <div class="col-sm-12  ml-3 mr-3">
             <!-- general form elements -->
             <div class="card card-primary card-outline">
                 <div class="card-header">
@@ -21,19 +21,19 @@
                     </h3>
                 </div>
 
-                @if (Model.Any())
+                @if (Model != null)
                 {
-                    <table class="table table-striped projects">
+                    <table class="table projects">
                         <thead>
-                            <tr class="bg-navy text-white-50">
-                                <th style="width: 10%">#</th>
-                                <th style="width: 40%">
+                            <tr class="bg-gradient-gray text-white-50" style="">
+                                <th style="width: 10%; color:#ccc">#</th>
+                                <th style="width: 40%; color:#ccc">
                                     FULL NAME (Lastname Firstname)
                                 </th>
-                                <th style="width: 30%">
+                                <th style="width: 30%; color:#ccc">
                                     COUNTRY
                                 </th>
-                                <th style="width: 20%"></th>
+                                <th style="width: 20%; color:#ccc"></th>
                             </tr>
                         </thead>
                         <tbody class="text-muted">
@@ -81,8 +81,8 @@
                 {
                     // this view did not recieve any roles
                     <div>
-                        <div class="">
-                            No User created yet
+                        <div class="p-5 text-black-50 text-center">
+                            NO ROLE CREATED YET
                         </div>
                     </div>
                 }
