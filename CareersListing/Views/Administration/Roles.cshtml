@@ -3,7 +3,7 @@
 @inject IAuthorizationService authorizationService
 
 @{
-    ViewBag.Title = "Manage Roles";
+    ViewBag.Title = "List of Roles";
     Layout = "_AdminLayout";
     var sn = 0;
 }
@@ -55,24 +55,16 @@
                                     <div class="text-right">
                                         @*@if ((await authorizationService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
                                         {*@
-                                            <form method="post" asp-action="DeleteRole" asp-controller="Administration" asp-route-id="@role.Id">
-                                                <a asp-action="EditRoleUsers" asp-controller="Administration" asp-route-roleId="@role.Id"
-                                                   class="btn btn-primary">
-                                                    Manage Role Users
-                                                </a>
-                                                <a asp-action="CreateRole" asp-controller="Administration" asp-route-id="@role.Id" class="btn btn-success">Edit</a>
-                                                <a href="#" id="delBtn_@role.Id" onclick="delConfirmation('@role.Id',true)" class="btn btn-danger">Delete</a>
-                                                <span id="conf_@role.Id" style="display:none;">
-                                                    <span style="display:block; padding:10px;"><b>Sure you want to delete:'@role.Name'?</b> Confirm this action &nbsp; </span>
-                                                    <button type="submit" class="btn btn-primary">Yes</button>
-                                                    <a href="#" onclick="delConfirmation('@role.Id',false)" class="btn btn-danger">No</a>
-                                                </span>
-                                            </form>
-                                        @*}
-                                        else
-                                        {
-                                            <h5 style="color:red; font-family:arial">Roles management denied for your access level.</h5>
-                                        }*@
+                                        <form method="post" asp-action="DeleteRole" asp-controller="Administration" asp-route-id="@role.Id">
+                                            <a asp-action="ManageRoleUsers" asp-controller="Administration" asp-route-roleId="@role.Id"
+                                               class="btn btn-primary">
+                                                Manage members
+                                            </a>
+                                            <a asp-action="CreateRole" asp-controller="Administration" asp-route-id="@role.Id" class="btn btn-success">Edit</a>
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Continue action to delete @role.Name Role?')">Delete</button>
+
+                                            <div asp-validation-summary="ModelOnly" class="no-bullet"></div>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

@@ -52,7 +52,7 @@ namespace CareersListing.Controllers
                 if (result.Succeeded)
                 {
                     ViewBag.ErrorTitle = "REGISTRATION WAS SUCCESSFUL!"; 
-                    ViewBag.ErrorMessage = "Please activate your account from the link sent to your email, Thank you.";
+                    ViewBag.Message = "Please activate your account from the link sent to your email, Thank you.";
                     return View();
                 }
 

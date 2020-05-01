@@ -1,6 +1,14 @@
 ﻿@model CreateRoleViewModel
 @{
-    ViewBag.Title = "Create New Role";
+    if (String.IsNullOrEmpty(ViewBag.PageTitle))
+    {
+        ViewBag.Title = "Create New Role";
+    }
+    else
+    {
+        ViewBag.Title = ViewBag.PageTitle;
+    }
+
     Layout = "_AdminLayout";
 }
 
@@ -10,14 +18,12 @@
         <div class="col-sm-12 ml-3 mr-3">
             <!-- general form elements -->
             <div class="card card-primary card-outline">
-                <div class="card-header">
-                    <h3 class="card-title"><b>Add New Role</b></h3>
-                </div>
-                <!-- /.card-header -->
                 <!-- form start -->
                 <form role="form" method="post" asp-action="CreateRole" asp-controller="Administration">
                     <div class="card-body">
                         <div asp-validation-summary="ModelOnly" class="no-bullet"></div>
+
+                        <input asp-for="Id" hidden />
 
                         <div class="row mb-2">
                             <div class="col-sm-6">
@@ -32,7 +38,12 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Create Role</button>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            @ViewBag.Title
+                        </button>
+                        
+
                         <a onclick="window.history.back()" class="btn btn-outline-danger">Cancel</a>
                     </div>
                 </form>

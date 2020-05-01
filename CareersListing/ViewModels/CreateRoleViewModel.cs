@@ -8,6 +8,7 @@ namespace CareersListing.ViewModels
 {
     public class CreateRoleViewModel
     {
+        public string Id { get; set; }
         [Required]
         public string RoleName { get; set; }
         

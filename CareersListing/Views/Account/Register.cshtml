@@ -16,11 +16,11 @@
 
             <form class="" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger" style="font-size:12px; list-style: none; "></div>
-                @if (!String.IsNullOrEmpty(ViewBag.ErrorMessage))
+                @if (!String.IsNullOrEmpty(ViewBag.Message))
                 {
                     <div class="mb-3 text-center alert alert-success" style="font-size:12px">
                         <div  class="text-capitalize text-center">@ViewBag.ErrorTitle</div>
-                        @ViewBag.ErrorMessage
+                        @ViewBag.Message
                     </div>
                 }
 
