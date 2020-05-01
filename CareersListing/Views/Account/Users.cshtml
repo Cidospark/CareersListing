@@ -26,14 +26,20 @@
                     <table class="table projects">
                         <thead>
                             <tr class="bg-gradient-gray text-white-50" style="">
-                                <th style="width: 10%;">#</th>
-                                <th style="width: 40%;">
+                                <th style="width: 5%;" class="text-center">#</th>
+                                <th style="width: 25%;">
                                     FULL NAME (Lastname Firstname)
                                 </th>
-                                <th style="width: 30%;">
+                                <th style="width: 15%;" class="text-center">
+                                    ACCOUNT TYPE
+                                </th>
+                                <th style="width: 20%;" class="text-center">
                                     COUNTRY
                                 </th>
-                                <th style="width: 20%;"></th>
+                                <th style="width: 10%;" class="text-center">
+                                    REG. DATE
+                                </th>
+                                <th style="width: 25%;"></th>
                             </tr>
                         </thead>
                         <tbody class="text-muted">
@@ -41,12 +47,18 @@
                             {
                                 sn += 1;
                                 <tr>
-                                    <td>@sn</td>
+                                    <td class="text-center">@sn</td>
                                     <td>
                                         @singleUser.LastName.ToUpper() &nbsp; @singleUser.FirstName
                                     </td>
-                                    <td>
+                                    <td class="text-center">
+                                        @singleUser.AccountType
+                                    </td>
+                                    <td class="text-center">
                                         @singleUser.Country
+                                    </td>
+                                    <td class="text-center">
+                                        @singleUser.DateRegistered
                                     </td>
                                     <td>
                                         <div class="text-right">

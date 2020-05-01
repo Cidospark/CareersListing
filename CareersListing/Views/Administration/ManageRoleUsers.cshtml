@@ -18,43 +18,46 @@
             </div>
             
             <div class="row ml-4 mt-4">
-                <div class="mr-5 col-md-5">
-                    <p class="text-danger"><b>Add or remove users from [@ViewBag.RoleName Role]</b></p>
-                    <form method="post">
-                        <div>
-                            <table class="table table-striped border">
-                                @for (int i = 0; i < Model.Count; i++)
-                                {
-                                    <tr>
-                                        <td class="p-3">
-                                            <div class="form-check">
-                                                <input type="hidden" asp-for="@Model[i].UserId" />
-                                                <input type="hidden" asp-for="@Model[i].UserName" />
-                                                <input asp-for="@Model[i].IsSelected" class="form-check-input" />
-                                                <label asp-for="@Model[i].IsSelected">
-                                                    @Model[i].UserName
-                                                </label>
-                                            </div>
-                                            <div asp-validation-summary="ModelOnly"></div>
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                        <br />
-                        <div>
-                            <input type="submit" value="Update" class="btn btn-primary" />
-                            <a asp-action="Roles" asp-controller="Administration" class="btn btn-danger">Cancel</a>
-                        </div>
-                        <br /><br />
-                    </form>
-                </div>
+                @if (ViewBag.RoleName != "Applicant" && ViewBag.RoleName != "Employer")
+                {
+                    <div class="mr-5 col-md-5">
+                        <p class="text-danger"><b>Add or remove users from [@ViewBag.RoleName Role]</b></p>
+                        <form method="post">
+                            <div style="max-height:400px; overflow-y:auto; padding-right:20px;">
+                                <table class="table table-striped border">
+                                    @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        <tr>
+                                            <td class="p-3">
+                                                <div class="form-check">
+                                                    <input type="hidden" asp-for="@Model[i].UserId" />
+                                                    <input type="hidden" asp-for="@Model[i].UserName" />
+                                                    <input asp-for="@Model[i].IsSelected" class="form-check-input" />
+                                                    <label asp-for="@Model[i].IsSelected">
+                                                        @Model[i].UserName
+                                                    </label>
+                                                </div>
+                                                <div asp-validation-summary="ModelOnly"></div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                            <br />
+                            <div>
+                                <input type="submit" value="Update" class="btn btn-primary" />
+                                <a asp-action="Roles" asp-controller="Administration" class="btn btn-danger">Cancel</a>
+                            </div>
+                            <br /><br />
+                        </form>
+                    </div>
+                }
                 <div class=" col-md-6" style="height:100%;">
                     <p class="text-primary"><b>List of users assigned to [@ViewBag.RoleName Role]</b></p>
 
-                    <div>
+                    <div style="max-height:400px; overflow-y:auto; padding-right:20px;">
                         <table class="table table" style="">
-                            
+
                             @if (Model.Count > 0)
                             {
                                 @for (int i = 0; i < Model.Count(); i++)
@@ -72,14 +75,15 @@
                                     }
 
                                 }
-                                @if(count < 1){
+                                @if (count < 1)
+                                {
                                     <tr>
-                                    <td>
-                                        <div class="form-check p-2">
-                                            No users found.
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            <div class="form-check p-2">
+                                                No users found.
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
                             }
                             else
@@ -95,7 +99,7 @@
 
                         </table>
                     </div>
-
+                    <a asp-action="Roles" asp-controller="Administration" class="btn btn-danger">Back</a>
                 </div>
             </div>
         </div>
