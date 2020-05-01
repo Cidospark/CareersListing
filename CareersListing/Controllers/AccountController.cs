@@ -41,6 +41,7 @@ namespace CareersListing.Controllers
                     UserName = model.Email,
                     LastName = model.LastName,
                     FirstName = model.FirstName,
+                    AccountType = model.AccountType,
                     City = model.City,
                     Country = model.Country,
                     Email = model.Email
@@ -51,6 +52,15 @@ namespace CareersListing.Controllers
 
                 if (result.Succeeded)
                 {
+                    if(model.AccountType == AccountType.Applicant)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Applicant");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Employer");
+                    }
+
                     ViewBag.ErrorTitle = "REGISTRATION WAS SUCCESSFUL!"; 
                     ViewBag.Message = "Please activate your account from the link sent to your email, Thank you.";
                     return View();

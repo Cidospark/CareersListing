@@ -1,0 +1,71 @@
+﻿@model IEnumerable<ClaimsStoreViewModel>
+
+@{
+    ViewBag.Title = "List of Claims";
+    Layout = "_AdminLayout";
+    var sn = 0;
+}
+
+
+
+
+<div class="row ml-5 mr-5">
+
+    <!-- left column -->
+    <div class="col-sm-12  ml-3 mr-3">
+        <!-- general form elements -->
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    All Claims
+                </h3>
+            </div>
+            <div style="overflow-x:auto; max-height:430px;">
+                @if (Model != null)
+                {
+                    <table class="table table-striped projects">
+                        <thead>
+                            <tr class="bg-gradient-gray text-white-50">
+                                <th style="width: 10%" class="text-center">#</th>
+                                <th style="width: 45%">
+                                    CLAIM NAME
+                                </th>
+                                <th style="width: 45%"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-muted">
+                            @foreach (var claim in Model)
+                            {
+                                sn += 1;
+                                <tr>
+                                    <td class="text-center">@sn</td>
+                                    <td>
+                                        @claim.ClaimType
+                                    </td>
+                                    <td>
+                                        <div class="text-right">
+                                            <a asp-action="ManageClaimsUsers" asp-controller="Administration" asp-route-type="@claim.ClaimType"
+                                               class="btn btn-primary">
+                                                Manage Claims members
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    // this view did not recieve any roles
+                    <div>
+                        <div class="p-5 text-black-50 text-center">
+                            NO ROLE CREATED YET
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

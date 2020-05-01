@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CareersListing.Models;
 using CareersListing.ViewModels;
@@ -32,6 +33,122 @@ namespace CareersListing.Controllers
         // -------------------------------------------------------- 
 
 
+
+        // Manage claims users
+        [HttpGet]
+        public IActionResult ClaimsList()
+        {
+            var list = new List<ClaimsStoreViewModel>();
+            foreach (var claim in ClaimsStore.AllCliams)
+            {
+                var claimsList = new ClaimsStoreViewModel()
+                {
+                    ClaimType = claim.Type
+                };
+                list.Add(claimsList);
+            }
+            return View(list);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ManageClaimsUsers(string type)
+        {
+            if (String.IsNullOrEmpty(type))
+            {
+                ViewBag.ErrorMessage = "Claim type is null or enpty";
+                return RedirectToAction("NotFound");
+            }
+            // create a container object to hold the list of claims users
+            var list = new List<ClaimsUsersViewModel>();
+
+
+            // GET ALL USERS
+            foreach (var user in _userManager.Users)
+            {
+                // create a user object and map Id, username values of the current user to it
+                var claimUser = new ClaimsUsersViewModel
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName
+                };
+
+                // get all the claims of this user
+                var userClaims  = await _userManager.GetClaimsAsync(user);
+
+                // check for a match
+                for(int i=0; i < userClaims.Count; i++)
+                {
+                    if(userClaims[i].Type == type)
+                    {
+                        claimUser.IsSelected = true;
+                        break;
+                    }
+                }
+
+                list.Add(claimUser);
+
+            }
+            
+            ViewBag.ClaimType = type;
+            return View(list);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ManageClaimsUsers(List<ClaimsUsersViewModel> model, string type)
+        {
+            if (String.IsNullOrEmpty(type))
+            {
+                ViewBag.ErrorMessage = "Claim type is null or enpty";
+                return RedirectToAction("NotFound");
+            }
+
+            // create a container object to hold the list of claims users
+            var list = new List<ClaimsUsersViewModel>();
+
+
+            foreach (var record in model)
+            {
+                var user = _userManager.Users.FirstOrDefault(u => u.Id == record.UserId);
+                if(user == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    var listClaim = new ClaimsUsersViewModel
+                    {
+                        UserId = record.UserId,
+                        UserName = record.UserName
+                    };
+
+                    IdentityResult result = null;
+                    // add all current selected claims
+                    if (record.IsSelected)
+                    {
+                        result = await _userManager.AddClaimAsync(user, new Claim(type, "true"));
+                        listClaim.IsSelected = true;
+                        // TODO : throw error if the above operation fails
+                    }
+                    // remove all current unselected claims
+                    else
+                    {
+                        result = await _userManager.RemoveClaimAsync(user, new Claim(type, "true"));
+                        listClaim.IsSelected = false;
+                        // TODO : throw error if the above operation fails
+                    }
+
+                    if (result.Succeeded)
+                    {
+                        list.Add(listClaim);
+                    }
+
+                }
+            }
+
+            return View(list);
+        }
+        // -------------------------------------------------------- 
+
+
+
         // DeleteRole
         [HttpPost]
         public async Task<IActionResult> DeleteRole(string id)
@@ -56,6 +173,7 @@ namespace CareersListing.Controllers
             return RedirectToAction ("Roles", "Administration");
         }
         // -------------------------------------------------------- 
+
 
         // Manage role users
         [HttpGet]
@@ -117,9 +235,13 @@ namespace CareersListing.Controllers
                     if(model[i].IsSelected && !(await _userManager.IsInRoleAsync(user, role.Name)))
                     {
                         await _userManager.AddToRoleAsync(user, role.Name);
+                        // TODO : throw error if the above operation fails
+
                     }// if user is not select and is in role, remove user from role
                     else if(!model[i].IsSelected && await _userManager.IsInRoleAsync(user, role.Name)){
                         await _userManager.RemoveFromRoleAsync(user, role.Name);
+                        // TODO : throw error if the above operation fails
+
                     }// else continue
                     else
                     {
@@ -131,6 +253,7 @@ namespace CareersListing.Controllers
             return RedirectToAction("ManageRoleUsers","Administration", new { roleId = roleId});
         }
         // -------------------------------------------------------- 
+
 
         // Create role
         [HttpGet]
@@ -201,6 +324,7 @@ namespace CareersListing.Controllers
             return View(model);
         }
         // -------------------------------------------------------- 
+
 
         [HttpGet]
         public IActionResult Roles()
