@@ -1,0 +1,92 @@
+﻿@model IEnumerable<ApplicationUser>
+@inject UserManager<ApplicationUser> userMngr
+@{
+    ViewBag.Title = "Registered Users";
+    Layout = "../Administration/_AdminLayout";
+    var sn = 0;
+}
+
+
+
+    <div class="row  ml-5 mr-5 ">
+
+        <!-- left column -->
+        <div class="col-sm-12  ml-3 mr-3">
+            <!-- general form elements -->
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <a class="btn btn-primary"
+                           asp-action="Register" asp-controller="Account">Register New User</a>
+                    </h3>
+                </div>
+
+                @if (Model != null)
+                {
+                    <table class="table projects">
+                        <thead>
+                            <tr class="bg-gradient-gray text-white-50" style="">
+                                <th style="width: 10%;">#</th>
+                                <th style="width: 40%;">
+                                    FULL NAME (Lastname Firstname)
+                                </th>
+                                <th style="width: 30%;">
+                                    COUNTRY
+                                </th>
+                                <th style="width: 20%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-muted">
+                            @foreach (var singleUser in Model)
+                            {
+                                sn += 1;
+                                <tr>
+                                    <td>@sn</td>
+                                    <td>
+                                        @singleUser.LastName.ToUpper() &nbsp; @singleUser.FirstName
+                                    </td>
+                                    <td>
+                                        @singleUser.Country
+                                    </td>
+                                    <td>
+                                        <div class="text-right">
+                                            <form method="post" asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@singleUser.Id">
+                                                <a asp-action="Details" asp-controller="Administration" asp-route-id="@singleUser.Id" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-folder"></i> View
+                                                </a>
+
+                                                @if (userMngr.GetUserId(User) == singleUser.Id || User.IsInRole("Super Admin"))
+                                                {
+                                                    <a asp-action="Edit" asp-controller="Account" asp-route-id="@singleUser.Id" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </a>
+                                                }
+
+                                                @if (User.IsInRole("Super Admin"))
+                                                {
+                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                            onclick="return confirm('Please confirm your action! to delete : @singleUser.FirstName @singleUser.LastName');">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </button>
+                                                }
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    // this view did not recieve any roles
+                    <div>
+                        <div class="p-5 text-black-50 text-center">
+                            NO ROLE CREATED YET
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>

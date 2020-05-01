@@ -52,7 +52,7 @@ namespace CareersListing.Controllers
                 if (result.Succeeded)
                 {
                     ViewBag.ErrorTitle = "REGISTRATION WAS SUCCESSFUL!"; 
-                    ViewBag.ErrorMessage = "Please activate your account from the link sent to your email, Thank you.";
+                    ViewBag.Message = "Please activate your account from the link sent to your email, Thank you.";
                     return View();
                 }
 
@@ -63,9 +63,9 @@ namespace CareersListing.Controllers
             }
             return View(model);
         }
+        //--------------------------------------------------------------------------------------------------------
 
-        //-- Register ends
-
+        // Check if email already exists
         [AcceptVerbs("Get","Post")]
         [AllowAnonymous]
         public async Task<IActionResult> IsEmailInUse(string email)
@@ -80,5 +80,17 @@ namespace CareersListing.Controllers
                 return Json($"Email {email} already exists!");
             }
         }
+        //--------------------------------------------------------------------------------------------------------
+
+        // List of registered users
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Users()
+        {
+            var users = _userManager.Users;
+            return View(users);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
     }
 }

@@ -1,0 +1,58 @@
+﻿@model CreateRoleViewModel
+@{
+    if (String.IsNullOrEmpty(ViewBag.PageTitle))
+    {
+        ViewBag.Title = "Create New Role";
+    }
+    else
+    {
+        ViewBag.Title = ViewBag.PageTitle;
+    }
+
+    Layout = "_AdminLayout";
+}
+
+    <div class="row ml-5 mr-5">
+
+        <!-- left column -->
+        <div class="col-sm-12 ml-3 mr-3">
+            <!-- general form elements -->
+            <div class="card card-primary card-outline">
+                <!-- form start -->
+                <form role="form" method="post" asp-action="CreateRole" asp-controller="Administration">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="no-bullet"></div>
+
+                        <input asp-for="Id" hidden />
+
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label asp-for="RoleName"></label>
+                                    <input asp-for="RoleName" placeholder="Role Name" class="form-control" />
+                                </div>
+                                <span asp-validation-for="RoleName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        
+                        <button type="submit" class="btn btn-primary">
+                            @ViewBag.Title
+                        </button>
+                        
+
+                        <a onclick="window.history.back()" class="btn btn-outline-danger">Cancel</a>
+                    </div>
+                </form>
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.content-wrapper -->
+
+    </div>
+
+
