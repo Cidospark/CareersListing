@@ -20,85 +20,88 @@
                            asp-action="Register" asp-controller="Account">Register New User</a>
                     </h3>
                 </div>
-
-                @if (Model != null)
-                {
-                    <table class="table projects">
-                        <thead>
-                            <tr class="bg-gradient-gray text-white-50" style="">
-                                <th style="width: 5%;" class="text-center">#</th>
-                                <th style="width: 25%;">
-                                    FULL NAME (Lastname Firstname)
-                                </th>
-                                <th style="width: 15%;" class="text-center">
-                                    ACCOUNT TYPE
-                                </th>
-                                <th style="width: 20%;" class="text-center">
-                                    COUNTRY
-                                </th>
-                                <th style="width: 10%;" class="text-center">
-                                    REG. DATE
-                                </th>
-                                <th style="width: 25%;"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-muted">
-                            @foreach (var singleUser in Model)
-                            {
-                                sn += 1;
-                                <tr>
-                                    <td class="text-center">@sn</td>
-                                    <td>
-                                        @singleUser.LastName.ToUpper() &nbsp; @singleUser.FirstName
-                                    </td>
-                                    <td class="text-center">
-                                        @singleUser.AccountType
-                                    </td>
-                                    <td class="text-center">
-                                        @singleUser.Country
-                                    </td>
-                                    <td class="text-center">
-                                        @singleUser.DateRegistered
-                                    </td>
-                                    <td>
-                                        <div class="text-right">
-                                            <form method="post" asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@singleUser.Id">
-                                                <a asp-action="Details" asp-controller="Administration" asp-route-id="@singleUser.Id" class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-folder"></i> View
-                                                </a>
-
-                                                @if (userMngr.GetUserId(User) == singleUser.Id || User.IsInRole("Super Admin"))
-                                                {
-                                                    <a asp-action="Edit" asp-controller="Account" asp-route-id="@singleUser.Id" class="btn btn-sm btn-success">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </a>
-                                                }
-
-                                                @if (User.IsInRole("Super Admin"))
-                                                {
-                                                    <button type="submit" class="btn btn-sm btn-danger"
-                                                            onclick="return confirm('Please confirm your action! to delete : @singleUser.FirstName @singleUser.LastName');">
-                                                        <i class="fas fa-trash"></i> Delete
-                                                    </button>
-                                                }
-                                            </form>
-                                        </div>
-                                    </td>
+                <div style="overflow-x:auto; max-height:430px;">
+                    @if (Model != null)
+                    {
+                        <table class="table projects">
+                            <thead>
+                                <tr class="bg-gradient-gray text-white-50" style="">
+                                    <th style="width: 5%;" class="text-center">#</th>
+                                    <th style="width: 25%;">
+                                        FULL NAME (Lastname Firstname)
+                                    </th>
+                                    <th style="width: 15%;" class="text-center">
+                                        ACCOUNT TYPE
+                                    </th>
+                                    <th style="width: 20%;" class="text-center">
+                                        COUNTRY
+                                    </th>
+                                    <th style="width: 10%;" class="text-center">
+                                        REG. DATE
+                                    </th>
+                                    <th style="width: 25%;"></th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    // this view did not recieve any roles
-                    <div>
-                        <div class="p-5 text-black-50 text-center">
-                            NO ROLE CREATED YET
-                        </div>
-                    </div>
-                }
+                            </thead>
+                            <tbody class="text-muted">
+                                @foreach (var singleUser in Model)
+                                {
+                                    sn += 1;
+                                    <tr>
+                                        <td class="text-center">@sn</td>
+                                        <td>
+                                            @singleUser.LastName.ToUpper() &nbsp; @singleUser.FirstName
+                                        </td>
+                                        <td class="text-center">
+                                            @singleUser.AccountType
+                                        </td>
+                                        <td class="text-center">
+                                            @singleUser.Country
+                                        </td>
+                                        <td class="text-center">
+                                            @singleUser.DateRegistered
+                                        </td>
+                                        <td>
+                                            <div class="text-right">
+                                                <form method="post" asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@singleUser.Id">
+                                                    <a asp-action="Details" asp-controller="Administration" asp-route-id="@singleUser.Id" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-folder"></i> View
+                                                    </a>
 
+                                                    @if (userMngr.GetUserId(User) == singleUser.Id || User.IsInRole("Super Admin"))
+                                                    {
+                                                        <a asp-action="Edit" asp-controller="Account" asp-route-id="@singleUser.Id" class="btn btn-sm btn-success">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                    }
+
+                                                    @if (User.IsInRole("Super Admin"))
+                                                    {
+                                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                                onclick="return confirm('Please confirm your action! to delete : @singleUser.FirstName @singleUser.LastName');">
+                                                            <i class="fas fa-trash"></i> Delete
+                                                        </button>
+                                                    }
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        // this view did not recieve any roles
+                        <div>
+                            <div class="p-5 text-black-50 text-center">
+                                NO ROLE CREATED YET
+                            </div>
+                        </div>
+                    }
+                </div>
+            <div class="card-footer">
+                <b>@userMngr.Users.Count() Registered Users</b>
+            </div>
             </div>
         </div>
     </div>
