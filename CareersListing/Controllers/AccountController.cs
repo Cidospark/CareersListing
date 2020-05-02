@@ -16,12 +16,60 @@ namespace CareersListing.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController(UserManager<ApplicationUser> userManager,
+                                 SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
-        
+
+        // Login
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel model, string ReturnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if(user == null)
+                {
+                    ModelState.AddModelError(String.Empty, "Email not confirmed yet");
+                    return View(model);
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
+                if (result.Succeeded)
+                {
+                    if (!String.IsNullOrEmpty(ReturnUrl))
+                    {
+                        return LocalRedirect(ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Dashboard","Administration");
+                    }
+                }
+
+                //if (result.IsLockedOut)
+                //{
+                //    return View("AccountLockedout");
+                //}
+
+                ModelState.AddModelError("", "Invalid Attempt");
+
+            }
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
         // Register User
         [HttpGet]
         [AllowAnonymous]

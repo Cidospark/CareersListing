@@ -1,0 +1,69 @@
+﻿@model LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "_AccountLayout";
+}
+
+
+<div class="register-box mt-3">
+    <div class="card">
+        <div class="card-body register-card-body">
+            <div class="">
+                <a href="#" style="font-size:41px; color:#0056B3;"><strong><i class="fa fa-briefcase"></i> Careers</strong>Listing</a>
+                <div class="mb-3 text-center" style="font-size:24px; color:#ccc;"> - Login - </div>
+            </div>
+
+            <form class="" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" style="font-size:12px; list-style: none; "></div>
+               
+                <div><small><span asp-validation-for="Email" class="text-danger"></span></small></div>
+                <div class="input-group mb-3">
+                    <input asp-for="Email" placeholder="Email" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div><small><span asp-validation-for="Password" class="text-danger"></span></small></div>
+                <div class="input-group mb-3">
+                    <input asp-for="Password" placeholder="Password" class="form-control" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-8 mb-2">
+                        <div class="icheck-primary">
+                            <label asp-for="RememberMe" class="font-weight-lighter ml-0" style="margin-left:-30px;">
+                                <input asp-for="RememberMe" /> @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="#" asp-controller="#"><small>Forgot password?</small></a>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+            <br />
+
+            <a asp-action="Register" asp-controller="Account"><small>Need an account? <span class="text-navy"><b> &nbsp;REGISTER</b></span></small></a>
+        </div>
+        <!-- /.form-box -->
+    </div><!-- /.card -->
+    <div class="text-muted text-center">
+        <small>Copyright &copy; @DateTime.Now.Year <a href="#">CareersListing</a>. All rights reserved.</small>
+    </div>
+</div>
