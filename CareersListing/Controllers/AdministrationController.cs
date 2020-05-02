@@ -26,12 +26,28 @@ namespace CareersListing.Controllers
         }
         // -------------------------------------------------------- 
 
+
         public IActionResult Index()
         {
             return RedirectToAction("Dashboard", "Administration");
         }
         // -------------------------------------------------------- 
 
+
+
+        // Dashboard
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // 
+        [HttpGet]
+
+        //--------------------------------------------------------------------------------------------------------
 
 
         // Manage claims users
