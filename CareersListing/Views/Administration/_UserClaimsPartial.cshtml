@@ -1,0 +1,27 @@
+﻿@model ProfileViewModel
+
+<div class="p-4">
+    <div><big><b>Claims</b></big></div>
+    <div class="pt-2">
+        @if (Model.Claims.Any())
+        {
+            <ol style="margin-left:0px; padding-left:15px;">
+                @foreach (var claim in Model.Claims)
+                {
+                    <li>&nbsp; @claim</li>
+                }
+            </ol>
+        }
+        else
+        {
+            <h5>None at the moment</h5>
+        }
+        @if (User.IsInRole("Super Admin"))
+        {
+        <div>
+            <a asp-action="ManageUserClaims" asp-route-userId="@Model.Id" asp-controller="Administration"
+               class="btn btn-outline-primary">Manage Claims</a>
+        </div>
+        }
+    </div>
+</div>

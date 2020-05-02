@@ -30,6 +30,10 @@ namespace CareersListing.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Dashboard", "Administration");
+            }
             return View();
         }
         [HttpPost]
@@ -149,6 +153,14 @@ namespace CareersListing.Controllers
             return View(users);
         }
         //--------------------------------------------------------------------------------------------------------
+
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
 
     }
 }

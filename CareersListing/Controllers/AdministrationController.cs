@@ -26,12 +26,59 @@ namespace CareersListing.Controllers
         }
         // -------------------------------------------------------- 
 
+
         public IActionResult Index()
         {
             return RedirectToAction("Dashboard", "Administration");
         }
         // -------------------------------------------------------- 
 
+
+
+        // Dashboard
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // 
+        [HttpGet]
+        public async Task<IActionResult> Profile(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id : {Id} was not found";
+                return View("NotFound");
+            }
+
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+
+            var model = new ProfileViewModel
+            {
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                AccountType = user.AccountType,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Street = user.Street,
+                City = user.City,
+                Country = user.Country,
+                ExistingPhotoPath = user.Photo,
+                DateRegistered = user.DateRegistered,
+                Claims = userClaims.Where(x => x.Value == "true").Select(c => c.Type).ToList(),
+                Roles = userRoles
+            };
+
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
 
 
         // Manage claims users
