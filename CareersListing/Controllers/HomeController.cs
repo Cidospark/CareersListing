@@ -14,7 +14,7 @@ namespace CareersListing.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return RedirectToAction("Register", "Account");
+            return RedirectToAction("Login", "Account");
         }
     }
 }
