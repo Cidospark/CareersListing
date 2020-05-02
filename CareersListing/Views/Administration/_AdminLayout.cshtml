@@ -87,7 +87,7 @@
                         <img src="@profilePhoto" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a asp-action="Details" asp-controller="Administration" asp-route-id="@userManager.GetUserId(User)" class="d-block">
+                        <a asp-action="Profile" asp-controller="Administration" asp-route-id="@userManager.GetUserId(User)" class="d-block">
                             @if (signInManager.IsSignedIn(User))
                             {
                                 <span>
