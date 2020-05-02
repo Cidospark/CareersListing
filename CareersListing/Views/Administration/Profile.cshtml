@@ -1,0 +1,191 @@
+﻿@model ProfileViewModel
+@{
+    ViewBag.Title = "Profile";
+    Layout = "_AdminLayout";
+    var photoPath = "~/images/";
+    photoPath += "pix1.jpg";/* String.IsNullOrEmpty(Model.ExistingPhotoPath) ? photoPath + "pix1.jpg" : Model.ExistingPhotoPath;*/
+    var ph = (@Model.PhoneNumber ?? "0808 00000 0000");
+    var cit = (@Model.City ?? "Nill");
+    var co = (@Model.Country ?? "Nill");
+    var lc = $"{cit}, {co}";
+}
+
+<div class="row ml-5 mr-5">
+
+    <!-- left column -->
+    <div class="col-sm-12  ml-3 mr-3">
+        <!-- general form elements -->
+        <div class="card card-primary card-outline">
+
+            <!-- left column -->
+            <div class="">
+                <div class="p-4 pb-0">
+                    <div class="row  pl-3 pt-3 pr-3">
+                        <div class="col-md-5">
+                            <div class="d-flex flex-md-wrap align-items-center pb-3">
+                                <div class="image mr-4 ">
+                                    <img src="@photoPath" class="img-circle elevation-2" style="width:100px;" alt="@photoPath" asp-append-version="true" />
+                                </div>
+                                <div class="">
+                                    <h1 class="card-title" style="font-size:40px;"><b>@Model.LastName @Model.FirstName</b></h1>
+                                    <div><span class="text-muted"><i class="fa fa-briefcase"></i> &nbsp;  @Model.AccountType.ToString()</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <p>
+                                <i class="fa fa-phone-square fa-rotate-90"></i> &nbsp; <span class="text-muted">@ph</span>
+                            </p>
+                            <p>
+                                <i class="fa fa-envelope"></i> &nbsp; <span class="text-muted">@Model.Email</span>
+                            </p>
+                            <p>
+                                <i class="fa fa-map-marker-alt"></i> &nbsp; <span class="text-muted">@lc</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @if (User.Identity.Name == Model.Email)
+            {
+                <div class="row pl-5 pr-5">
+                    <!-- general form elements -->
+                    <div class="card card-primary col-md-8 mb-5">
+
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" enctype="multipart/form-data" method="post" asp-action="edit">
+                            <div class="card-body">
+                                <input asp-for="Id" hidden />
+                                <input asp-for="ExistingPhotoPath" hidden />
+
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label asp-for="FirstName"></label>
+                                            <input asp-for="FirstName" placeholder="First Name" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label asp-for="LastName"></label>
+                                            <input asp-for="LastName" placeholder="Last Name" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label asp-for="PhoneNumber"></label>
+                                            <input asp-for="PhoneNumber" placeholder="PhoneNumber" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                        <div class="form-group mt-1">
+                                            <label asp-for="Email"></label>
+                                            <input asp-for="Email" placeholder="Email" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Street"></label>
+                                            <input asp-for="Street" placeholder="Street" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="Street" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="City"></label>
+                                            <input asp-for="City" placeholder="City" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="City" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Country"></label>
+                                            <input asp-for="Country" placeholder="Country" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="Country" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label asp-for="FormPhoto" class="col-form-label"></label>
+                                            <div class="">
+                                                <div class="custom-file col-sm-12 ">
+                                                    <input asp-for="FormPhoto" type="file" class="custom-file-input form-control" />
+                                                    <label class="custom-file-label">Pick a photo</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a asp-action="ListOfUsers" asp-controller="Administration" class="btn btn-danger">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                    <!-- right column -->
+
+                    <div class="col-md-4">
+                        <!-- general form elements -->
+                        <div class="card card-gray">
+                            <div class="card-header">
+                                <h3 class="card-title"><b>@Model.LastName @Model.FirstName's</b> Roles &amp; Claims</h3>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <partial name="_UserRolesPartial.cshtml" />
+                            <partial name="_UserClaimsPartial.cshtml" />
+
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!-- /.content-wrapper -->
+                </div>
+                <!-- /.content-wrapper -->
+
+            }
+            else
+            {
+
+
+
+                <div class="col-sm-12 p-4">
+                    <!-- general form elements -->
+                    <div class=" card-gray">
+                        <div class="card-header">
+                            <h3 class="card-title"><b>@Model.LastName @Model.FirstName's</b> Roles &amp; Claims</h3>
+                        </div>
+                        <!-- /.card-header -->
+
+                        <partial name="_UserRolesPartial.cshtml" />
+                        <partial name="_UserClaimsPartial.cshtml" />
+
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+                <!-- /.content-wrapper -->
+            }
+
+
+        </div>
+    </div>
+</div>

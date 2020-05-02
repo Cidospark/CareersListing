@@ -63,16 +63,9 @@
                                         <td>
                                             <div class="text-right">
                                                 <form method="post" asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@singleUser.Id">
-                                                    <a asp-action="Details" asp-controller="Administration" asp-route-id="@singleUser.Id" class="btn btn-sm btn-primary">
+                                                    <a asp-action="Profile" asp-controller="Administration" asp-route-id="@singleUser.Id" class="btn btn-sm btn-primary">
                                                         <i class="fas fa-folder"></i> View
                                                     </a>
-
-                                                    @if (userMngr.GetUserId(User) == singleUser.Id || User.IsInRole("Super Admin"))
-                                                    {
-                                                        <a asp-action="Edit" asp-controller="Account" asp-route-id="@singleUser.Id" class="btn btn-sm btn-success">
-                                                            <i class="fas fa-edit"></i> Edit
-                                                        </a>
-                                                    }
 
                                                     @if (User.IsInRole("Super Admin"))
                                                     {
