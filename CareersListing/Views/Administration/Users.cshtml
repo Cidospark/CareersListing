@@ -17,7 +17,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <a class="btn btn-primary"
-                           asp-action="Register" asp-controller="Account">Register New User</a>
+                           asp-action="CreateUser" asp-controller="Administration">Register New User</a>
                     </h3>
                 </div>
                 <div style="overflow-x:auto; max-height:430px;">
@@ -70,7 +70,7 @@
                                                     @if (User.IsInRole("Super Admin"))
                                                     {
                                                         <button type="submit" class="btn btn-sm btn-danger"
-                                                                onclick="return confirm('Please confirm your action! to delete : @singleUser.FirstName @singleUser.LastName');">
+                                                                onclick="return confirm('Please confirm your action to delete : @singleUser.FirstName @singleUser.LastName');">
                                                             <i class="fas fa-trash"></i> Delete
                                                         </button>
                                                     }

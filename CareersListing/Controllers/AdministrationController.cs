@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CareersListing.Models;
+using CareersListing.Utilities;
 using CareersListing.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +20,15 @@ namespace CareersListing.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public AdministrationController(RoleManager<IdentityRole> roleManager,
-                                        UserManager<ApplicationUser> userManager)
+                                        UserManager<ApplicationUser> userManager,
+                                        IHostingEnvironment hostingEnvironment)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
         }
         // -------------------------------------------------------- 
 
@@ -44,7 +50,7 @@ namespace CareersListing.Controllers
         //--------------------------------------------------------------------------------------------------------
 
 
-        // 
+        // Profile
         [HttpGet]
         public async Task<IActionResult> Profile(string Id)
         {
@@ -77,6 +83,63 @@ namespace CareersListing.Controllers
             };
 
             return View(model);
+        }
+        // Profile
+        [HttpPost]
+        public async Task<IActionResult> Profile(ProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFilename = null;
+                
+                // if photo is selected
+                if(model.FormPhoto != null)
+                {
+                    var hostingEnvPath = _hostingEnvironment.WebRootPath+"/images/profile";
+                    // if there is an existing photo
+                    if (model.ExistingPhotoPath != null)
+                    {
+                        // get the path to the wwwroot folder combined with file name, then delete it
+                        var fullPath = Path.Combine(hostingEnvPath, model.ExistingPhotoPath);
+                        System.IO.File.Delete(fullPath);
+                    }
+
+                    uniqueFilename = Utils.UploadFile(model.FormPhoto, hostingEnvPath);
+
+                }
+                else
+                {
+                    uniqueFilename = model.ExistingPhotoPath;
+                }
+
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = $"User with id : {model.Id} was not found!";
+                    return View("NotFound");
+                }
+
+                user.LastName = model.LastName;
+                user.FirstName = model.FirstName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Street = model.Street;
+                user.City = model.City;
+                user.Country = model.Country;
+                user.Photo = uniqueFilename;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Profile","Administration", new { id = model.Id});
+                }
+
+                foreach(var err in result.Errors)
+                {
+                    ModelState.AddModelError("",err.Description);
+                }
+            }
+            return View(model);
+
         }
         //--------------------------------------------------------------------------------------------------------
 
@@ -378,6 +441,41 @@ namespace CareersListing.Controllers
         {
             var roles = _roleManager.Roles;
             return View(roles);
+        }
+
+
+        // List of registered users
+        [HttpGet]
+        public IActionResult Users()
+        {
+            var users = _userManager.Users;
+            return View(users);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+        // Delete user
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id : {id} was not found!";
+                return View("NotFound");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Users", "Administration");
+            }
+
+            foreach(var err in result.Errors)
+            {
+                ModelState.AddModelError("", err.Description);
+            }
+
+            return View();
         }
     }
 }

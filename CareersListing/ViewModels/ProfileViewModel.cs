@@ -31,10 +31,6 @@ namespace CareersListing.ViewModels
         [Required]
         public AccountType AccountType { get; set; }
         
-        [Required(ErrorMessage = "Email required")]
-        [EmailAddress]
-        [Remote(action: "IsEmailInUse", controller: "Account")]
-        [ValidEmailDomain(allowedDomain: "sample.com", ErrorMessage = "Email domain must be 'sample.com'")]
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 

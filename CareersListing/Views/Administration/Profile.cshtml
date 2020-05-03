@@ -2,8 +2,7 @@
 @{
     ViewBag.Title = "Profile";
     Layout = "_AdminLayout";
-    var photoPath = "~/images/";
-    photoPath += "pix1.jpg";/* String.IsNullOrEmpty(Model.ExistingPhotoPath) ? photoPath + "pix1.jpg" : Model.ExistingPhotoPath;*/
+    var photoPath = "~/images/profile/" + (Model.ExistingPhotoPath ?? "pix1.jpg");
     var ph = (@Model.PhoneNumber ?? "0808 00000 0000");
     var cit = (@Model.City ?? "Nill");
     var co = (@Model.Country ?? "Nill");
@@ -55,7 +54,7 @@
 
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form role="form" enctype="multipart/form-data" method="post" asp-action="edit">
+                        <form role="form" enctype="multipart/form-data" method="post" asp-action="Profile">
                             <div class="card-body">
                                 <input asp-for="Id" hidden />
                                 <input asp-for="ExistingPhotoPath" hidden />
@@ -88,7 +87,7 @@
                                         <span asp-validation-for="Email" class="text-danger"></span>
                                         <div class="form-group mt-1">
                                             <label asp-for="Email"></label>
-                                            <input asp-for="Email" placeholder="Email" class="form-control" />
+                                            <input asp-for="Email" disabled placeholder="Email" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
@@ -189,3 +188,20 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts{
+    <script>
+        // when document is ready
+        // run the anonymous function
+        // on change on custom-file-input element
+        // get the value from the element and split it then pop out the last item
+        // add the popped out item to the label element
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var filename = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(filename);
+            })
+        })
+    </script>
+}

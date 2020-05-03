@@ -144,16 +144,6 @@ namespace CareersListing.Controllers
         }
         //--------------------------------------------------------------------------------------------------------
 
-        // List of registered users
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Users()
-        {
-            var users = _userManager.Users;
-            return View(users);
-        }
-        //--------------------------------------------------------------------------------------------------------
-
 
         [HttpPost]
         public async Task<IActionResult> Logout()
