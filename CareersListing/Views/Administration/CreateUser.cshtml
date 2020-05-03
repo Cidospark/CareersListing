@@ -1,0 +1,135 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "Create New User";
+    Layout = "_AdminLayout";
+   
+}
+
+<div class="row ml-5 mr-5">
+
+    <!-- left column -->
+    <div class="col-sm-12  ml-3 mr-3">
+        <!-- general form elements -->
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <b>All fileds are required.</b>
+            </div>
+
+           
+                <div class="row ">
+                    <!-- general form elements -->
+                    <div class=" card-primary col-md-12 mb-5 mt-4">
+
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" method="post" asp-action="CreateUser">
+                            <div class="card-body">
+                                <div class="no-bullet" asp-validation-summary="ModelOnly"></div>
+                                
+                                    @if (!String.IsNullOrEmpty(ViewBag.RegMessage))
+                                    {
+                                        <div class="text-success">@ViewBag.RegMessage</div>
+                                    }
+                                
+
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <div><small><span asp-validation-for="LastName" class="text-danger"></span></small></div>
+                                        <div class="form-group">
+                                            <input asp-for="LastName" placeholder="Last Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div><small><span asp-validation-for="FirstName" class="text-danger"></span></small></div>
+                                        <div class="form-group">
+                                            <input asp-for="FirstName" placeholder="First Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-sm-6">
+                                        <div><small><span asp-validation-for="Email" class="text-danger"></span></small></div>
+                                        <div class="form-group mt-1">
+                                            <input asp-for="Email" placeholder="Email" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div><small><span asp-validation-for="LastName" class="text-danger"></span></small></div>
+                                        <div class="w-100">
+                                            <select asp-for="AccountType" asp-items="Html.GetEnumSelectList<AccountType>()" class="form-control">
+                                                <option value="">---Select Account Type---</option>
+                                                <option value="2">Admin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <div><small><span asp-validation-for="Password" class="text-danger"></span></small></div>
+                                        <div class="input-group mb-3">
+                                            <input asp-for="Password" value="123Pass!" class="form-control" placeholder="Password">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-lock"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div><small><span asp-validation-for="ConfirmPassword" class="text-danger"></span></small></div>
+                                        <div class="input-group mb-3">
+                                            <input asp-for="ConfirmPassword" value="123Pass!" class="form-control" placeholder="Confirm password">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-lock"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <div><small><span asp-validation-for="City" class="text-danger"></span></small></div>
+                                        <div class="input-group mb-3">
+                                            <input asp-for="City" class="form-control" placeholder="City">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-map-marker-alt"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div><small><span asp-validation-for="Country" class="text-danger"></span></small></div>
+                                        <div class="input-group mb-3">
+                                            <select asp-for="Country" class="form-control">
+                                                <option value="">---Select Country---</option>
+                                                <option value="Nigeria">Nigeria</option>
+                                                <option value="Ghana">Ghana</option>
+                                                <option value="Carmeroon">Carmeroon</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="ml-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a asp-action="Users" asp-controller="Administration" class="btn btn-danger">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                    
+                </div>
+                <!-- /.content-wrapper -->
+
+        </div>
+    </div>
+</div>
+

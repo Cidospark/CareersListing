@@ -41,7 +41,7 @@ namespace CareersListing.Controllers
 
 
 
-        // Dashboard
+        // Dashboard (GET)
         [HttpGet]
         public IActionResult Dashboard()
         {
@@ -50,7 +50,7 @@ namespace CareersListing.Controllers
         //--------------------------------------------------------------------------------------------------------
 
 
-        // Profile
+        // Profile (GET) 
         [HttpGet]
         public async Task<IActionResult> Profile(string Id)
         {
@@ -84,7 +84,8 @@ namespace CareersListing.Controllers
 
             return View(model);
         }
-        // Profile
+
+        // Profile (POST) ---------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> Profile(ProfileViewModel model)
         {
@@ -144,7 +145,7 @@ namespace CareersListing.Controllers
         //--------------------------------------------------------------------------------------------------------
 
 
-        // Manage claims users
+        // List of claims (GET) 
         [HttpGet]
         public IActionResult ClaimsList()
         {
@@ -159,6 +160,8 @@ namespace CareersListing.Controllers
             }
             return View(list);
         }
+
+        // Manage claims users (POST) -------------------------------------------------------------------------
         [HttpGet]
         public async Task<IActionResult> ManageClaimsUsers(string type)
         {
@@ -201,6 +204,8 @@ namespace CareersListing.Controllers
             ViewBag.ClaimType = type;
             return View(list);
         }
+
+        // Manage claims users (POST) -------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> ManageClaimsUsers(List<ClaimsUsersViewModel> model, string type)
         {
@@ -255,11 +260,11 @@ namespace CareersListing.Controllers
 
             return View(list);
         }
-        // -------------------------------------------------------- 
+        // ------------------------------------------------------------------------------- 
 
 
 
-        // DeleteRole
+        // DeleteRole (POST) 
         [HttpPost]
         public async Task<IActionResult> DeleteRole(string id)
         {
@@ -282,10 +287,10 @@ namespace CareersListing.Controllers
             }
             return RedirectToAction ("Roles", "Administration");
         }
-        // -------------------------------------------------------- 
+        // --------------------------------------------------------------------------------------------- 
 
 
-        // Manage role users
+        // Manage role users (GET) 
         [HttpGet]
         public async Task<IActionResult> ManageRoleUsers(string roleId)
         {
@@ -319,6 +324,8 @@ namespace CareersListing.Controllers
             ViewBag.RoleName = role.Name;
             return View(roleUsers);
         }
+
+        // Manage role users (POST) -------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> ManageRoleUsers(List<RoleUsersViewModel> model, string roleId)
         {
@@ -365,7 +372,7 @@ namespace CareersListing.Controllers
         // -------------------------------------------------------- 
 
 
-        // Create role
+        // Create role (GET)
         [HttpGet]
         public async Task<IActionResult> CreateRole(string Id)
         {
@@ -382,6 +389,8 @@ namespace CareersListing.Controllers
             }
             return View();
         }
+
+        // Create role (POST) -------------------------------------------------------------------------
         [HttpPost]
         public async  Task<IActionResult> CreateRole(CreateRoleViewModel model)
         { 
@@ -433,18 +442,20 @@ namespace CareersListing.Controllers
             // if model not valid
             return View(model);
         }
-        // -------------------------------------------------------- 
+        // ------------------------------------------------------------------------------------
 
 
+        // List of Roles (GET)
         [HttpGet]
         public IActionResult Roles()
         {
             var roles = _roleManager.Roles;
             return View(roles);
         }
+        //--------------------------------------------------------------------------------------------------------
 
 
-        // List of registered users
+        // List of registered users (GET)
         [HttpGet]
         public IActionResult Users()
         {
@@ -453,7 +464,66 @@ namespace CareersListing.Controllers
         }
         //--------------------------------------------------------------------------------------------------------
 
-        // Delete user
+        // Create user (GET)
+        [HttpGet] 
+        public IActionResult CreateUser()
+        {
+            return View();
+        }
+
+        // Create user (POST)
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // create a new user from values from model
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    AccountType = model.AccountType,
+                    City = model.City,
+                    Country = model.Country,
+                    Email = model.Email
+                };
+
+                // create user using user manager of the identity class
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    if (model.AccountType == AccountType.Applicant)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Applicant");
+                    }
+                    else if(model.AccountType == AccountType.Employer)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Employer");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+
+                    ViewBag.RegMessage = "REGISTRATION WAS SUCCESSFUL!";
+                    // TODO : send confirmation message to user email
+                    
+                    return RedirectToAction("CreateUser","Administration");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // Delete user (POST)
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -477,5 +547,6 @@ namespace CareersListing.Controllers
 
             return View();
         }
+        //--------------------------------------------------------------------------------------------------------
     }
 }

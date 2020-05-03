@@ -52,7 +52,11 @@
                                             @singleUser.LastName.ToUpper() &nbsp; @singleUser.FirstName
                                         </td>
                                         <td class="text-center">
-                                            @singleUser.AccountType
+                                            @if(singleUser.AccountType.ToString() == "2")
+                                            {
+                                                <span>Admin</span>
+                                            }
+                                            else { @singleUser.AccountType }
                                         </td>
                                         <td class="text-center">
                                             @singleUser.Country
