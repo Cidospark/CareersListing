@@ -25,7 +25,7 @@ namespace CareersListing.Controllers
             _signInManager = signInManager;
         }
 
-        // Login
+        // Login (GET)
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login()
@@ -36,6 +36,8 @@ namespace CareersListing.Controllers
             }
             return View();
         }
+
+        // Login (POST)
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model, string ReturnUrl)
@@ -74,13 +76,16 @@ namespace CareersListing.Controllers
         }
         //--------------------------------------------------------------------------------------------------------
 
-        // Register User
+
+        // Register User (GET)
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
+
+        // Register (POST)
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -127,7 +132,7 @@ namespace CareersListing.Controllers
         }
         //--------------------------------------------------------------------------------------------------------
 
-        // Check if email already exists
+        // Check if email already exists (GET, POST)
         [AcceptVerbs("Get","Post")]
         [AllowAnonymous]
         public async Task<IActionResult> IsEmailInUse(string email)
@@ -144,23 +149,16 @@ namespace CareersListing.Controllers
         }
         //--------------------------------------------------------------------------------------------------------
 
-        // List of registered users
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Users()
-        {
-            var users = _userManager.Users;
-            return View(users);
-        }
-        //--------------------------------------------------------------------------------------------------------
 
-
+        // Logout (GET)
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
+        //--------------------------------------------------------------------------------------------------------
+
 
     }
 }

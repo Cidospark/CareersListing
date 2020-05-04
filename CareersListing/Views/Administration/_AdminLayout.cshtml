@@ -1,7 +1,7 @@
 ﻿@inject SignInManager<ApplicationUser> signInManager;
 @inject UserManager<ApplicationUser> userManager;
 @{
-    var profilePhoto = "../../images/pix1.jpg"; // + (userManager.GetUserAsync(User).Result.Photo ?? "pix1.jpg");
+    var profilePhoto = "../../images/profile/" + (userManager.GetUserAsync(User).Result.Photo ?? "pix1.jpg");
 }
 <!DOCTYPE html>
 
@@ -122,7 +122,7 @@
                             </a>
                         </li>
                         <li class="nav-item has-treeview">
-                            <a asp-action="Users" asp-controller="Account" class="nav-link">
+                            <a asp-action="Users" asp-controller="Administration" class="nav-link">
                                 <i class="fa fa-users nav-icon"></i>
                                 <p>Registered Users</p>
                             </a>

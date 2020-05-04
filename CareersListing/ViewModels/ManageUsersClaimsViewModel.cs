@@ -1,7 +1,6 @@
 ﻿using CareersListing.Models;
-using CareersListing.Utilities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace CareersListing.ViewModels
 {
-    public class ProfileViewModel
+    public class ManageUsersClaimsViewModel
     {
-        public ProfileViewModel()
+        public ManageUsersClaimsViewModel()
         {
-            Claims = new List<string>();
-            Roles = new List<string>();
+            ListOfUserClaims = new List<UserClaim>();
+            ListOfUserRoles = new List<string>();
         }
 
         public string Id { get; set; }
@@ -27,10 +26,10 @@ namespace CareersListing.ViewModels
         [Required(ErrorMessage = "Firstname require")]
         [Display(Name = "First name")]
         public string FirstName { get; set; }
-        
+
         [Required]
         public AccountType AccountType { get; set; }
-        
+
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 
@@ -47,9 +46,9 @@ namespace CareersListing.ViewModels
         public IFormFile FormPhoto { get; set; }
         public string ExistingPhotoPath { get; set; }
 
-        public List<string> Claims { get; set; }
-        public IList<string> Roles { get; set; }
         public DateTime DateRegistered { get; set; }
 
+        public List<UserClaim> ListOfUserClaims { get; set; }
+        public IList<string> ListOfUserRoles { get; set; }
     }
 }

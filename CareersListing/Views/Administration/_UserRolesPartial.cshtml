@@ -16,16 +16,7 @@
         {
             <h5>None at the moment</h5>
         }
-        @if (Model.AccountType.ToString() != "Applicant" && Model.AccountType.ToString() != "Employer")
-        {
-            if (User.IsInRole("Super Admin"))
-            {
-                <div>
-                    <a class="btn btn-outline-primary" asp-action="ManageUserRoles" 
-                       asp-route-userId="@Model.Id"  asp-controller="Administration">Manage Roles</a>
-                </div>
-            }
-        }
+        
     </div>
 </div>
 <hr/>

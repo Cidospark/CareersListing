@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CareersListing.Models;
+using CareersListing.Utilities;
 using CareersListing.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +20,15 @@ namespace CareersListing.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public AdministrationController(RoleManager<IdentityRole> roleManager,
-                                        UserManager<ApplicationUser> userManager)
+                                        UserManager<ApplicationUser> userManager,
+                                        IHostingEnvironment hostingEnvironment)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
         }
         // -------------------------------------------------------- 
 
@@ -35,7 +41,7 @@ namespace CareersListing.Controllers
 
 
 
-        // Dashboard
+        // Dashboard (GET)
         [HttpGet]
         public IActionResult Dashboard()
         {
@@ -44,7 +50,7 @@ namespace CareersListing.Controllers
         //--------------------------------------------------------------------------------------------------------
 
 
-        // 
+        // Profile (GET) 
         [HttpGet]
         public async Task<IActionResult> Profile(string Id)
         {
@@ -62,6 +68,7 @@ namespace CareersListing.Controllers
 
             var model = new ProfileViewModel
             {
+                Id = user.Id,
                 LastName = user.LastName,
                 FirstName = user.FirstName,
                 AccountType = user.AccountType,
@@ -78,17 +85,75 @@ namespace CareersListing.Controllers
 
             return View(model);
         }
+
+        // Profile (POST) ---------------------------------------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> Profile(ProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFilename = null;
+                
+                // if photo is selected
+                if(model.FormPhoto != null)
+                {
+                    var hostingEnvPath = _hostingEnvironment.WebRootPath+"/images/profile";
+                    // if there is an existing photo
+                    if (model.ExistingPhotoPath != null)
+                    {
+                        // get the path to the wwwroot folder combined with file name, then delete it
+                        var fullPath = Path.Combine(hostingEnvPath, model.ExistingPhotoPath);
+                        System.IO.File.Delete(fullPath);
+                    }
+
+                    uniqueFilename = Utils.UploadFile(model.FormPhoto, hostingEnvPath);
+
+                }
+                else
+                {
+                    uniqueFilename = model.ExistingPhotoPath;
+                }
+
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = $"User with id : {model.Id} was not found!";
+                    return View("NotFound");
+                }
+
+                user.LastName = model.LastName;
+                user.FirstName = model.FirstName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Street = model.Street;
+                user.City = model.City;
+                user.Country = model.Country;
+                user.Photo = uniqueFilename;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Profile","Administration", new { id = model.Id});
+                }
+
+                foreach(var err in result.Errors)
+                {
+                    ModelState.AddModelError("",err.Description);
+                }
+            }
+            return View(model);
+
+        }
         //--------------------------------------------------------------------------------------------------------
 
 
-        // Manage claims users
+        // List of claims (GET) 
         [HttpGet]
         public IActionResult ClaimsList()
         {
-            var list = new List<ClaimsStoreViewModel>();
+            var list = new List<ClaimsListViewModel>();
             foreach (var claim in ClaimsStore.AllCliams)
             {
-                var claimsList = new ClaimsStoreViewModel()
+                var claimsList = new ClaimsListViewModel()
                 {
                     ClaimType = claim.Type
                 };
@@ -96,6 +161,8 @@ namespace CareersListing.Controllers
             }
             return View(list);
         }
+
+        // Manage claims users (POST) -------------------------------------------------------------------------
         [HttpGet]
         public async Task<IActionResult> ManageClaimsUsers(string type)
         {
@@ -138,6 +205,8 @@ namespace CareersListing.Controllers
             ViewBag.ClaimType = type;
             return View(list);
         }
+
+        // Manage claims users (POST) -------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> ManageClaimsUsers(List<ClaimsUsersViewModel> model, string type)
         {
@@ -192,11 +261,94 @@ namespace CareersListing.Controllers
 
             return View(list);
         }
-        // -------------------------------------------------------- 
+
+        //--------------------------------------------------------------------------------------------------------
 
 
+        // Manage user claims (GET)
+        [HttpGet]
+        public async Task<IActionResult> ManageUserClaims(string userId)
+        {
+            // get user by Id
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id = {userId} cannot be found";
+                return View("NotFound");
+            }
 
-        // DeleteRole
+            // get user's existing claims
+            var existingUserClaim = await _userManager.GetClaimsAsync(user);
+            var existingRoleClaim = await _userManager.GetRolesAsync(user);
+            var model = new ManageUsersClaimsViewModel();
+            model.Id = user.Id;
+            model.LastName = user.LastName;
+            model.FirstName = user.FirstName;
+            model.AccountType = user.AccountType;
+            model.Email = user.Email;
+            model.PhoneNumber = user.PhoneNumber;
+            model.Street = user.Street;
+            model.City = user.City;
+            model.Country = user.Country;
+            model.ExistingPhotoPath = user.Photo;
+            model.DateRegistered = user.DateRegistered;
+            model.ListOfUserRoles = existingRoleClaim;
+
+            foreach(var claim in ClaimsStore.AllCliams)
+            {
+                var eachClaim = new UserClaim
+                {
+                    ClaimType = claim.Type
+                };
+
+                if(existingUserClaim.Any(c => c.Type == claim.Type && c.Value == "true"))
+                {
+                    eachClaim.IsSelected = true;
+                }
+
+                model.ListOfUserClaims.Add(eachClaim);
+            }
+
+            return View(model);
+        }
+
+        // Manage user claims (POST) ----------------------------------------------------- 
+        [HttpPost]
+        public async Task<IActionResult> ManageUserClaims(ManageUsersClaimsViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+
+            // if we have found the user
+            // retrieve all the user claims and delete those claims
+            var claims = await _userManager.GetClaimsAsync(user);
+            var result = await _userManager.RemoveClaimsAsync(user, claims);
+            // if there is any problem removing the claims then
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove user existing claims");
+                return View(model);
+            }
+
+            // retrieve all selected claims
+            result = await _userManager.AddClaimsAsync(user, 
+                model.ListOfUserClaims.Select(c => new Claim(c.ClaimType, c.IsSelected ? "true" : "false")));
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot add selected claims to user");
+                return View(model);
+            }
+            return RedirectToAction("Profile", "Administration", new { Id = model.Id });
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // DeleteRole (POST) 
         [HttpPost]
         public async Task<IActionResult> DeleteRole(string id)
         {
@@ -219,10 +371,10 @@ namespace CareersListing.Controllers
             }
             return RedirectToAction ("Roles", "Administration");
         }
-        // -------------------------------------------------------- 
+        // --------------------------------------------------------------------------------------------- 
 
 
-        // Manage role users
+        // Manage role users (GET) 
         [HttpGet]
         public async Task<IActionResult> ManageRoleUsers(string roleId)
         {
@@ -256,6 +408,8 @@ namespace CareersListing.Controllers
             ViewBag.RoleName = role.Name;
             return View(roleUsers);
         }
+
+        // Manage role users (POST) -------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> ManageRoleUsers(List<RoleUsersViewModel> model, string roleId)
         {
@@ -302,7 +456,7 @@ namespace CareersListing.Controllers
         // -------------------------------------------------------- 
 
 
-        // Create role
+        // Create role (GET)
         [HttpGet]
         public async Task<IActionResult> CreateRole(string Id)
         {
@@ -319,6 +473,8 @@ namespace CareersListing.Controllers
             }
             return View();
         }
+
+        // Create role (POST) -------------------------------------------------------------------------
         [HttpPost]
         public async  Task<IActionResult> CreateRole(CreateRoleViewModel model)
         { 
@@ -370,14 +526,111 @@ namespace CareersListing.Controllers
             // if model not valid
             return View(model);
         }
-        // -------------------------------------------------------- 
+        // ------------------------------------------------------------------------------------
 
 
+        // List of Roles (GET)
         [HttpGet]
         public IActionResult Roles()
         {
             var roles = _roleManager.Roles;
             return View(roles);
         }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // List of registered users (GET)
+        [HttpGet]
+        public IActionResult Users()
+        {
+            var users = _userManager.Users;
+            return View(users);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+        // Create user (GET)
+        [HttpGet] 
+        public IActionResult CreateUser()
+        {
+            return View();
+        }
+
+        // Create user (POST)
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // create a new user from values from model
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    AccountType = model.AccountType,
+                    City = model.City,
+                    Country = model.Country,
+                    Email = model.Email
+                };
+
+                // create user using user manager of the identity class
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    if (model.AccountType == AccountType.Applicant)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Applicant");
+                    }
+                    else if(model.AccountType == AccountType.Employer)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Employer");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+
+                    ViewBag.RegMessage = "REGISTRATION WAS SUCCESSFUL!";
+                    // TODO : send confirmation message to user email
+                    
+                    return RedirectToAction("Users","Administration");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // Delete user (POST)
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id : {id} was not found!";
+                return View("NotFound");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Users", "Administration");
+            }
+
+            foreach(var err in result.Errors)
+            {
+                ModelState.AddModelError("", err.Description);
+            }
+
+            return View();
+        }
+        //--------------------------------------------------------------------------------------------------------
     }
 }
