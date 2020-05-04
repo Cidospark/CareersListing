@@ -19,6 +19,11 @@
                         <a class="btn btn-primary"
                            asp-action="CreateUser" asp-controller="Administration">Register New User</a>
                     </h3>
+                    @if (!String.IsNullOrEmpty(ViewBag.RegMessage))
+                    {
+                        <div class="text-success">@ViewBag.RegMessage</div>
+                    }
+
                 </div>
                 <div style="overflow-x:auto; max-height:430px;">
                     @if (Model != null)

@@ -68,6 +68,7 @@ namespace CareersListing.Controllers
 
             var model = new ProfileViewModel
             {
+                Id = user.Id,
                 LastName = user.LastName,
                 FirstName = user.FirstName,
                 AccountType = user.AccountType,
@@ -149,10 +150,10 @@ namespace CareersListing.Controllers
         [HttpGet]
         public IActionResult ClaimsList()
         {
-            var list = new List<ClaimsStoreViewModel>();
+            var list = new List<ClaimsListViewModel>();
             foreach (var claim in ClaimsStore.AllCliams)
             {
-                var claimsList = new ClaimsStoreViewModel()
+                var claimsList = new ClaimsListViewModel()
                 {
                     ClaimType = claim.Type
                 };
@@ -260,8 +261,91 @@ namespace CareersListing.Controllers
 
             return View(list);
         }
-        // ------------------------------------------------------------------------------- 
 
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // Manage user claims (GET)
+        [HttpGet]
+        public async Task<IActionResult> ManageUserClaims(string userId)
+        {
+            // get user by Id
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id = {userId} cannot be found";
+                return View("NotFound");
+            }
+
+            // get user's existing claims
+            var existingUserClaim = await _userManager.GetClaimsAsync(user);
+            var existingRoleClaim = await _userManager.GetRolesAsync(user);
+            var model = new ManageUsersClaimsViewModel();
+            model.Id = user.Id;
+            model.LastName = user.LastName;
+            model.FirstName = user.FirstName;
+            model.AccountType = user.AccountType;
+            model.Email = user.Email;
+            model.PhoneNumber = user.PhoneNumber;
+            model.Street = user.Street;
+            model.City = user.City;
+            model.Country = user.Country;
+            model.ExistingPhotoPath = user.Photo;
+            model.DateRegistered = user.DateRegistered;
+            model.ListOfUserRoles = existingRoleClaim;
+
+            foreach(var claim in ClaimsStore.AllCliams)
+            {
+                var eachClaim = new UserClaim
+                {
+                    ClaimType = claim.Type
+                };
+
+                if(existingUserClaim.Any(c => c.Type == claim.Type && c.Value == "true"))
+                {
+                    eachClaim.IsSelected = true;
+                }
+
+                model.ListOfUserClaims.Add(eachClaim);
+            }
+
+            return View(model);
+        }
+
+        // Manage user claims (POST) ----------------------------------------------------- 
+        [HttpPost]
+        public async Task<IActionResult> ManageUserClaims(ManageUsersClaimsViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+
+            // if we have found the user
+            // retrieve all the user claims and delete those claims
+            var claims = await _userManager.GetClaimsAsync(user);
+            var result = await _userManager.RemoveClaimsAsync(user, claims);
+            // if there is any problem removing the claims then
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove user existing claims");
+                return View(model);
+            }
+
+            // retrieve all selected claims
+            result = await _userManager.AddClaimsAsync(user, 
+                model.ListOfUserClaims.Select(c => new Claim(c.ClaimType, c.IsSelected ? "true" : "false")));
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot add selected claims to user");
+                return View(model);
+            }
+            return RedirectToAction("Profile", "Administration", new { Id = model.Id });
+        }
+        //--------------------------------------------------------------------------------------------------------
 
 
         // DeleteRole (POST) 
@@ -510,7 +594,7 @@ namespace CareersListing.Controllers
                     ViewBag.RegMessage = "REGISTRATION WAS SUCCESSFUL!";
                     // TODO : send confirmation message to user email
                     
-                    return RedirectToAction("CreateUser","Administration");
+                    return RedirectToAction("Users","Administration");
                 }
 
                 foreach (var error in result.Errors)

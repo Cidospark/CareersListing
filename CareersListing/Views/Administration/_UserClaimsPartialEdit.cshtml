@@ -1,0 +1,35 @@
+﻿@model ManageUsersClaimsViewModel
+
+<div class="pl-4 pr-4 pb-4">
+    <div><big><b>Claims</b></big></div>
+    <div class="pt-2">
+        <form method="post">
+            <input asp-for="Id" hidden />
+            <div style="max-height:400px; overflow-y:auto; padding-right:20px;">
+                <table class="table table-striped border">
+                    @for (int i = 0; i < Model.ListOfUserClaims.Count; i++)
+                    {
+                        <tr>
+                            <td class="p-3">
+                                <div class="form-check">
+                                    <input type="hidden" asp-for="@Model.ListOfUserClaims[i].ClaimType" />
+                                    <input asp-for="@Model.ListOfUserClaims[i].IsSelected" class="form-check-input" />
+                                    <label asp-for="@Model.ListOfUserClaims[i].IsSelected">
+                                        @Model.ListOfUserClaims[i].ClaimType
+                                    </label>
+                                </div>
+                                <div asp-validation-summary="ModelOnly"></div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <br />
+            <div>
+                <input type="submit" value="Update" class="btn btn-primary" />
+                <a asp-action="Profile" asp-controller="Administration" asp-route-id="@Model.Id" class="btn btn-danger">Cancel</a>
+            </div>
+            <br /><br />
+        </form>
+    </div>
+</div>

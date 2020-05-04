@@ -26,12 +26,6 @@
                             <div class="card-body">
                                 <div class="no-bullet" asp-validation-summary="ModelOnly"></div>
                                 
-                                    @if (!String.IsNullOrEmpty(ViewBag.RegMessage))
-                                    {
-                                        <div class="text-success">@ViewBag.RegMessage</div>
-                                    }
-                                
-
                                 <div class="row mb-2">
                                     <div class="col-sm-6">
                                         <div><small><span asp-validation-for="LastName" class="text-danger"></span></small></div>
