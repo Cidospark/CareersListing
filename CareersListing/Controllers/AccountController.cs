@@ -25,6 +25,79 @@ namespace CareersListing.Controllers
             _signInManager = signInManager;
         }
 
+        // ChangePasswordConfirmation (GET)
+        [HttpGet]
+        public IActionResult ChangePasswordConfirmation()
+        {
+            return View();
+        }
+        // --------------------------------------------------------------------------------------------------
+
+        // Edit Password (GET)
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id = {id} cannot be found";
+                return View("NotFound");
+            }
+
+            var model = new ChangePasswordViewModel{
+                 LastName = user.LastName,
+                 FirstName = user.FirstName,
+                 AccountType = user.AccountType,
+                 PhoneNumber = user.PhoneNumber,
+                 Email = user.Email,
+                 City = user.City,
+                 Country = user.Country,
+                 ExistingPhotoPath = user.Photo
+            };
+
+            return View(model);
+        }
+        // Edit Password (POST) -------------------------------------------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            ApplicationUser user = null;
+            ViewBag.PasswordErr = "Invalid Password!";
+            
+            user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+
+            model.ExistingPhotoPath = user.Photo;
+            model.LastName = user.LastName;
+            model.FirstName = user.FirstName;
+            model.PhoneNumber = user.PhoneNumber;
+            model.City = user.City;
+            model.Email = user.Email;
+            model.Country = user.Country;
+            model.AccountType = user.AccountType;
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+                return RedirectToAction("ChangePasswordConfirmation", "Account");
+            }
+                
+            foreach(var err in result.Errors)
+            {
+                ModelState.AddModelError("", err.Description);
+                ViewBag.PasswordErr = "Failed to change password!";
+            }
+
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
         // Login (GET)
         [HttpGet]
         [AllowAnonymous]
