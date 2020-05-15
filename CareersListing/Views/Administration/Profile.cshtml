@@ -30,7 +30,7 @@
                                     <div>
                                         <span class="text-muted"><i class="fa fa-briefcase"></i> &nbsp;  @Model.AccountType.ToString()</span> &nbsp; &nbsp;
                                         <span class="text-muted">
-                                            <small><a asp-action="#" asp-controller="#"><i class="fa fa-lock"></i> Edit password</a></small>
+                                            <small><a asp-action="ChangePassword" asp-controller="Account" asp-route-id="@Model.Id"><i class="fa fa-lock"></i> Edit password</a></small>
                                         </span>
                                     </div>
                                 </div>
