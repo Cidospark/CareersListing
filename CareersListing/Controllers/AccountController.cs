@@ -28,34 +28,54 @@ namespace CareersListing.Controllers
         // Reset Password (GET)
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword()
+        public IActionResult ResetPassword(string token, string email)
         {
+            if (token == null)
+            {
+                ModelState.AddModelError("", "Invalid password reset token");
+            }
+
+            if (email == null)
+            {
+                ModelState.AddModelError("", "Invalid password reset email");
+            }
+            ViewBag.Email = email;
             return View();
         }
         // Reset Password (POST) -------------------------------------------------------------------------
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // confirm if email exist
-                // Use email to get user to generate password reset token
+                // confirm email is valid
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+                if (user != null)
                 {
-                    // Use user to generate token
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    // use the user, token, and new password to reset the password
+                    var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        // if user account is locked out
+                        // set the lockout end time to now
+                        if(await _userManager.IsLockedOutAsync(user))
+                        {
+                            await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow);
+                        }
+                        return View("ResetPasswordConfirmation");
+                    }
 
-                    // Use token to genetate password reset link
-                    var passwordResetLink = Url.Action("ResetPassword", "Action", new { email = model.Email, token = token }, Request.Scheme);
-
-                    //return Json(passwordResetLink);
-                    ViewBag.ResetLink = passwordResetLink;
-                    return View("ForgotPasswordConfirmation");
+                    // if the above operation failed the add errors to model state
+                    foreach(var err in result.Errors)
+                    {
+                        ModelState.AddModelError("", err.Description);
+                    }
+                    return View(model);
                 }
 
-                return View("ForgotPasswordConfirmation");
+                // if user is null goto confirmation page
+                return View("ResetPasswordConfirmation");
             }
             return View(model);
         }
@@ -85,7 +105,7 @@ namespace CareersListing.Controllers
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                     // Use token to genetate password reset link
-                    var passwordResetLink = Url.Action("ResetPassword", "Action", new { email = model.Email, token = token }, Request.Scheme);
+                    var passwordResetLink = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, Request.Scheme);
 
                     //return Json(passwordResetLink);
                     ViewBag.ResetLink = passwordResetLink;
@@ -135,10 +155,9 @@ namespace CareersListing.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
-            ApplicationUser user = null;
             ViewBag.PasswordErr = "Invalid Password!";
             
-            user = await _userManager.FindByIdAsync(model.Id);
+            var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with id = {model.Id} cannot be found";

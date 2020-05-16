@@ -10,7 +10,6 @@ namespace CareersListing.ViewModels
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Enter email : ")]
         public string Email { get; set; }
     }
 }
