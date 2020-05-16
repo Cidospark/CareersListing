@@ -32,7 +32,8 @@ namespace CareersListing
                 options.Password.RequiredLength = 3;
                 options.SignIn.RequireConfirmedEmail = false;
 
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             services.AddDbContextPool<ApplicationDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("default"))

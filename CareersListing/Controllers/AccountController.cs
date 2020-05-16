@@ -25,6 +25,80 @@ namespace CareersListing.Controllers
             _signInManager = signInManager;
         }
 
+        // Reset Password (GET)
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+        // Reset Password (POST) -------------------------------------------------------------------------
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // confirm if email exist
+                // Use email to get user to generate password reset token
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    // Use user to generate token
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // Use token to genetate password reset link
+                    var passwordResetLink = Url.Action("ResetPassword", "Action", new { email = model.Email, token = token }, Request.Scheme);
+
+                    //return Json(passwordResetLink);
+                    ViewBag.ResetLink = passwordResetLink;
+                    return View("ForgotPasswordConfirmation");
+                }
+
+                return View("ForgotPasswordConfirmation");
+            }
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // Forgot Password (GET)
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        // Forgot Password (POST) -------------------------------------------------------------------------
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // confirm if email exist
+                // Use email to get user to generate password reset token
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if(user != null && await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    // Use user to generate token
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // Use token to genetate password reset link
+                    var passwordResetLink = Url.Action("ResetPassword", "Action", new { email = model.Email, token = token }, Request.Scheme);
+
+                    //return Json(passwordResetLink);
+                    ViewBag.ResetLink = passwordResetLink;
+                    return View("ForgotPasswordConfirmation");
+                }
+
+                return View("ForgotPasswordConfirmation");
+            }
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
         // ChangePasswordConfirmation (GET)
         [HttpGet]
         public IActionResult ChangePasswordConfirmation()
