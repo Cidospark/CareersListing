@@ -37,15 +37,15 @@
                 </div>
                 
                 <div class="row">
-                    <div class="col-8 mb-2">
+                    <div class="col-7 mb-2 ">
                         <div class="icheck-primary">
                             <label asp-for="RememberMe" class="font-weight-lighter ml-0" style="margin-left:-30px;">
                                 <input asp-for="RememberMe" /> @Html.DisplayNameFor(m => m.RememberMe)
                             </label>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <a asp-action="#" asp-controller="#"><small>Forgot password?</small></a>
+                    <div class="col-5  text-right">
+                        <a asp-action="ForgotPassword" asp-controller="Account"><small>Forgot password?</small></a>
                     </div>
                 </div>
                 

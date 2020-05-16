@@ -12,10 +12,9 @@ namespace CareersListing.Utilities
     {
         public static string UploadFile(IFormFile file, string wwwRootPath)
         {
-            string filename = null;
 
             // get a unique name
-            filename = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filename = Guid.NewGuid().ToString() + "_" + file.FileName;
 
             // combine name and path
             var fullPath = Path.Combine(wwwRootPath, filename);

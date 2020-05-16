@@ -280,19 +280,21 @@ namespace CareersListing.Controllers
             // get user's existing claims
             var existingUserClaim = await _userManager.GetClaimsAsync(user);
             var existingRoleClaim = await _userManager.GetRolesAsync(user);
-            var model = new ManageUsersClaimsViewModel();
-            model.Id = user.Id;
-            model.LastName = user.LastName;
-            model.FirstName = user.FirstName;
-            model.AccountType = user.AccountType;
-            model.Email = user.Email;
-            model.PhoneNumber = user.PhoneNumber;
-            model.Street = user.Street;
-            model.City = user.City;
-            model.Country = user.Country;
-            model.ExistingPhotoPath = user.Photo;
-            model.DateRegistered = user.DateRegistered;
-            model.ListOfUserRoles = existingRoleClaim;
+            var model = new ManageUsersClaimsViewModel
+            {
+                Id = user.Id,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                AccountType = user.AccountType,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Street = user.Street,
+                City = user.City,
+                Country = user.Country,
+                ExistingPhotoPath = user.Photo,
+                DateRegistered = user.DateRegistered,
+                ListOfUserRoles = existingRoleClaim
+            };
 
             foreach(var claim in ClaimsStore.AllCliams)
             {
@@ -343,7 +345,7 @@ namespace CareersListing.Controllers
                 ModelState.AddModelError("", "Cannot add selected claims to user");
                 return View(model);
             }
-            return RedirectToAction("Profile", "Administration", new { Id = model.Id });
+            return RedirectToAction("Profile", "Administration", new { model.Id });
         }
         //--------------------------------------------------------------------------------------------------------
 
@@ -451,7 +453,7 @@ namespace CareersListing.Controllers
                 }
             }
 
-            return RedirectToAction("ManageRoleUsers","Administration", new { roleId = roleId});
+            return RedirectToAction("ManageRoleUsers","Administration", new {roleId});
         }
         // -------------------------------------------------------- 
 
