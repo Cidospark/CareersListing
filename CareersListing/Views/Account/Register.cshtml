@@ -14,7 +14,7 @@
                 <div class="mb-3 text-center" style="font-size:24px; color:#ccc;"> - Register - </div>
             </div>
 
-            <form class="" method="post">
+            <form class="" method="post" asp-route-accType="@ViewBag.accType">
                 <div asp-validation-summary="ModelOnly" class="text-danger" style="font-size:12px; list-style: none; "></div>
                 @if (!String.IsNullOrEmpty(ViewBag.Message))
                 {
@@ -23,7 +23,7 @@
                         @ViewBag.Message
                     </div>
                 }
-
+                
                 <div><small><span asp-validation-for="LastName" class="text-danger"></span></small></div>
                 <div class="input-group mb-3">
                     <input asp-for="LastName" placeholder="Last Name" class="form-control" />
@@ -40,14 +40,6 @@
                         <div class="input-group-text">
                             <span class="fas fa-user"></span>
                         </div>
-                    </div>
-                </div>
-                <div><small><span asp-validation-for="AccountType" class="text-danger"></span></small></div>
-                <div class="input-group mb-3">
-                    <div class="w-100 ">
-                        <select asp-for="AccountType" asp-items="Html.GetEnumSelectList<AccountType>()" class="form-control">
-                            <option value="">---Select Account Type---</option>
-                        </select>
                     </div>
                 </div>
 
@@ -109,11 +101,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- /.col -->
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary btn-block">Register</button>
-                    </div>
-                    <!-- /.col -->
+                    @if(ViewBag.accType != "applicant" && ViewBag.accType != "employer")
+                    {
+                        <div class="text-danger text-center col-12"><small>@ViewBag.accType</small></div>
+                    }
+                    else
+                    {
+                        <!-- /.col -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">Register As <span class="text-capitalize">@ViewBag.accType</span></button>
+                        </div>
+                        <!-- /.col -->
+                    }
+
                 </div>
             </form>
             <br />

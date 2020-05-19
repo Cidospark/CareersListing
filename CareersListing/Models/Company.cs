@@ -9,8 +9,8 @@ namespace CareersListing.Models
     public class Company
     {
         public int Id { get; set; }
-        public Employer Employer { get; set; }
-        public int EmployerId { get; set; }
+        public ApplicationUser Employer { get; set; }
+        public string EmployerId { get; set; }
 
         [Required]
         [MaxLength(100, ErrorMessage = "Company name must not be more than 100 characters")]
@@ -37,7 +37,7 @@ namespace CareersListing.Models
         [Required]
         public DateTime DateRegistered { get; set; }
 
-        public ICollection<JobPost> JobPost { get; set; }
+        public ICollection<Vacancy> Vacancies { get; set; }
 
     }
 }

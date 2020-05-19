@@ -20,12 +20,10 @@ namespace CareersListing.ViewModels
         [Display(Name = "First name")]
         public string FirstName { get; set; }
 
-        [Required]
-        public AccountType AccountType { get; set; }
-
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 
+        public string AccountTtpe { get; set; }
 
         [Required]
         [MaxLength(100, ErrorMessage = "City must not be more than 100 characters")]

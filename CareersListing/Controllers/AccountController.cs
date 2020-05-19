@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CareersListing.Models;
+using CareersListing.Utilities;
 using CareersListing.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -141,9 +142,9 @@ namespace CareersListing.Controllers
             var model = new ChangePasswordViewModel{
                  LastName = user.LastName,
                  FirstName = user.FirstName,
-                 AccountType = user.AccountType,
                  PhoneNumber = user.PhoneNumber,
-                 Email = user.Email,
+                AccountTtpe = await Utils.getUserAccountType(_userManager, user),
+                Email = user.Email,
                  City = user.City,
                  Country = user.Country,
                  ExistingPhotoPath = user.Photo
@@ -170,8 +171,8 @@ namespace CareersListing.Controllers
             model.PhoneNumber = user.PhoneNumber;
             model.City = user.City;
             model.Email = user.Email;
+            model.AccountTtpe = await Utils.getUserAccountType(_userManager, user);
             model.Country = user.Country;
-            model.AccountType = user.AccountType;
 
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
@@ -246,15 +247,22 @@ namespace CareersListing.Controllers
         // Register User (GET)
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register()
+        public IActionResult Register(string accType)
         {
+            if(accType != "applicant" && accType != "employer")
+            {
+                ViewBag.accType = "Invalid account type!";
+                return View();
+            }
+           
+            ViewBag.accType = accType;
             return View();
         }
 
         // Register (POST)
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model, string acctype)
         {
             if (ModelState.IsValid)
             {
@@ -264,7 +272,6 @@ namespace CareersListing.Controllers
                     UserName = model.Email,
                     LastName = model.LastName,
                     FirstName = model.FirstName,
-                    AccountType = model.AccountType,
                     City = model.City,
                     Country = model.Country,
                     Email = model.Email
@@ -275,7 +282,7 @@ namespace CareersListing.Controllers
 
                 if (result.Succeeded)
                 {
-                    if(model.AccountType == AccountType.Applicant)
+                    if (acctype == "applicant")
                     {
                         await _userManager.AddToRoleAsync(user, "Applicant");
                     }

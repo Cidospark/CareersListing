@@ -27,10 +27,9 @@ namespace CareersListing.ViewModels
         [Required(ErrorMessage = "Firstname require")]
         [Display(Name = "First name")]
         public string FirstName { get; set; }
-        
-        [Required]
-        public AccountType AccountType { get; set; }
-        
+
+        public string AccountTtpe { get; set; }
+
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 

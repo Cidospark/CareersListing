@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using CareersListing.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +28,33 @@ namespace CareersListing.Utilities
             }
             
             return filename;
+        }
+
+        public static async Task<string> getUserAccountType(UserManager<ApplicationUser> userManager, ApplicationUser user)
+        {
+            string userAccType = null;
+
+            if (await  userManager.IsInRoleAsync(user, "APPLICANT"))
+            {
+                userAccType += "Applicant, ";
+            }
+
+            if (await userManager.IsInRoleAsync(user, "EMPLOYER"))
+            {
+                userAccType += "Employer, ";
+            }
+
+            if (await userManager.IsInRoleAsync(user, "ADMIN"))
+            {
+                userAccType += "Admin, ";
+            }
+
+            if (await userManager.IsInRoleAsync(user, "SUPER ADMIN"))
+            {
+                userAccType += "Super Admin, ";
+            }
+
+            return userAccType;
         }
     }
 }

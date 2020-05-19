@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@model IEnumerable<UsersViewModel>
 @inject UserManager<ApplicationUser> userMngr
 @{
     ViewBag.Title = "Registered Users";
@@ -57,17 +57,13 @@
                                             @singleUser.LastName.ToUpper() &nbsp; @singleUser.FirstName
                                         </td>
                                         <td class="text-center">
-                                            @if(singleUser.AccountType.ToString() == "2")
-                                            {
-                                                <span>Admin</span>
-                                            }
-                                            else { @singleUser.AccountType }
+                                           @singleUser.AccountTtpe
                                         </td>
                                         <td class="text-center">
                                             @singleUser.Country
                                         </td>
                                         <td class="text-center">
-                                            @singleUser.DateRegistered
+                                            @singleUser.DateOfReg
                                         </td>
                                         <td>
                                             <div class="text-right">

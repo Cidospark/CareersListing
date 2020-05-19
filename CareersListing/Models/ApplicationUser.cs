@@ -13,9 +13,7 @@ namespace CareersListing.Models
         public string LastName { get; set; }
         [Required]
         public string FirstName { get; set; }
-        [Required]
-        public AccountType AccountType { get; set; }
-
+        
         public string Street { get; set; }
 
         [Required]
@@ -29,8 +27,8 @@ namespace CareersListing.Models
         [Required]
         public DateTime DateRegistered { get; set; }
 
-        public Applicant Applicant { get; set; }
-        public Employer Employer { get; set; }
+        public ICollection<JobApplication> JobApplication { get; set; }
+        public ICollection<Company> Company { get; set; }
 
         public ApplicationUser()
         {
