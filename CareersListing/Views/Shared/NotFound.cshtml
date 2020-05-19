@@ -1,13 +1,16 @@
 ﻿@{
     ViewBag.Title = "Not Found";
-    Layout = "_AdminLayout";
+    Layout = "_Layout";
 }
 
 <div class="row ml-5 mr-5">
 
     <!-- left column -->
-    <div class="card card-primary card-outline col-md-12">
+    <div class="card card-warning card-outline col-md-12">
         <div class="card-body text-center">
+           <div class="d-flex justify-content-end">
+            <i class="fa fa-times-circle text-muted fa-2x" onclick="window.history.back()" style="cursor:pointer;"></i>
+           </div>
             <div style="padding:12%;">
                 <p>
                     <i class="fa fa-exclamation-triangle text-warning" style="font-size:15vh;"></i>
