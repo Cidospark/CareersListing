@@ -2,22 +2,22 @@
 
 namespace CareersListing.Migrations
 {
-    public partial class EditedAppUserMigration : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Nationality",
+                name: "AccountType",
                 table: "AspNetUsers");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Nationality",
+            migrationBuilder.AddColumn<int>(
+                name: "AccountType",
                 table: "AspNetUsers",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: 0);
         }
     }
 }

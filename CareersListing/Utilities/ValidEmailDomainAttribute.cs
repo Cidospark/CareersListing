@@ -22,8 +22,15 @@ namespace CareersListing.Utilities
             // change the splited string @ index 1 to uppercase and 
             // compare it with the allowedDomain attribute
             // return true or false
-            string[] strings = value.ToString().Split("@");
-            return strings[1].ToUpper() == allowedDomain.ToUpper();
+            if (value.ToString().Contains("@"))
+            {
+                string[] strings = value.ToString().Split("@");
+                return strings[1].ToUpper() == allowedDomain.ToUpper();
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

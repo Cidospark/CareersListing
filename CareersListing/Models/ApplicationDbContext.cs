@@ -11,20 +11,20 @@ namespace CareersListing.Models
     {
         public ApplicationDbContext(DbContextOptions options): base(options) {}
 
-        public DbSet<Employer> Employers { get; set; }
-        public DbSet<Applicant> Applicants { get; set; }
         public DbSet<Company> Companies { get; set; }
-        public DbSet<JobPost> jobPosts { get; set; }
+        public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    // the line below have to be called 
+        //    // since we are overriding OnModelCreating
+        //    base.OnModelCreating(modelBuilder);
 
-            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            {
-                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
-            }
-        }
+        //    //foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+        //    //{
+        //    //    foreignKey.DeleteBehavior = DeleteBehavior.Cascade;
+        //    //}
+        //}
     }
 }

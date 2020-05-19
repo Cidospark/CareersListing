@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CareersListing.Models
 {
-    public class JobPost
+    public class Vacancy
     {
         public int Id { get; set; }
         public Company Company { get; set; }

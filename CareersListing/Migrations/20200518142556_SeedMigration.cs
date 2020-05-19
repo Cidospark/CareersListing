@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CareersListing.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class SeedMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,7 +44,6 @@ namespace CareersListing.Migrations
                     LastName = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     AccountType = table.Column<int>(nullable: false),
-                    Nationality = table.Column<string>(nullable: false),
                     Street = table.Column<string>(nullable: true),
                     City = table.Column<string>(maxLength: 100, nullable: false),
                     Country = table.Column<string>(nullable: false),
@@ -74,27 +73,7 @@ namespace CareersListing.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Applicants",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ApplicationUserId = table.Column<string>(nullable: true),
-                    CV = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Applicants", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Applicants_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,7 +94,7 @@ namespace CareersListing.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -135,7 +114,7 @@ namespace CareersListing.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,13 +132,13 @@ namespace CareersListing.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,26 +158,7 @@ namespace CareersListing.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Employers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ApplicationUserId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Employers_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -207,7 +167,7 @@ namespace CareersListing.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EmployerId = table.Column<int>(nullable: false),
+                    EmployerId = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Email = table.Column<string>(nullable: false),
                     Website = table.Column<string>(nullable: true),
@@ -222,15 +182,15 @@ namespace CareersListing.Migrations
                 {
                     table.PrimaryKey("PK_Companies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Companies_Employers_EmployerId",
+                        name: "FK_Companies_AspNetUsers_EmployerId",
                         column: x => x.EmployerId,
-                        principalTable: "Employers",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "jobPosts",
+                name: "Vacancies",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -248,13 +208,13 @@ namespace CareersListing.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_jobPosts", x => x.Id);
+                    table.PrimaryKey("PK_Vacancies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_jobPosts_Companies_CompanyId",
+                        name: "FK_Vacancies_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -263,9 +223,8 @@ namespace CareersListing.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ApplicantId1 = table.Column<int>(nullable: true),
                     ApplicantId = table.Column<string>(nullable: true),
-                    JobPostId = table.Column<int>(nullable: false),
+                    VacancyId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     DateRegistered = table.Column<DateTime>(nullable: false)
                 },
@@ -273,25 +232,18 @@ namespace CareersListing.Migrations
                 {
                     table.PrimaryKey("PK_JobApplications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_JobApplications_Applicants_ApplicantId1",
-                        column: x => x.ApplicantId1,
-                        principalTable: "Applicants",
+                        name: "FK_JobApplications_AspNetUsers_ApplicantId",
+                        column: x => x.ApplicantId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_JobApplications_jobPosts_JobPostId",
-                        column: x => x.JobPostId,
-                        principalTable: "jobPosts",
+                        name: "FK_JobApplications_Vacancies_VacancyId",
+                        column: x => x.VacancyId,
+                        principalTable: "Vacancies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Applicants_ApplicationUserId",
-                table: "Applicants",
-                column: "ApplicationUserId",
-                unique: true,
-                filter: "[ApplicationUserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -338,25 +290,18 @@ namespace CareersListing.Migrations
                 column: "EmployerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employers_ApplicationUserId",
-                table: "Employers",
-                column: "ApplicationUserId",
-                unique: true,
-                filter: "[ApplicationUserId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobApplications_ApplicantId1",
+                name: "IX_JobApplications_ApplicantId",
                 table: "JobApplications",
-                column: "ApplicantId1");
+                column: "ApplicantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobApplications_JobPostId",
+                name: "IX_JobApplications_VacancyId",
                 table: "JobApplications",
-                column: "JobPostId");
+                column: "VacancyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_jobPosts_CompanyId",
-                table: "jobPosts",
+                name: "IX_Vacancies_CompanyId",
+                table: "Vacancies",
                 column: "CompanyId");
         }
 
@@ -384,16 +329,10 @@ namespace CareersListing.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Applicants");
-
-            migrationBuilder.DropTable(
-                name: "jobPosts");
+                name: "Vacancies");
 
             migrationBuilder.DropTable(
                 name: "Companies");
-
-            migrationBuilder.DropTable(
-                name: "Employers");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

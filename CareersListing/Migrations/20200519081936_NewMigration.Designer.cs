@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareersListing.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200430082030_EditedAppUserMigration")]
-    partial class EditedAppUserMigration
+    [Migration("20200519081936_NewMigration")]
+    partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,33 +21,12 @@ namespace CareersListing.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CareersListing.Models.Applicant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<string>("CV");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique()
-                        .HasFilter("[ApplicationUserId] IS NOT NULL");
-
-                    b.ToTable("Applicants");
-                });
-
             modelBuilder.Entity("CareersListing.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
-
-                    b.Property<int>("AccountType");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -132,7 +111,7 @@ namespace CareersListing.Migrations
                     b.Property<string>("Email")
                         .IsRequired();
 
-                    b.Property<int>("EmployerId");
+                    b.Property<string>("EmployerId");
 
                     b.Property<string>("Logo");
 
@@ -151,23 +130,6 @@ namespace CareersListing.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("CareersListing.Models.Employer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique()
-                        .HasFilter("[ApplicationUserId] IS NOT NULL");
-
-                    b.ToTable("Employers");
-                });
-
             modelBuilder.Entity("CareersListing.Models.JobApplication", b =>
                 {
                     b.Property<int>("Id")
@@ -176,24 +138,22 @@ namespace CareersListing.Migrations
 
                     b.Property<string>("ApplicantId");
 
-                    b.Property<int?>("ApplicantId1");
-
                     b.Property<DateTime>("DateRegistered");
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("JobPostId");
+                    b.Property<int>("VacancyId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicantId1");
+                    b.HasIndex("ApplicantId");
 
-                    b.HasIndex("JobPostId");
+                    b.HasIndex("VacancyId");
 
                     b.ToTable("JobApplications");
                 });
 
-            modelBuilder.Entity("CareersListing.Models.JobPost", b =>
+            modelBuilder.Entity("CareersListing.Models.Vacancy", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -229,7 +189,7 @@ namespace CareersListing.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("jobPosts");
+                    b.ToTable("Vacancies");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -342,49 +302,31 @@ namespace CareersListing.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CareersListing.Models.Applicant", b =>
-                {
-                    b.HasOne("CareersListing.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("Applicant")
-                        .HasForeignKey("CareersListing.Models.Applicant", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("CareersListing.Models.Company", b =>
                 {
-                    b.HasOne("CareersListing.Models.Employer", "Employer")
+                    b.HasOne("CareersListing.Models.ApplicationUser", "Employer")
                         .WithMany("Company")
-                        .HasForeignKey("EmployerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("CareersListing.Models.Employer", b =>
-                {
-                    b.HasOne("CareersListing.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("Employer")
-                        .HasForeignKey("CareersListing.Models.Employer", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("EmployerId");
                 });
 
             modelBuilder.Entity("CareersListing.Models.JobApplication", b =>
                 {
-                    b.HasOne("CareersListing.Models.Applicant", "Applicant")
+                    b.HasOne("CareersListing.Models.ApplicationUser", "Applicant")
                         .WithMany("JobApplication")
-                        .HasForeignKey("ApplicantId1")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ApplicantId");
 
-                    b.HasOne("CareersListing.Models.JobPost", "JobPost")
+                    b.HasOne("CareersListing.Models.Vacancy", "Vacancy")
                         .WithMany("JobApplication")
-                        .HasForeignKey("JobPostId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("VacancyId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("CareersListing.Models.JobPost", b =>
+            modelBuilder.Entity("CareersListing.Models.Vacancy", b =>
                 {
                     b.HasOne("CareersListing.Models.Company", "Company")
-                        .WithMany("JobPost")
+                        .WithMany("Vacancies")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -392,7 +334,7 @@ namespace CareersListing.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -400,7 +342,7 @@ namespace CareersListing.Migrations
                     b.HasOne("CareersListing.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -408,7 +350,7 @@ namespace CareersListing.Migrations
                     b.HasOne("CareersListing.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -416,12 +358,12 @@ namespace CareersListing.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CareersListing.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -429,7 +371,7 @@ namespace CareersListing.Migrations
                     b.HasOne("CareersListing.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -18,8 +18,7 @@ namespace CareersListing.ViewModels
         [Required]
         [Display(Name = "First name")]
         public string FirstName { get; set; }
-        [Required]
-        public AccountType AccountType { get; set; }
+
         [Required]
         [EmailAddress]
         [Remote(action: "IsEmailInUse", controller: "Account")]

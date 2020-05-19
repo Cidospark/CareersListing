@@ -71,7 +71,7 @@ namespace CareersListing.Controllers
                 Id = user.Id,
                 LastName = user.LastName,
                 FirstName = user.FirstName,
-                AccountType = user.AccountType,
+                AccountTtpe = await Utils.getUserAccountType(_userManager, user),
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Street = user.Street,
@@ -285,8 +285,8 @@ namespace CareersListing.Controllers
                 Id = user.Id,
                 LastName = user.LastName,
                 FirstName = user.FirstName,
-                AccountType = user.AccountType,
                 Email = user.Email,
+                AccountTtpe = await Utils.getUserAccountType(_userManager, user),
                 PhoneNumber = user.PhoneNumber,
                 Street = user.Street,
                 City = user.City,
@@ -543,10 +543,29 @@ namespace CareersListing.Controllers
 
         // List of registered users (GET)
         [HttpGet]
-        public IActionResult Users()
+        public async Task<IActionResult> Users()
         {
+            var model = new List<UsersViewModel>();
             var users = _userManager.Users;
-            return View(users);
+
+            foreach(var user in users)
+            {
+                var eachUser = new UsersViewModel
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Country = user.Country,
+                    DateOfReg = user.DateRegistered
+                };
+                
+                eachUser.AccountTtpe = await Utils.getUserAccountType(_userManager, user);
+
+                model.Add(eachUser);
+
+            }
+            
+            return View(model);
         }
         //--------------------------------------------------------------------------------------------------------
 
@@ -569,7 +588,6 @@ namespace CareersListing.Controllers
                     UserName = model.Email,
                     LastName = model.LastName,
                     FirstName = model.FirstName,
-                    AccountType = model.AccountType,
                     City = model.City,
                     Country = model.Country,
                     Email = model.Email
@@ -580,18 +598,18 @@ namespace CareersListing.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (model.AccountType == AccountType.Applicant)
-                    {
-                        await _userManager.AddToRoleAsync(user, "Applicant");
-                    }
-                    else if(model.AccountType == AccountType.Employer)
-                    {
-                        await _userManager.AddToRoleAsync(user, "Employer");
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, "Admin");
-                    }
+                    //if (model.AccountType == AccountType.Applicant)
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, "Applicant");
+                    //}
+                    //else if(model.AccountType == AccountType.Employer)
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, "Employer");
+                    //}
+                    //else
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, "Admin");
+                    //}
 
                     ViewBag.RegMessage = "REGISTRATION WAS SUCCESSFUL!";
                     // TODO : send confirmation message to user email

@@ -9,10 +9,10 @@ namespace CareersListing.Models
     public class JobApplication
     {
         public int Id { get; set; }
-        public Applicant Applicant { get; set; }
+        public ApplicationUser Applicant { get; set; }
         public string ApplicantId { get; set; }
-        public JobPost JobPost { get; set; }
-        public int JobPostId { get; set; }
+        public Vacancy Vacancy { get; set; }
+        public int VacancyId { get; set; }
         public string Description { get; set; }
 
         [Required]
