@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CareersListing.Models;
+using CareersListing.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,9 +33,14 @@ namespace CareersListing
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 3;
                 options.SignIn.RequireConfirmedEmail = false;
+                options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
 
             }).AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<CustomEmailConfirmationTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
+
+            services.Configure<CustomEmailConfirmationTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(3));
+
 
             services.AddDbContextPool<ApplicationDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("default"))
