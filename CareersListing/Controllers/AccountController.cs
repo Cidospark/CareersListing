@@ -284,6 +284,7 @@ namespace CareersListing.Controllers
 
                 if (result.Succeeded)
                 {
+                    // add role to user
                     if (acctype == "applicant")
                     {
                         await _userManager.AddToRoleAsync(user, "Applicant");
@@ -293,17 +294,63 @@ namespace CareersListing.Controllers
                         await _userManager.AddToRoleAsync(user, "Employer");
                     }
 
+                    // generate email confirmation email and log it
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { id = user.Id, token }, Request.Scheme);
+                    _logger.LogWarning(confirmationLink);
+
+                    // display a confimation message to user
                     ViewBag.ErrorTitle = "REGISTRATION WAS SUCCESSFUL!"; 
                     ViewBag.Message = "Please activate your account from the link sent to your email, Thank you.";
                     return View();
                 }
-
+                
+                // display error if not successful
                 foreach(var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
             }
+
+            // go back to thesame view
             return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // Confirm Email (GET)
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string id, string token)
+        {
+           // if id or token is null, end the process
+           if(id == null || token == null)
+            {
+                ViewBag.ErrorTitle = "Invalid Id or token";
+                ViewBag.ErrorMessage = $"User or token cannot be null";
+                return View("Error");
+            }
+
+            // ensure that user exist
+            var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id {id} cannot be found!";
+                return View("NotFound");
+            }
+
+            // confirm email
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return View();
+            }
+
+            // on failure
+            ViewBag.ErrorTitle = "Conirmation Fialed";
+            ViewBag.ErrorMessage = $"Could not confirm email.";
+            return View("Error");
+
         }
         //--------------------------------------------------------------------------------------------------------
 
@@ -323,7 +370,6 @@ namespace CareersListing.Controllers
             }
         }
         //--------------------------------------------------------------------------------------------------------
-
 
         // Logout (GET)
         [HttpPost]
