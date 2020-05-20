@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CareersListing.Models;
+using CareersListing.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,11 +32,24 @@ namespace CareersListing
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 3;
-                options.SignIn.RequireConfirmedEmail = false;
+
+                // settings for email lockout count and lock time
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+
+                // setting for confirmed email on sign in and customized email token life span
+                options.SignIn.RequireConfirmedEmail = true; // step 1
+                options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
 
             }).AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<CustomEmailConfirmationTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
+            // Customize the lifespan of email token generated in the app to 3 days instead of the default 5 hours
+            services.Configure<CustomEmailConfirmationTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromDays(3));
 
+            // set all lifespan of all tokens generated in the app to 5 hours
+            services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(5));
+            
             services.AddDbContextPool<ApplicationDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("default"))
            );

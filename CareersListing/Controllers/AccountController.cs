@@ -160,6 +160,7 @@ namespace CareersListing.Controllers
         {
             ViewBag.PasswordErr = "Invalid Password!";
             
+            // check if id is valid
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
@@ -167,6 +168,7 @@ namespace CareersListing.Controllers
                 return View("NotFound");
             }
 
+            // create user object view model
             model.ExistingPhotoPath = user.Photo;
             model.LastName = user.LastName;
             model.FirstName = user.FirstName;
@@ -214,13 +216,23 @@ namespace CareersListing.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if(user == null)
+                // if user is null 
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = $"User with email {model.Email} cannot be found!";
+                    return View("NotFound");
+                }
+
+                // step 2 from start up
+                // if user is not null and email is not confirmed or password not currect
+                if (user != null && !user.EmailConfirmed && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     ModelState.AddModelError(String.Empty, "Email not confirmed yet");
                     return View(model);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
+                // sign in
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, true);
                 if (result.Succeeded)
                 {
                     if (!String.IsNullOrEmpty(ReturnUrl))
@@ -233,10 +245,10 @@ namespace CareersListing.Controllers
                     }
                 }
 
-                //if (result.IsLockedOut)
-                //{
-                //    return View("AccountLockedout");
-                //}
+                if (result.IsLockedOut)
+                {
+                    return View("AccountLockedout");
+                }
 
                 ModelState.AddModelError("", "Invalid Attempt");
 
@@ -284,6 +296,7 @@ namespace CareersListing.Controllers
 
                 if (result.Succeeded)
                 {
+                    // add role to user
                     if (acctype == "applicant")
                     {
                         await _userManager.AddToRoleAsync(user, "Applicant");
@@ -293,17 +306,63 @@ namespace CareersListing.Controllers
                         await _userManager.AddToRoleAsync(user, "Employer");
                     }
 
+                    // generate email confirmation email and log it
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new { id = user.Id, token }, Request.Scheme);
+                    _logger.LogWarning(confirmationLink);
+
+                    // display a confimation message to user
                     ViewBag.ErrorTitle = "REGISTRATION WAS SUCCESSFUL!"; 
                     ViewBag.Message = "Please activate your account from the link sent to your email, Thank you.";
                     return View();
                 }
-
+                
+                // display error if not successful
                 foreach(var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
             }
+
+            // go back to thesame view
             return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+
+        // Confirm Email (GET)
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string id, string token)
+        {
+           // if id or token is null, end the process
+           if(id == null || token == null)
+            {
+                ViewBag.ErrorTitle = "Invalid Id or token";
+                ViewBag.ErrorMessage = $"User or token cannot be null";
+                return View("Error");
+            }
+
+            // ensure that user exist
+            var user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                ViewBag.ErrorMessage = $"User with id {id} cannot be found!";
+                return View("NotFound");
+            }
+
+            // confirm email
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return View();
+            }
+
+            // on failure
+            ViewBag.ErrorTitle = "Conirmation Fialed";
+            ViewBag.ErrorMessage = $"Could not confirm email.";
+            return View("Error");
+
         }
         //--------------------------------------------------------------------------------------------------------
 
@@ -323,7 +382,6 @@ namespace CareersListing.Controllers
             }
         }
         //--------------------------------------------------------------------------------------------------------
-
 
         // Logout (GET)
         [HttpPost]
