@@ -32,16 +32,20 @@ namespace CareersListing
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 3;
-                options.SignIn.RequireConfirmedEmail = false;
+
+                // settings for email lockout count and lock time
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+
+                // setting for confirmed email on sign in and customized email token life span
+                options.SignIn.RequireConfirmedEmail = true; // step 1
                 options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
 
             }).AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders()
             .AddTokenProvider<CustomEmailConfirmationTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
-
             services.Configure<CustomEmailConfirmationTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(3));
-
-
+            
             services.AddDbContextPool<ApplicationDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("default"))
            );

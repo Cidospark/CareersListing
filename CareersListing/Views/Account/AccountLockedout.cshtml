@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Account lockout";
+    Layout = "_AccountLayout";
+}
+
+
+<div class="register-box mt-3">
+    <div class="card">
+        <div class="card-body register-card-body">
+            <div class="">
+                <a href="#" style="font-size:41px; color:#0056B3;"><strong><i class="fa fa-briefcase"></i> Careers</strong>Listing</a>
+            </div><br />
+            <center>
+                <i class="fa fa-lock text-teal m-5" style="font-size:70px;"></i>
+                <p class="login-box-msg text-info">Your account is locked, please try again after sometime or you may.</p>
+
+                <p class="mb-1">
+                    <small>
+                        <a asp-action="ForgotPassword" asp-controller="Account">
+                            Reset your password by clicking here
+                        </a>
+                    </small>
+                </p>
+            </center>
+        </div>
+    </div><!-- /.card -->
+    <div class="text-muted text-center">
+        <small>Copyright &copy; @DateTime.Now.Year <a href="#">CareersListing</a>. All rights reserved.</small>
+    </div>
+</div>

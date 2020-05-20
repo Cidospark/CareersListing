@@ -160,6 +160,7 @@ namespace CareersListing.Controllers
         {
             ViewBag.PasswordErr = "Invalid Password!";
             
+            // check if id is valid
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
@@ -167,6 +168,7 @@ namespace CareersListing.Controllers
                 return View("NotFound");
             }
 
+            // create user object view model
             model.ExistingPhotoPath = user.Photo;
             model.LastName = user.LastName;
             model.FirstName = user.FirstName;
@@ -214,13 +216,23 @@ namespace CareersListing.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if(user == null)
+                // if user is null 
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = $"User with email {model.Email} cannot be found!";
+                    return View("NotFound");
+                }
+
+                // step 2 from start up
+                // if user is not null and email is not confirmed or password not currect
+                if (user != null && !user.EmailConfirmed && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     ModelState.AddModelError(String.Empty, "Email not confirmed yet");
                     return View(model);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
+                // sign in
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, true);
                 if (result.Succeeded)
                 {
                     if (!String.IsNullOrEmpty(ReturnUrl))
@@ -233,10 +245,10 @@ namespace CareersListing.Controllers
                     }
                 }
 
-                //if (result.IsLockedOut)
-                //{
-                //    return View("AccountLockedout");
-                //}
+                if (result.IsLockedOut)
+                {
+                    return View("AccountLockedout");
+                }
 
                 ModelState.AddModelError("", "Invalid Attempt");
 
