@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Error";
+    Layout = "_Layout";
+}
+
+
+<div class="row ml-5 mr-5">
+
+    <!-- left column -->
+    <div class="card card-warning card-outline col-md-12">
+        <div class="card-body text-center">
+            <div class="d-flex justify-content-end">
+                <i class="fa fa-times-circle text-muted fa-2x" onclick="window.history.back()" style="cursor:pointer;"></i>
+            </div>
+            <div style="padding:12%;" class="text-warning">
+                @if (ViewBag.ErrorTitle == null)
+                {
+                    <p>
+                        <i class="fa fa-exclamation-triangle text-warning" style="font-size:15vh;"></i>
+                    </p>
+                    <h4 class="pt-3 text-warning">
+                        An error occured while processing your request. For emergencies or " +
+                        "enquiries, please contact us on sample@sample.com
+                    </h4>
+                }
+                else
+                {
+                    <h3 class="text-warning">@ViewBag.ErrorTitle</h3>
+                    <hr />
+                    @ViewBag.ErrorMessage
+                }
+            </div>
+        </div>
+    </div>
+</div>

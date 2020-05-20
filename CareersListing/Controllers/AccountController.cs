@@ -8,6 +8,7 @@ using CareersListing.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,12 +19,15 @@ namespace CareersListing.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(UserManager<ApplicationUser> userManager,
-                                 SignInManager<ApplicationUser> signInManager)
+                                 SignInManager<ApplicationUser> signInManager,
+                                 ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger;
         }
 
         // Reset Password (GET)
@@ -100,16 +104,14 @@ namespace CareersListing.Controllers
                 // confirm if email exist
                 // Use email to get user to generate password reset token
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if(user != null && await _userManager.IsEmailConfirmedAsync(user))
+                if(user != null && !await _userManager.IsEmailConfirmedAsync(user))
                 {
                     // Use user to generate token
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                     // Use token to genetate password reset link
-                    var passwordResetLink = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, Request.Scheme);
+                    _logger.LogWarning(Url.Action("ResetPassword", "Account", new { email = model.Email, token }, Request.Scheme));
 
-                    //return Json(passwordResetLink);
-                    ViewBag.ResetLink = passwordResetLink;
                     return View("ForgotPasswordConfirmation");
                 }
 
