@@ -1,0 +1,168 @@
+﻿body {
+    margin:0px;
+}
+
+.slider-div {
+    background: url(../../images/slider/niceBlue.jpg) center;
+    width: 100% !important;
+    padding:0px; margin:0px;
+    position:relative;
+}.sitename {
+    font-size:24px; 
+    color:#0056B3; 
+    margin-right:40px;
+}.premium{
+    opacity:0.75 !important;
+    cursor:pointer;
+}
+.slider-div header {
+    background: #fff;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+.login-btn {
+    display: none;
+    border:2px solid blue !important;
+    cursor:pointer;
+}
+
+.slider-desc{
+    position:absolute;
+    bottom:20px;
+    background: rgba(6, 15, 24, 0.63);
+    color: #fff;
+    width:100%;
+    padding:30px;
+    border-radius:6px;
+    z-index:500;
+}
+.slider-area {
+    position: relative;
+    min-height:400px
+}
+.slider-area img{
+    display:none;
+    width:100%;
+}
+.slider-area img.active{
+    display:block;
+}
+.slider-area .title{
+    font-size:40px;
+    font-weight:bold;
+    margin-bottom:-10px !important;
+    margin-top:-10px !important;
+}
+.slider-area .text{
+    font-size:13px;
+    margin-top:0px !important;
+    padding-top:0px !important;
+}
+
+.frm-job-search select {
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+    cursor: pointer;
+    -webkit-appearance: none;
+    background: url(../../images/assets/arrow-dwn.png) no-repeat 95% 55%;
+    padding: 5px 25px;
+    padding-left: 0px;
+    color:#777;
+    padding-left:5px;
+}
+.frm-job-search .selects{
+    background:#fff;
+    border-radius:4px;
+}
+
+@media all and (min-width:350px) {
+    .slider-area .title {
+        font-size: 30px;
+    }
+    .sitename {
+        font-size: 17px;
+    }
+}
+@media all and (min-width:450px) {
+    .slider-area .title {
+        font-size: 40px;
+    }
+    .sitename {
+        font-size: 20px;
+    }
+}
+@media all and (min-width:600px) {
+    .nav-btn{
+        display:none;
+    }
+    .login-btn{
+        display:inline-block;
+    }
+
+    .sitename {
+        font-size: 24px;
+    }
+}
+@media all and (min-width:770px){
+    .slider-area{
+        display: flex !important;
+        justify-content:space-between !important;
+        align-items: center;
+        width:100%;
+    }
+    .slider-area img{
+        width:37%;
+    }
+    .slider-desc{
+        width:50%;
+        min-width:400px;
+        bottom:25%;
+        background:transparent;
+        margin-left:0px;
+        padding-left:0px;
+        position:relative;
+        left:0px;
+    }
+    .frm-job-search .search-btn{
+        background:blue;
+        box-shadow:0px 0px 2px 2px blue;
+    }
+    .frm-job-search .search-btn:hover {
+        background: navy;
+    }
+    .frm-job-search .selects{
+        border:1px solid blue;
+    }
+}
+@media all and (min-width:970px) {
+    .slider-area .title {
+        font-size: 47px;
+    }
+    .slider-area .text {
+        font-size: 16px;
+    }
+    .slider-desc {
+        bottom: 35%;
+    }
+}
+/*.slider-div header {
+    background:transparent;
+}
+
+.nav-item .nav-link:hover{
+    background-color:skyblue !important;
+    color:#fff !important;
+    display:inline-block;
+    border-radius:4px;
+}
+
+
+
+#services-div {
+    height: 180vh !important;
+    width: 100% !important;
+    padding: 0px;
+    margin: 0px;
+}*/

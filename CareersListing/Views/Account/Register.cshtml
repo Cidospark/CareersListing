@@ -6,11 +6,11 @@
 }
 
 
-<div class="register-box mt-3">
+<div class="register-box mt-3"  style="width:360px;">
     <div class="card">
         <div class="card-body register-card-body">
             <div class="">
-                <a href="#" style="font-size:41px; color:#0056B3;"><strong><i class="fa fa-briefcase"></i> Careers</strong>Listing</a>
+                <a  asp-action="Index" asp-controller="Home"  style="font-size:41px; color:#0056B3;"><strong><i class="fa fa-briefcase"></i> Careers</strong>Listing</a>
                 <div class="mb-3 text-center" style="font-size:24px; color:#ccc;"> - Register - </div>
             </div>
 
@@ -122,7 +122,10 @@
         </div>
         <!-- /.form-box -->
     </div><!-- /.card -->
-    <div class="text-muted text-center">
-        <small>Copyright &copy; @DateTime.Now.Year <a href="#">CareersListing</a>. All rights reserved.</small>
+    <div class="text-white text-center">
+        <small>
+            Copyright &copy; @DateTime.Now.Year
+            <a asp-action="Index" asp-controller="Home" class="text-teal">CareersListing</a>. All rights reserved.
+        </small>
     </div>
 </div>

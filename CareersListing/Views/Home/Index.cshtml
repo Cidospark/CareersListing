@@ -1,5 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewBag.Title = "Home";
+    Layout = "_PublicLayout";
+}
+
+
+<div class="slider-div">
+    <div class="container">
+        <div class="slider-area pt-4">
+            <div class="slider-desc animated3 fadeInLeft">
+                <div class="title-wrap"><div class="title"> Your smart choice </div></div>
+                <div class="text">
+                    CareersListing offers you the best place to find your dream job.
+                </div>
+                <div>
+                    <form class="mt-4 frm-job-search">
+                        <div class="input-group selects">
+                            <select class="form-control">
+                                <option>Job function</option>
+                            </select>
+                            <select class="form-control">
+                                <option>Industry</option>
+                            </select>
+                            <select class="form-control">
+                                <option>Location</option>
+                            </select>
+                        </div>
+                        <div class="input-group mt-3">
+                            <button class="btn btn-primary form-control search-btn"><i class="fa fa-search"></i> &nbsp; Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <img src="~/images/slider/img1.png" class="active ml-5 animated3 fadeInRight " />
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/dist/js/generalJS.js"></script>
 }
