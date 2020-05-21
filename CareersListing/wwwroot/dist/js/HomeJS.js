@@ -2,7 +2,7 @@
 const sliderImage = document.querySelector(".slider-area");
 const sliderTitle = document.querySelector(".slider-desc .title-wrap");
 const imageNames = ["img1.png", "img3.png"];
-const titles = ["Your smart choice", "Take advantage"];
+const titles = ["Your smart choice", "Own your dream job"];
 const animateStyles = ["fadeInLeft", "fadeIn", "fadeInUp"];
 
 let counter = 1;

@@ -11,7 +11,7 @@
         <div class="card-body register-card-body">
             <div class="">
                 <a  asp-action="Index" asp-controller="Home"  style="font-size:41px; color:#0056B3;"><strong><i class="fa fa-briefcase"></i> Careers</strong>Listing</a>
-                <div class="mb-3 text-center" style="font-size:24px; color:#ccc;"> - Register - </div>
+                <div class="mb-3 text-center" style="font-size:24px; color:#ccc;"> - Register  as <span class="text-capitalize">@ViewBag.accType</span> - </div>
             </div>
 
             <form class="" method="post" asp-route-accType="@ViewBag.accType">
@@ -109,7 +109,7 @@
                     {
                         <!-- /.col -->
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block">Register As <span class="text-capitalize">@ViewBag.accType</span></button>
+                            <button type="submit" class="btn btn-primary btn-block">Register</button>
                         </div>
                         <!-- /.col -->
                     }
