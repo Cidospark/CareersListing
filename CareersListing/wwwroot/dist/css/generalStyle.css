@@ -25,11 +25,12 @@
     display: none;
     border:2px solid blue !important;
     cursor:pointer;
+    white-space:nowrap;
 }
 
 .slider-desc{
     position:absolute;
-    bottom:20px;
+    bottom:10%;
     background: rgba(6, 15, 24, 0.63);
     color: #fff;
     width:100%;
@@ -43,7 +44,7 @@
 }
 .slider-area img{
     display:none;
-    width:100%;
+    width:90%;
 }
 .slider-area img.active{
     display:block;
@@ -76,6 +77,48 @@
     background:#fff;
     border-radius:4px;
 }
+.dm-flex {
+    position: relative;
+    display: flex;
+    flex-flow: column wrap;
+    flex-direction: row-reverse;
+}
+.nav-btn {
+    position: relative;
+    max-width:70px;
+    cursor:pointer;
+}
+.menu {
+    position:absolute;
+    color:black;
+    z-index:1000;
+    background:rgba(255,255,255,.5);
+    margin-top:52px;
+    left:0px;
+    display:none;
+}
+.menu div{position:relative;}
+.menu > div a {
+    border-top:1px solid grey;
+    display:block;
+    padding:5px 40px;
+    color:navy;
+    font-weight:bold;    
+}
+.menu a:hover {
+    background:white;
+    cursor:pointer;
+}
+.menu .sub-m{
+    display:none;
+}
+.menu .sub-m a{
+   border-top:0px;
+   font-size:10px;
+}
+.title-logo{
+    white-space:nowrap;
+}
 
 @media all and (min-width:350px) {
     .slider-area .title {
@@ -83,6 +126,11 @@
     }
     .sitename {
         font-size: 17px;
+    }
+    .premium{
+        font-size:14px;
+        white-space:nowrap;
+        padding:10px;
     }
 }
 @media all and (min-width:450px) {
@@ -94,18 +142,65 @@
     }
 }
 @media all and (min-width:600px) {
-    .nav-btn{
-        display:none;
-    }
-    .login-btn{
-        display:inline-block;
-    }
-
-    .sitename {
-        font-size: 24px;
-    }
+   
 }
 @media all and (min-width:770px){
+    .nav-btn {
+        display: none;
+    }
+ 
+    .menu {
+        position: relative;
+        margin-top: 0px;
+        left: 0px;
+        display: block;
+    }
+    .auto-h{
+        display:none;
+    }
+
+    .menu .sub-m {
+        position:absolute;
+        background: rgba(255,255,255, .5);
+        z-index:500;
+        color:navy;
+        width:200px;
+        margin-top:14px;
+    }
+    .menu .sub-m a{
+        border-top: 1px solid grey;
+        font-size:14px;
+    }
+
+    .dm-flex {
+        flex-flow: row nowrap;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+
+        .dm-flex .menu {
+            display: flex;
+            flex-flow: row;
+            background: transparent;
+        }
+
+            .dm-flex .menu a {
+                padding: 0px 15px;
+                color: rgba(16, 99, 141, 0.74);
+                border-top: none;
+                font-weight: normal;
+                background: transparent;
+                line-height: 40px;
+            }
+
+                .dm-flex .menu a:hover {
+                    color: #777;
+                }
+
+    .login-btn {
+        display: inline-block;
+    }
+
     .slider-area{
         display: flex !important;
         justify-content:space-between !important;
@@ -137,6 +232,7 @@
     }
 }
 @media all and (min-width:970px) {
+
     .slider-area .title {
         font-size: 47px;
     }
@@ -146,6 +242,18 @@
     .slider-desc {
         bottom: 35%;
     }
+    .col-left{
+        width:40% !important;
+    }
+    .col-right{
+        width:70% !important;
+    }
+}
+@media all and (min-width:1120px) {
+    .sitename {
+        font-size: 24px;
+    }
+    
 }
 /*.slider-div header {
     background:transparent;
