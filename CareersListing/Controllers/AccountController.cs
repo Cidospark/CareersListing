@@ -104,7 +104,7 @@ namespace CareersListing.Controllers
                 // confirm if email exist
                 // Use email to get user to generate password reset token
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if(user != null && !await _userManager.IsEmailConfirmedAsync(user))
+                if(user != null && await _userManager.IsEmailConfirmedAsync(user))
                 {
                     // Use user to generate token
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);

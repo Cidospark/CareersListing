@@ -33,7 +33,7 @@ namespace CareersListing.Models
 
             }
 
-            if (userManager.Users.Any())
+            if (!userManager.Users.Any())
             {
                 // construct default user
                 var adminUser = new ApplicationUser

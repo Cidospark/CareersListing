@@ -26,18 +26,18 @@ namespace CareersListing.Controllers
             {
                 case 403:
                     ViewBag.ErrorMessage = $"{statusCode}: Forbidden!";
-                    _logger.LogWarning($"403 Error Occurred. Path={statusCodeReExecuteFeature.OriginalPath}" +
+                    _logger.LogWarning($"403 Error Occurred. Path={statusCodeReExecuteFeature.OriginalPath} " +
                         $"and QueryString = {statusCodeReExecuteFeature.OriginalQueryString}");
                     break;
                 case 404:
                     ViewBag.ErrorMessage = $"{statusCode}: Sorry! resource Not Found.";
-                    _logger.LogWarning($"404 Error Occurred. Path={statusCodeReExecuteFeature.OriginalPath}" +
+                    _logger.LogWarning($"404 Error Occurred. Path={statusCodeReExecuteFeature.OriginalPath} " +
                         $"and QueryString = {statusCodeReExecuteFeature.OriginalQueryString}");
                     break;
                 default:
                     ViewBag.ErrorMessage = $"An error occured while processing your request. For emergencies or " +
                         "enquiries, please contact us on sample@sample.com";
-                    _logger.LogWarning($"{statusCode} Error Occurred. Path={statusCodeReExecuteFeature.OriginalPath}" +
+                    _logger.LogWarning($"{statusCode} Error Occurred. Path={statusCodeReExecuteFeature.OriginalPath} " +
                         $"and QueryString = {statusCodeReExecuteFeature.OriginalQueryString}");
                     break;
             }

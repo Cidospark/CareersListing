@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title  | CareersListing</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- icheck bootstrap
+    <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">-->
+    <!-- AdminLTE css -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.css">
+    <link rel="stylesheet" href="~/dist/css/generalStyle.css">
+    <link rel="stylesheet" href="~/dist/css/animate.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+    <div>
+        <div class="">
+            <header>
+                <div class="container">
+                    <div class="col-12 d-flex justify-content-between">
+                        <div class="p-2 title-logo col-left">
+                            <a asp-action="Index" asp-controller="Home" class="sitename"><strong><i class="fa fa-briefcase"></i> Careers</strong>Listing</a>
+                        </div>
+                        <div class="d-flex justify-content-between col-right  p-2">
+                            <div class="dm-flex">
+                                <div class="menu animated2 ">
+                                    <div class="auto-h"><a asp-action="Login" asp-controller="Account">Login</a></div>
+                                    <div>
+                                        <a href="#" id="signup-btn">SignUp</a>
+                                        <div class="sub-m animated2 fadeInUp" id="acc">
+                                            <div><a asp-action="Register" asp-controller="Account" asp-route-accType="applicant"><i class="fa fa-star"></i> Applicant</a></div>
+                                            <div><a asp-action="Register" asp-controller="Account" asp-route-accType="employer"><i class="fa fa-star"></i> Employer</a></div>
+                                        </div>
+                                    </div>
+                                    <div><a asp-action="Index" asp-controller="Home">About</a></div>
+                                    <div><a asp-action="Index" asp-controller="Home">Services</a></div>
+                                    <div><a asp-action="Index" asp-controller="Home">Contact</a></div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <div class="btn btn-outline-primary mr-2 nav-btn"><i class="fa fa-bars"></i></div>
+                                <a asp-action="Login" asp-controller="Account" class="btn btn-outline-primary mr-2 login-btn">Login</a>
+                                <div><a asp-action="Index" asp-controller="Home" class="btn btn-primary premium">Go Premium</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!--/ Navbar-->
+        </div>
+
+        @RenderBody()
+    </div>
+    <script src="~/dist/js/generalJS.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

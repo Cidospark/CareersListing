@@ -1,0 +1,257 @@
+﻿body {
+    margin:0px;
+}
+
+.slider-div {
+    background: url(../../images/slider/niceBlue.jpg) center;
+    width: 100% !important;
+    padding:0px; margin:0px;
+    position:relative;
+}.sitename {
+    font-size:24px; 
+    color:#0056B3; 
+    margin-right:40px;
+}.premium{
+    opacity:0.75 !important;
+    cursor:pointer;
+}
+.slider-div header {
+    background: #fff;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+.login-btn {
+    display: none;
+    border:2px solid blue !important;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.slider-desc{
+    position:absolute;
+    bottom:10%;
+    background: rgba(6, 15, 24, 0.63);
+    color: #fff;
+    width:100%;
+    padding:30px;
+    border-radius:6px;
+    z-index:500;
+}
+.slider-area {
+    position: relative;
+    min-height:400px
+}
+.slider-area img{
+    display:none;
+    width:90%;
+}
+.slider-area img.active{
+    display:block;
+}
+.slider-area .title{
+    font-size:40px;
+    font-weight:bold;
+    margin-bottom:-10px !important;
+    margin-top:-10px !important;
+}
+.slider-area .text{
+    font-size:13px;
+    margin-top:0px !important;
+    padding-top:0px !important;
+}
+
+.frm-job-search select {
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+    cursor: pointer;
+    -webkit-appearance: none;
+    background: url(../../images/assets/arrow-dwn.png) no-repeat 95% 55%;
+    padding: 5px 25px;
+    padding-left: 0px;
+    color:#777;
+    padding-left:5px;
+}
+.frm-job-search .selects{
+    background:#fff;
+    border-radius:4px;
+}
+.dm-flex {
+    position: relative;
+    display: flex;
+    flex-flow: column wrap;
+    flex-direction: row-reverse;
+}
+.nav-btn {
+    position: relative;
+    max-width:70px;
+    cursor:pointer;
+}
+.menu {
+    position:absolute;
+    color:black;
+    z-index:1000;
+    background:rgba(255,255,255,.5);
+    margin-top:52px;
+    left:0px;
+    display:none;
+}
+.menu div{position:relative;}
+.menu > div a {
+    border-top:1px solid grey;
+    display:block;
+    padding:5px 40px;
+    color:navy;
+    font-weight:bold;    
+}
+.menu a:hover {
+    background:white;
+    cursor:pointer;
+}
+.menu .sub-m{
+    display:none;
+}
+.menu .sub-m a{
+   border-top:0px;
+   font-size:10px;
+}
+.title-logo{
+    white-space:nowrap;
+}
+
+@media all and (min-width:350px) {
+    .slider-area .title {
+        font-size: 30px;
+    }
+    .sitename {
+        font-size: 17px;
+    }
+    .premium{
+        font-size:14px;
+        white-space:nowrap;
+        padding:10px;
+    }
+}
+@media all and (min-width:450px) {
+    .slider-area .title {
+        font-size: 40px;
+    }
+    .sitename {
+        font-size: 20px;
+    }
+}
+@media all and (min-width:600px) {
+   
+}
+@media all and (min-width:770px){
+    .nav-btn {
+        display: none;
+    }
+ 
+    .menu {
+        position: relative;
+        margin-top: 0px;
+        left: 0px;
+        display: block;
+    }
+    .auto-h{
+        display:none;
+    }
+
+    .menu .sub-m {
+        position:absolute;
+        background: rgba(255,255,255, .5);
+        z-index:500;
+        color:navy;
+        width:200px;
+        margin-top:14px;
+    }
+    .menu .sub-m a{
+        border-top: 1px solid grey;
+        font-size:14px;
+    }
+
+    .dm-flex {
+        flex-flow: row nowrap;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+
+        .dm-flex .menu {
+            display: flex;
+            flex-flow: row;
+            background: transparent;
+        }
+
+            .dm-flex .menu a {
+                padding: 0px 15px;
+                color: rgba(16, 99, 141, 0.74);
+                border-top: none;
+                font-weight: normal;
+                background: transparent;
+                line-height: 40px;
+            }
+
+                .dm-flex .menu a:hover {
+                    color: #777;
+                }
+
+    .login-btn {
+        display: inline-block;
+    }
+
+    .slider-area{
+        display: flex !important;
+        justify-content:space-between !important;
+        align-items: center;
+        width:100%;
+    }
+    .slider-area img{
+        width:37%;
+    }
+    .slider-desc{
+        width:50%;
+        min-width:400px;
+        bottom:25%;
+        background:transparent;
+        margin-left:0px;
+        padding-left:0px;
+        position:relative;
+        left:0px;
+    }
+    .frm-job-search .search-btn{
+        background:blue;
+        box-shadow:0px 0px 2px 2px blue;
+    }
+    .frm-job-search .search-btn:hover {
+        background: navy;
+    }
+    .frm-job-search .selects{
+        border:1px solid blue;
+    }
+}
+@media all and (min-width:970px) {
+
+    .slider-area .title {
+        font-size: 47px;
+    }
+    .slider-area .text {
+        font-size: 16px;
+    }
+    .slider-desc {
+        bottom: 35%;
+    }
+    .col-left{
+        width:40% !important;
+    }
+    .col-right{
+        width:70% !important;
+    }
+}
+@media all and (min-width:1120px) {
+    .sitename {
+        font-size: 24px;
+    }
+    
+}
