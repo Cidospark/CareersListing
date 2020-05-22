@@ -1,4 +1,5 @@
 ﻿using CareersListing.Models;
+using CareersListing.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,22 +13,42 @@ namespace CareersListing.Utilities
 {
     public static class Utils
     {
-        public static string UploadFile(IFormFile file, string wwwRootPath)
+        public static string UploadFile(IFormFile FormPhoto, string ExistingPhotoPath, IHostingEnvironment hostingEnvironment, string folderName)
         {
+            string uniqueFilename = null;
 
-            // get a unique name
-            string filename = Guid.NewGuid().ToString() + "_" + file.FileName;
-
-            // combine name and path
-            var fullPath = Path.Combine(wwwRootPath, filename);
-
-            // copy
-            using(var fileStream = new FileStream(fullPath, FileMode.Create))
+            if (FormPhoto != null)
             {
-                file.CopyTo(fileStream);
+                var hostingEnvPath = hostingEnvironment.WebRootPath + "/images/"+ folderName;
+                // if there is an existing photo
+                if (ExistingPhotoPath != null)
+                {
+                    // get the path to the wwwroot folder combined with file name, then delete it
+                    var fullPath = Path.Combine(hostingEnvPath, ExistingPhotoPath);
+                    System.IO.File.Delete(fullPath);
+                }
+
+                //uniqueFilename = Utils.UploadFile(model.FormPhoto, hostingEnvPath);
+
+                // get a unique name
+                uniqueFilename = Guid.NewGuid().ToString() + "_" + FormPhoto.FileName;
+
+                // combine name and path
+                var path = Path.Combine(hostingEnvPath, uniqueFilename);
+
+                // copy
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    FormPhoto.CopyTo(fileStream);
+                }
+
+            }
+            else
+            {
+                uniqueFilename = ExistingPhotoPath;
             }
             
-            return filename;
+            return uniqueFilename;
         }
 
         public static async Task<string> getUserAccountType(UserManager<ApplicationUser> userManager, ApplicationUser user)

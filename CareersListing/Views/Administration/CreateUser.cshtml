@@ -1,4 +1,4 @@
-﻿@model RegisterViewModel
+﻿@model CreateUserViewModel
 @{
     ViewBag.Title = "Create New User";
     Layout = "_AdminLayout";
@@ -50,10 +50,12 @@
                                     <div class="col-sm-6">
                                         <div><small><span asp-validation-for="LastName" class="text-danger"></span></small></div>
                                         <div class="w-100">
-                                            @*<select asp-for="AccountType" asp-items="Html.GetEnumSelectList<AccountType>()" class="form-control">
+                                            <select asp-for="AccountType" class="form-control">
                                                 <option value="">---Select Account Type---</option>
-                                                <option value="2">Admin</option>
-                                            </select>*@
+                                                <option value="admin">Admin</option>
+                                                <option value="employer">Employer</option>
+                                                <option value="applicant">Applicant</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

@@ -28,6 +28,7 @@ namespace CareersListing
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("default")));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -49,11 +50,8 @@ namespace CareersListing
 
             // set all lifespan of all tokens generated in the app to 5 hours
             services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(5));
-            
-            services.AddDbContextPool<ApplicationDbContext>(
-                options => options.UseSqlServer(configuration.GetConnectionString("default"))
-           );
 
+            services.AddScoped<ICompanyRepo, CompanyRepo>();
             services.AddMvc();
         }
 

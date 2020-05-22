@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,14 +22,19 @@ namespace CareersListing.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ICompanyRepo _companyRepo;
+        private readonly ILogger<AdministrationController> _logger;
 
         public AdministrationController(RoleManager<IdentityRole> roleManager,
                                         UserManager<ApplicationUser> userManager,
-                                        IHostingEnvironment hostingEnvironment)
+                                        IHostingEnvironment hostingEnvironment,
+                                        ICompanyRepo companyRepo, ILogger<AdministrationController> logger)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
+            _companyRepo = companyRepo;
+            _logger = logger;
         }
         // -------------------------------------------------------- 
 
@@ -49,6 +55,47 @@ namespace CareersListing.Controllers
         }
         //--------------------------------------------------------------------------------------------------------
 
+
+        // Company (GET)
+        [HttpGet]
+        public IActionResult Company(string successMessage)
+        {
+            if (!String.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                ViewBag.ErrorMessage = successMessage;
+            }
+            return View();
+        }
+        // Company (POST) ---------------------------------------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> Company(CompanyViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var company = new Company
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Website = model.Website,
+                    Street = model.Street,
+                    City = model.City,
+                    Country = model.Country,
+                    CompanyCertificate = Utils.UploadFile(model.CompanyCertificate, model.ExistingCertificate, _hostingEnvironment, "Certificates"),
+                    Logo = Utils.UploadFile(model.Logo, model.ExistingLogo, _hostingEnvironment, "logos"),
+                    EmployerId = _userManager.GetUserId(User)
+                };
+
+                var result = await _companyRepo.AddCompany(company);
+                if (!result)
+                {
+                    _logger.LogError($"Error saving to database!");
+                    ViewBag.ErrorMessage = "Failed to save to database!";
+                }
+                return RedirectToAction("Company", "Administration", new { successMessage = "Save to successfully!" });
+            };
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
 
         // Profile (GET) 
         [HttpGet]
@@ -92,27 +139,7 @@ namespace CareersListing.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFilename = null;
-                
-                // if photo is selected
-                if(model.FormPhoto != null)
-                {
-                    var hostingEnvPath = _hostingEnvironment.WebRootPath+"/images/profile";
-                    // if there is an existing photo
-                    if (model.ExistingPhotoPath != null)
-                    {
-                        // get the path to the wwwroot folder combined with file name, then delete it
-                        var fullPath = Path.Combine(hostingEnvPath, model.ExistingPhotoPath);
-                        System.IO.File.Delete(fullPath);
-                    }
-
-                    uniqueFilename = Utils.UploadFile(model.FormPhoto, hostingEnvPath);
-
-                }
-                else
-                {
-                    uniqueFilename = model.ExistingPhotoPath;
-                }
+                string uniqueFilename = Utils.UploadFile(model.FormPhoto, model.ExistingPhotoPath, _hostingEnvironment, "profile");
 
                 var user = await _userManager.FindByIdAsync(model.Id);
                 if (user == null)
@@ -578,7 +605,7 @@ namespace CareersListing.Controllers
 
         // Create user (POST)
         [HttpPost]
-        public async Task<IActionResult> CreateUser(RegisterViewModel model)
+        public async Task<IActionResult> CreateUser(CreateUserViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -598,18 +625,18 @@ namespace CareersListing.Controllers
 
                 if (result.Succeeded)
                 {
-                    //if (model.AccountType == AccountType.Applicant)
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Applicant");
-                    //}
-                    //else if(model.AccountType == AccountType.Employer)
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Employer");
-                    //}
-                    //else
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, "Admin");
-                    //}
+                    if (model.AccountType == "applicant")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Applicant");
+                    }
+                    else if (model.AccountType == "employer")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Employer");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
 
                     ViewBag.RegMessage = "REGISTRATION WAS SUCCESSFUL!";
                     // TODO : send confirmation message to user email

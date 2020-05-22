@@ -15,16 +15,5 @@ namespace CareersListing.Models
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    // the line below have to be called 
-        //    // since we are overriding OnModelCreating
-        //    base.OnModelCreating(modelBuilder);
-
-        //    //foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-        //    //{
-        //    //    foreignKey.DeleteBehavior = DeleteBehavior.Cascade;
-        //    //}
-        //}
     }
 }
