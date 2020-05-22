@@ -58,13 +58,11 @@ namespace CareersListing.Controllers
 
         // Company (GET)
         [HttpGet]
-        public IActionResult Company(string successMessage)
+        public async Task<IActionResult> Company()
         {
-            if (!String.IsNullOrEmpty(ViewBag.ErrorMessage))
-            {
-                ViewBag.ErrorMessage = successMessage;
-            }
-            return View();
+            var companies = await _companyRepo.GetAllCompanies();
+            
+           return View();
         }
         // Company (POST) ---------------------------------------------------------------------
         [HttpPost]
@@ -91,7 +89,7 @@ namespace CareersListing.Controllers
                     _logger.LogError($"Error saving to database!");
                     ViewBag.ErrorMessage = "Failed to save to database!";
                 }
-                return RedirectToAction("Company", "Administration", new { successMessage = "Save to successfully!" });
+                return RedirectToAction("Company", "Administration");
             };
             return View(model);
         }
