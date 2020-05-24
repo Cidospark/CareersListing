@@ -46,4 +46,9 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\Certificates\" />
+    <Folder Include="wwwroot\images\logos\" />
+  </ItemGroup>
+
 </Project>

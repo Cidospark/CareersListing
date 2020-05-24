@@ -31,7 +31,7 @@
 .slider-desc{
     position:absolute;
     bottom:10%;
-    background: rgba(6, 15, 24, 0.63);
+    background: rgba(6, 15, 27, 0.63);
     color: #fff;
     width:100%;
     padding:30px;
@@ -209,9 +209,10 @@
     }
     .slider-area img{
         width:37%;
+        margin-top:5%;
     }
     .slider-desc{
-        width:50%;
+        width:40%;
         min-width:400px;
         bottom:25%;
         background:transparent;
@@ -221,11 +222,10 @@
         left:0px;
     }
     .frm-job-search .search-btn{
-        background:blue;
-        box-shadow:0px 0px 2px 2px blue;
+        background:#0056B3;
     }
     .frm-job-search .search-btn:hover {
-        background: navy;
+        background: blue;
     }
     .frm-job-search .selects{
         border:1px solid blue;
