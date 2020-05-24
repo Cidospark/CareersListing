@@ -20,7 +20,7 @@
                         <div>@ViewBag.ErrorMessage</div>
                         <!-- form start -->
                         <form role="form" enctype="multipart/form-data" method="post" asp-action="Company">
-                            <div class="no-bullet"  asp-validation-summary="All"></div>
+                            <div class="no-bullet"  asp-validation-summary="ModelOnly"></div>
                             <div class="card-body">
                                 @*<input asp-for="Id" hidden />*@
                                 <input asp-for="ExistingLogo" hidden />
@@ -150,7 +150,7 @@
                                             <td>
                                                 <div class="text-center">
                                                     <form method="post" asp-action="DeleteCompany" asp-controller="Employer" asp-route-id="@company.Id">
-                                                        <a asp-action="CompanyDetails" asp-controller="Employer" asp-route-id="@company.Id" 
+                                                        <a asp-action="Company" asp-controller="Employer" asp-route-id="@company.Id" 
                                                            style="font-size:14px;" class="btn btn-sm btn-primary m-1"> Edit </a>
 
                                                         <button type="submit" class="btn btn-sm btn-danger m-1"style="font-size:14px;" 

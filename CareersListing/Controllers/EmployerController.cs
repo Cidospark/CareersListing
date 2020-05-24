@@ -35,10 +35,31 @@ namespace CareersListing.Controllers
 
         // Company (GET)
         [HttpGet]
-        public async Task<IActionResult> Company()
+        public async Task<IActionResult> Company(int? id)
         {
-            var companies = await _companyRepo.GetAllCompanies();
             CompanyViewModel model = new CompanyViewModel();
+            if (id.HasValue)
+            {
+                var companyToEdit = await _companyRepo.GetCompany(id);
+                if (companyToEdit == null)
+                {
+                    ViewBag.ErrorMessage = $"Company with id : {id} was not found!";
+                    return RedirectToAction("NotFound");
+                }
+                    // add the details of company to edit to model
+                    model.Id = companyToEdit.Id;
+                    model.Name = companyToEdit.Name;
+                    model.Email = companyToEdit.Email;
+                    model.Website = companyToEdit.Website;
+                    model.Street = companyToEdit.Street;
+                    model.City = companyToEdit.Website;
+                    model.Country = companyToEdit.Country;
+                    model.ExistingLogo = companyToEdit.Logo;
+                    model.ExistingCertificate = companyToEdit.CompanyCertificate;
+            }
+
+            // add the list of companies to model
+            var companies = await _companyRepo.GetAllCompanies();
             foreach (var company in companies)
             {
                 var row = new ListCompaniesViewModel
@@ -58,7 +79,7 @@ namespace CareersListing.Controllers
         }
         // Company (POST) ---------------------------------------------------------------------
         [HttpPost]
-        public async Task<IActionResult> Company(CompanyViewModel model)
+        public async Task<IActionResult> Company(CompanyViewModel model, int? id)
         {
             if (ModelState.IsValid)
             {
@@ -75,7 +96,18 @@ namespace CareersListing.Controllers
                     EmployerId = _userManager.GetUserId(User)
                 };
 
-                var result = await _companyRepo.AddCompany(company);
+                // id value is binding from the edit view 
+                bool result;
+                if (id.HasValue)
+                {
+                    company.Id = (int)id;
+                    result = await _companyRepo.UpdateCompany(company);
+                }
+                else
+                {
+                    result = await _companyRepo.AddCompany(company);
+                }
+                
                 if (!result)
                 {
                     _logger.LogError($"Error saving to database!");
@@ -87,6 +119,7 @@ namespace CareersListing.Controllers
         }
         //--------------------------------------------------------------------------------------------------------
 
+       
         // Delete company (POST)
         [HttpPost]
         public async Task<IActionResult> DeleteCompany(int id)

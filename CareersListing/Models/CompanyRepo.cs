@@ -28,7 +28,7 @@ namespace CareersListing.Models
         }
 
         // get single company
-        public async Task<Company> GetCompany(int Id)
+        public async Task<Company> GetCompany(int? Id)
         {
             return await _context.Companies.FindAsync(Id);
         }
