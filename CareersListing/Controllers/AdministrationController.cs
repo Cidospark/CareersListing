@@ -56,45 +56,6 @@ namespace CareersListing.Controllers
         //--------------------------------------------------------------------------------------------------------
 
 
-        // Company (GET)
-        [HttpGet]
-        public async Task<IActionResult> Company()
-        {
-            var companies = await _companyRepo.GetAllCompanies();
-            
-           return View();
-        }
-        // Company (POST) ---------------------------------------------------------------------
-        [HttpPost]
-        public async Task<IActionResult> Company(CompanyViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var company = new Company
-                {
-                    Name = model.Name,
-                    Email = model.Email,
-                    Website = model.Website,
-                    Street = model.Street,
-                    City = model.City,
-                    Country = model.Country,
-                    CompanyCertificate = Utils.UploadFile(model.CompanyCertificate, model.ExistingCertificate, _hostingEnvironment, "Certificates"),
-                    Logo = Utils.UploadFile(model.Logo, model.ExistingLogo, _hostingEnvironment, "logos"),
-                    EmployerId = _userManager.GetUserId(User)
-                };
-
-                var result = await _companyRepo.AddCompany(company);
-                if (!result)
-                {
-                    _logger.LogError($"Error saving to database!");
-                    ViewBag.ErrorMessage = "Failed to save to database!";
-                }
-                return RedirectToAction("Company", "Administration");
-            };
-            return View(model);
-        }
-        //--------------------------------------------------------------------------------------------------------
-
         // Profile (GET) 
         [HttpGet]
         public async Task<IActionResult> Profile(string Id)

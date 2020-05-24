@@ -51,6 +51,18 @@ namespace CareersListing.Utilities
             return uniqueFilename;
         }
 
+        public static void DeleteFile(string ExistingPhotoPath, IHostingEnvironment hostingEnvironment, string folderName)
+        {
+            var hostingEnvPath = hostingEnvironment.WebRootPath + "/images/" + folderName;
+            // if there is an existing photo
+            if (ExistingPhotoPath != null)
+            {
+                // get the path to the wwwroot folder combined with file name, then delete it
+                var fullPath = Path.Combine(hostingEnvPath, ExistingPhotoPath);
+                System.IO.File.Delete(fullPath);
+            }
+        }
+
         public static async Task<string> getUserAccountType(UserManager<ApplicationUser> userManager, ApplicationUser user)
         {
             string userAccType = null;

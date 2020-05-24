@@ -7,7 +7,7 @@ namespace CareersListing.Models
 {
     public interface ICompanyRepo
     {
-        Task<Company> GetCompany(Company company);
+        Task<Company> GetCompany(int Id);
         Task<ICollection<Company>> GetAllCompanies();
         Task<ICollection<Company>> GetAllCompaniesByEmployer(string EmployerId);
         Task<bool> AddCompany(Company company);

@@ -10,7 +10,7 @@ namespace CareersListing.ViewModels
     public class CompanyViewModel
     {
 
-        //public int Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(100, ErrorMessage = "Company name must not be more than 100 characters")]
@@ -42,9 +42,13 @@ namespace CareersListing.ViewModels
 
         public DateTime DateRegistered { get; set; }
 
+        public List<ListCompaniesViewModel> ListOfCompanies { get; set; }
+
         public CompanyViewModel()
         {
             DateRegistered = DateTime.Now;
+            ListOfCompanies = new List<ListCompaniesViewModel>();
         }
+
     }
 }

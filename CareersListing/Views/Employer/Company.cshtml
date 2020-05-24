@@ -1,7 +1,8 @@
 ﻿@model CompanyViewModel
 @{
     ViewBag.Title = "Add Company";
-    Layout = "_AdminLayout";
+    Layout = "../Administration/_AdminLayout";
+    var sn = 0;
 }
 
 
@@ -13,9 +14,9 @@
         <!-- general form elements -->
         <div class="card card-primary card-outline">
 
-                <div class="row p-5">
+                <div class="row p-3">
                     <!-- general form elements -->
-                    <div class="card card-primary col-md-6">
+                    <div class="col-md-5">
                         <div>@ViewBag.ErrorMessage</div>
                         <!-- form start -->
                         <form role="form" enctype="multipart/form-data" method="post" asp-action="Company">
@@ -110,6 +111,62 @@
                     </div>
                     <!-- /.card -->
                   
+                    <div class="col-md-7">
+                        <div class="card mt-5" style="overflow:auto; min-height:450px; min-height:450px;">
+                            <table class="table projects">
+                                <thead>
+                                    <tr class="bg-gradient-gray text-white-50" style="">
+                                        <th style="width: 5%;" class="text-center">#</th>
+                                        <th style="width: 20%;">
+                                            COMPANY
+                                        </th>
+                                        <th style="width: 30%;" class="text-center">
+                                            WEBSITE & EMAIL
+                                        </th>
+                                        <th style="width: 20%;" class="text-center">
+                                            LOCATION
+                                        </th>
+                                        <th style="width: 25%;" class="text-center">
+                                            MANAGE
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-muted">
+                                    @foreach (var company in Model.ListOfCompanies)
+                                    {
+                                        sn += 1;
+                                        <tr>
+                                            <td class="text-center">@sn</td>
+                                            <td>
+                                                <div>@company.Name</div> 
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="border-bottom pb-2"><small><a href="#">@company.Website</a></small></div>
+                                                <div><small><a href="#">@company.Email</a></small></div>
+                                            </td>
+                                            <td class="text-center">
+                                                @company.City, @company.Country
+                                            </td>
+                                            <td>
+                                                <div class="text-center">
+                                                    <form method="post" asp-action="DeleteCompany" asp-controller="Employer" asp-route-id="@company.Id">
+                                                        <a asp-action="CompanyDetails" asp-controller="Employer" asp-route-id="@company.Id" 
+                                                           style="font-size:14px;" class="btn btn-sm btn-primary m-1"> Edit </a>
+
+                                                        <button type="submit" class="btn btn-sm btn-danger m-1"style="font-size:14px;" 
+                                                                onclick="return confirm('Please confirm your action to delete : @company.Name');">
+                                                             Delete
+                                                        </button>
+
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <!-- /.content-wrapper -->
                 </div>
                 <!-- /.content-wrapper -->

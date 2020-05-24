@@ -28,9 +28,9 @@ namespace CareersListing.Models
         }
 
         // get single company
-        public async Task<Company> GetCompany(Company company)
+        public async Task<Company> GetCompany(int Id)
         {
-            return await _context.Companies.FindAsync(company);
+            return await _context.Companies.FindAsync(Id);
         }
 
         // commit changes to database
