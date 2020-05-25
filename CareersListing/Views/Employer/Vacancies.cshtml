@@ -1,0 +1,241 @@
+﻿@model JobVacancyViewModel
+@{
+    ViewBag.Title = "Manage Vacancies";
+    Layout = "../Administration/_AdminLayout";
+    var sn = 0;
+}
+
+
+
+<div class="row ml-5 mr-5">
+
+    <!-- left column -->
+    <div class="col-sm-12  ml-3 mr-3">
+        <!-- general form elements -->
+        <div class="card card-primary card-outline">
+            <div class="row m-4">
+                <nav class="w-100">
+                    <div class="nav nav-tabs" id="product-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="product-desc-tab" data-toggle="tab" href="#product-desc" role="tab" aria-controls="product-desc" aria-selected="true">Post New Vacancy</a>
+                        <a class="nav-item nav-link" id="product-comments-tab" data-toggle="tab" href="#product-comments" role="tab" aria-controls="product-comments" aria-selected="false">List of Vacancies</a>
+                    </div>
+                </nav>
+                <div class="tab-content col-12" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="product-desc" role="tabpanel" aria-labelledby="product-desc-tab">
+                        <div class="">
+                            <!-- general form elements -->
+                            <div class="col-md-12">
+                                <div>@ViewBag.ErrorMessage</div>
+                                <!-- form start -->
+                                <form role="form" enctype="multipart/form-data" method="post" asp-action="Vacancies">
+                                    <div class="no-bullet" asp-validation-summary="ModelOnly"></div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-4 mb-2">
+                                                <div class="col-12">
+                                                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="CompanyId"></label>
+                                                        <select class="form-control" asp-for="CompanyId">
+                                                                <option value="">--- Companies ---</option>
+                                                                @foreach (var company in ViewBag.CompanyList)
+                                                                {
+                                                                    <option value="@company.Id">@company.Name</option>
+                                                                }
+                                                            </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span asp-validation-for="JobTitle" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="JobTitle"></label>
+                                                        <input asp-for="JobTitle" placeholder="Job Title" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span asp-validation-for="JobDuration" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="JobDuration"></label>
+                                                        <input asp-for="JobDuration" placeholder="Job Duration" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 mb-2">
+                                                <div class="col-12">
+                                                    <span asp-validation-for="JobFunction" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="JobFunction"></label>
+                                                        <select asp-for="JobFunction" class="form-control">
+                                                            <option value="">--- All Job Functions ---</option>
+                                                            <option value="accounting-auditing">Accounting, Auditing &amp; Finance</option>
+                                                            <option value="administrative">Administrative &amp; Office</option>
+                                                            <option value="farming-agriculture">Agriculture &amp; Farming</option>
+                                                            <option value="building-architecture">Building &amp; Architecture</option>
+                                                            <option value="social-services">Community &amp; Social Services</option>
+                                                            <option value="consulting">Consulting &amp; Strategy</option>
+                                                            <option value="creative">Creative &amp; Design</option>
+                                                            <option value="customer-service">Customer Service &amp; Support</option><
+                                                            <option value="employability-soft-skills">Employability &amp; Soft Skills</option>
+                                                            <option value="engineering">Engineering</option>
+                                                            <option value="food-services-catering">Food Services &amp; Catering</option>
+                                                            <option value="health-safety">Health &amp; Safety</option>
+                                                            <option value="hospitality">Hospitality/Leisure/Travel</option>
+                                                            <option value="human-resources">Human Resources</option>
+                                                            <option value="it-software">IT &amp; Software</option>
+                                                            <option value="legal">Legal Services</option>
+                                                            <option value="management-business-development">Management &amp; Business Development</option>
+                                                            <option value="marketing-communications">Marketing &amp; Communications</option>
+                                                            <option value="medical-pharmaceutical">Medical &amp; Pharmaceutical</option>
+                                                            <option value="natural-sciences">Natural Sciences</option>
+                                                            <option value="other">Other</option>
+                                                            <option value="project-management">Project &amp; Product Management</option>
+                                                            <option value="quality-control">Quality Control &amp; Assurance </option>
+                                                            <option value="property-management">Real Estate &amp; Property Management</option>
+                                                            <option value="teaching-training">Research, Teaching &amp; Training</option>
+                                                            <option value="sales">Sales</option>
+                                                            <option value="security">Security</option>
+                                                            <option value="supply-chain-procurement">Supply Chain &amp; Procurement</option>
+                                                            <option value="trades-services">Trades &amp; Services</option>
+                                                            <option value="transport-logistics">Transport &amp; Logistics</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span asp-validation-for="Industry" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="Industry"></label>
+                                                        <select asp-for="Industry" class="form-control">
+                                                            <option value="">--- All Industries ---</option>
+                                                            <option value="advertising-marketing">Advertising &amp; Marketing</option>
+                                                            <option value="agriculture-fishing">Agriculture, Fishing &amp; Forestry</option>
+                                                            <option value="art-design">Art &amp; Design</option>
+                                                            <option value="automotive-aviation">Automotive &amp; Aviation</option>
+                                                            <option value="banking-finance">Banking, Finance &amp; Insurance</option>
+                                                            <option value="construction">Construction</option>
+                                                            <option value="digital-media-comms">Digital, Media &amp; Communications</option>
+                                                            <option value="education">Education &amp; Training</option>
+                                                            <option value="energy">Energy &amp; Utilities</option>
+                                                            <option value="entertainment-events">Entertainment &amp; Events</option>
+                                                            <option value="government">Government</option>
+                                                            <option value="healthcare">Healthcare</option>
+                                                            <option value="hospitality-hotel">Hospitality &amp; Hotel</option>
+                                                            <option value="internet-telecoms">Internet &amp; Telecommunications</option>
+                                                            <option value="law">Law</option>
+                                                            <option value="enforcement-security">Law Enforcement &amp; Security</option>
+                                                            <option value="operations">Logistics &amp; Transportation</option>
+                                                            <option value="manufacturing">Manufacturing</option>
+                                                            <option value="mining-oil">Mining, Oil &amp; Metals</option>
+                                                            <option value="ngo">NGO</option>
+                                                            <option value="real-estate">Real Estate</option>
+                                                            <option value="hr-recruitment">Recruitment</option>
+                                                            <option value="retail-fmcg">Retail, Fashion &amp; FMCG</option>
+                                                            <option value="technology">Technology</option>
+                                                            <option value="tourism-travel">Travel, Tourism &amp; Leisure</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span asp-validation-for="Location" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="Location"></label>
+                                                        <select asp-for="Location" class="form-control">
+                                                            <option value="">--- All Locations ---</option>
+                                                            <option value="abia">Abia</option>
+                                                            <option value="abuja">Abuja</option>
+                                                            <option value="adamawa">Adamawa</option>
+                                                            <option value="akwa-ibom">Akwa Ibom</option>
+                                                            <option value="anambra">Anambra</option>
+                                                            <option value="bauchi">Bauchi</option>
+                                                            <option value="bayelsa">Bayelsa</option>
+                                                            <option value="benue">Benue</option>
+                                                            <option value="cross-river">Cross River</option>
+                                                            <option value="delta">Delta</option>
+                                                            <option value="ebonyi">Ebonyi</option>
+                                                            <option value="edo">Edo</option>
+                                                            <option value="ekiti">Ekiti</option>
+                                                            <option value="enugu">Enugu</option>
+                                                            <option value="gombe">Gombe</option>
+                                                            <option value="oyo">Oyo</option>
+                                                            <option value="imo">Imo</option>
+                                                            <option value="jigawa">Jigawa</option>
+                                                            <option value="kaduna">Kaduna</option>
+                                                            <option value="kano">Kano</option>
+                                                            <option value="katsina">Katsina</option>
+                                                            <option value="kebbi">Kebbi</option>
+                                                            <option value="kogi">Kogi</option>
+                                                            <option value="kwara">Kwara</option>
+                                                            <option value="lagos">Lagos</option>
+                                                            <option value="borno">Borno</option>
+                                                            <option value="nassarawa">Nassarawa</option>
+                                                            <option value="niger">Niger</option>
+                                                            <option value="ogun">Ogun</option>
+                                                            <option value="ondo">Ondo</option>
+                                                            <option value="osun">Osun</option>
+                                                            <option value="plateau">Plateau</option>
+                                                            <option value="rivers">Rivers</option>
+                                                            <option value="sokoto">Sokoto</option>
+                                                            <option value="taraba">Taraba</option>
+                                                            <option value="yobe">Yobe</option>
+                                                            <option value="zamfara">Zamfara</option>
+                                                            <option value="rest-nigeria">Rest of Nigeria</option>
+                                                            <option value="nationwide">Nationwide</option>
+                                                            <option value="outside-nigeria">Outside Nigeria</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 mb-2">
+                                                <div class="col-12">
+                                                    <span asp-validation-for="SalaryScale" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="SalaryScale"></label>
+                                                        <input asp-for="SalaryScale" placeholder="Salar yScale" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span asp-validation-for="DatePosted" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="DatePosted"></label>
+                                                        <input asp-for="DatePosted" value="@DateTime.Now" placeholder="Date Posted" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span asp-validation-for="DateExpired" class="text-danger"></span>
+                                                    <div class="form-group">
+                                                        <label asp-for="DateExpired"></label>
+                                                        <input asp-for="DateExpired" placeholder="mm/dd/yyyy 0:00:00 am/pm" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="card-body pad">
+                                                <span asp-validation-for="Description"></span>
+                                                <label asp-for="Description"></label>
+                                                <div class="mb-3">
+                                                    <textarea class="textarea" placeholder="Please enter a comprehensive job description here..."
+                                                         asp-for="Description"     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.card-body -->
+
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <a asp-action="Users" asp-controller="Administration" class="btn btn-danger">Cancel</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" style="min-height:400px;" id="product-comments" role="tabpanel" aria-labelledby="product-comments-tab">
+                        Job list
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

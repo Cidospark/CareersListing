@@ -19,19 +19,89 @@ namespace CareersListing.Controllers
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ICompanyRepo _companyRepo;
         private readonly ILogger<EmployerController> _logger;
+        private readonly IVacancyRepo _vacancyRepo;
 
         public EmployerController(RoleManager<IdentityRole> roleManager,
                                         UserManager<ApplicationUser> userManager,
                                         IHostingEnvironment hostingEnvironment,
-                                        ICompanyRepo companyRepo, ILogger<EmployerController> logger)
+                                        ICompanyRepo companyRepo, ILogger<EmployerController> logger,
+                                        IVacancyRepo vacancyRepo)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
             _companyRepo = companyRepo;
             _logger = logger;
+            _vacancyRepo = vacancyRepo;
         }
         // ----------------------------------------------------------------------------------------
+
+        // Vacancies (GET)
+        [HttpGet]
+        public async Task<IActionResult> Vacancies()
+        {
+            JobVacancyViewModel model = new JobVacancyViewModel();
+            List<ListCompaniesViewModel> listOfCompanies = new List<ListCompaniesViewModel>();
+
+            // add the list of companies to model
+            var companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
+            foreach (var company in companies)
+            {
+                var row = new ListCompaniesViewModel
+                {
+                    Id = company.Id,
+                    Name = company.Name,
+                };
+
+                listOfCompanies.Add(row);
+            }
+
+            ViewBag.CompanyList = listOfCompanies;
+            return View(model);
+        }
+        // Company (POST) ---------------------------------------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> Vacancies(JobVacancyViewModel model, int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                var vacancy = new Vacancy
+                {
+                   CompanyId = model.CompanyId,
+                   JobTitle = model.JobTitle,
+                   JobDuration = model.JobDuration,
+                   JobFunction = model.JobFunction,
+                   Industry = model.Industry,
+                   Location = model.Industry,
+                   SalaryScale = model.SalaryScale,
+                   DateExpired = model.DateExpired,
+                   DatePosted = model.DatePosted,
+                   Description = model.Description
+                };
+
+                // id value is binding from the edit view 
+                bool result;
+                if (id.HasValue)
+                {
+                    vacancy.Id = (int)id;
+                    result = await _vacancyRepo.UpdateVacancy(vacancy);
+                }
+                else
+                {
+                    result = await _vacancyRepo.AddVacancy(vacancy);
+                }
+
+                if (!result)
+                {
+                    _logger.LogError($"Error saving vacancy to database!");
+                    ViewBag.ErrorMessage = "Failed to save vacancy to database!";
+                }
+                return RedirectToAction("Vacancies");
+            };
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
 
         // Company (GET)
         [HttpGet]
@@ -59,7 +129,7 @@ namespace CareersListing.Controllers
             }
 
             // add the list of companies to model
-            var companies = await _companyRepo.GetAllCompanies();
+            var companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
             foreach (var company in companies)
             {
                 var row = new ListCompaniesViewModel
@@ -110,8 +180,8 @@ namespace CareersListing.Controllers
                 
                 if (!result)
                 {
-                    _logger.LogError($"Error saving to database!");
-                    ViewBag.ErrorMessage = "Failed to save to database!";
+                    _logger.LogError($"Error saving company to database!");
+                    ViewBag.ErrorMessage = "Failed to save company to database!";
                 }
                 return RedirectToAction("Company");
             };

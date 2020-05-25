@@ -1,6 +1,6 @@
 ﻿@model CompanyViewModel
 @{
-    ViewBag.Title = "Add Company";
+    ViewBag.Title = "Manage Company";
     Layout = "../Administration/_AdminLayout";
     var sn = 0;
 }
@@ -22,7 +22,6 @@
                         <form role="form" enctype="multipart/form-data" method="post" asp-action="Company">
                             <div class="no-bullet"  asp-validation-summary="ModelOnly"></div>
                             <div class="card-body">
-                                @*<input asp-for="Id" hidden />*@
                                 <input asp-for="ExistingLogo" hidden />
                                 <input asp-for="ExistingCertificate" hidden />
 
@@ -113,58 +112,69 @@
                   
                     <div class="col-md-7">
                         <div class="card mt-5" style="overflow:auto; min-height:450px; min-height:450px;">
-                            <table class="table projects">
-                                <thead>
-                                    <tr class="bg-gradient-gray text-white-50" style="">
-                                        <th style="width: 5%;" class="text-center">#</th>
-                                        <th style="width: 20%;">
-                                            COMPANY
-                                        </th>
-                                        <th style="width: 30%;" class="text-center">
-                                            WEBSITE & EMAIL
-                                        </th>
-                                        <th style="width: 20%;" class="text-center">
-                                            LOCATION
-                                        </th>
-                                        <th style="width: 25%;" class="text-center">
-                                            MANAGE
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-muted">
-                                    @foreach (var company in Model.ListOfCompanies)
-                                    {
-                                        sn += 1;
-                                        <tr>
-                                            <td class="text-center">@sn</td>
-                                            <td>
-                                                <div>@company.Name</div> 
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="border-bottom pb-2"><small><a href="#">@company.Website</a></small></div>
-                                                <div><small><a href="#">@company.Email</a></small></div>
-                                            </td>
-                                            <td class="text-center">
-                                                @company.City, @company.Country
-                                            </td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <form method="post" asp-action="DeleteCompany" asp-controller="Employer" asp-route-id="@company.Id">
-                                                        <a asp-action="Company" asp-controller="Employer" asp-route-id="@company.Id" 
-                                                           style="font-size:14px;" class="btn btn-sm btn-primary m-1"> Edit </a>
-
-                                                        <button type="submit" class="btn btn-sm btn-danger m-1"style="font-size:14px;" 
-                                                                onclick="return confirm('Please confirm your action to delete : @company.Name');">
-                                                             Delete
-                                                        </button>
-
-                                                    </form>
-                                                </div>
-                                            </td>
+                            @if(Model.ListOfCompanies.Count > 0)
+                            {
+                                <table class="table projects">
+                                    <thead>
+                                        <tr class="bg-gradient-gray text-white-50" style="">
+                                            <th style="width: 5%;" class="text-center">#</th>
+                                            <th style="width: 20%;">
+                                                COMPANY
+                                            </th>
+                                            <th style="width: 30%;" class="text-center">
+                                                WEBSITE & EMAIL
+                                            </th>
+                                            <th style="width: 20%;" class="text-center">
+                                                LOCATION
+                                            </th>
+                                            <th style="width: 25%;" class="text-center">
+                                                MANAGE
+                                            </th>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="text-muted">
+                                        @foreach (var company in Model.ListOfCompanies)
+                                        {
+                                            sn += 1;
+                                            <tr>
+                                                <td class="text-center">@sn</td>
+                                                <td>
+                                                    <div>@company.Name</div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="border-bottom pb-2"><small><a href="#">@company.Website</a></small></div>
+                                                    <div><small><a href="#">@company.Email</a></small></div>
+                                                </td>
+                                                <td class="text-center">
+                                                    @company.City, @company.Country
+                                                </td>
+                                                <td>
+                                                    <div class="text-center">
+                                                        <form method="post" asp-action="DeleteCompany" asp-controller="Employer" asp-route-id="@company.Id">
+                                                            <a asp-action="Company" asp-controller="Employer" asp-route-id="@company.Id"
+                                                               style="font-size:14px;" class="btn btn-sm btn-primary m-1"> Edit </a>
+
+                                                            <button type="submit" class="btn btn-sm btn-danger m-1" style="font-size:14px;"
+                                                                    onclick="return confirm('Please confirm your action to delete : @company.Name');">
+                                                                Delete
+                                                            </button>
+
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <div style="font-size:26px; padding-top:200px;" class="text-center text-black-50">No company record added yet!</div>
+                                <div class="text-center">
+                                    <i class="fa fa-building text-black-50" style="font-size:70px;"></i>
+                                </div>
+                            }
+
                         </div>
                     </div>
                     <!-- /.content-wrapper -->

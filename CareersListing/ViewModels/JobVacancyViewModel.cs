@@ -1,15 +1,17 @@
-﻿using System;
+﻿using CareersListing.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CareersListing.Models
+namespace CareersListing.ViewModels
 {
-    public class Vacancy
+    public class JobVacancyViewModel
     {
         public int Id { get; set; }
-        public Company Company { get; set; }
+
+        [Required]
         public int CompanyId { get; set; }
 
         [Required]
@@ -38,7 +40,27 @@ namespace CareersListing.Models
         [Required]
         public DateTime DateExpired { get; set; }
 
-        public ICollection<JobApplication> JobApplication { get; set; }
+        public List<ListOfJobVacancies> Vacancies { get; set; }
+
+        public JobVacancyViewModel()
+        {
+            DatePosted = DateTime.Now;
+            Vacancies = new List<ListOfJobVacancies>();
+        }
+    }
+
+    public class ListOfJobVacancies
+    {
+        public int Id { get; set; }
+        public string JobTitle { get; set; }
+
+        public Company CompanyName { get; set; }
+
+        public string Salaries { get; set; }
+
+        public DateTime DateExpired { get; set; }
+        public string Duration { get; set; }
+        public string Location { get; set; }
 
     }
 }
