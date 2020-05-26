@@ -16,12 +16,12 @@
         {
             <h5>None at the moment</h5>
         }
-        @if (User.IsInRole("Super Admin"))
+        @if ((await authService.AuthorizeAsync(User, "AdminRole")).Succeeded)
         {
-        <div>
-            <a asp-action="ManageUserClaims" asp-route-userId="@Model.Id" asp-controller="Administration"
-               class="btn btn-outline-primary">Manage Claims</a>
-        </div>
+            <div>
+                <a asp-action="ManageUserClaims" asp-route-userId="@Model.Id" asp-controller="Administration"
+                   class="btn btn-outline-primary">Manage Claims</a>
+            </div>
         }
     </div>
 </div>

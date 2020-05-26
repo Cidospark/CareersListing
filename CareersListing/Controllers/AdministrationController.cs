@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CareersListing.Models;
 using CareersListing.Utilities;
 using CareersListing.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CareersListing.Controllers
 {
+    [Authorize]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -134,6 +136,7 @@ namespace CareersListing.Controllers
 
         // List of claims (GET) 
         [HttpGet]
+        [Authorize(Policy = "AdminRole")]
         public IActionResult ClaimsList()
         {
             var list = new List<ClaimsListViewModel>();
@@ -150,6 +153,7 @@ namespace CareersListing.Controllers
 
         // Manage claims users (POST) -------------------------------------------------------------------------
         [HttpGet]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> ManageClaimsUsers(string type)
         {
             if (String.IsNullOrEmpty(type))
@@ -194,6 +198,7 @@ namespace CareersListing.Controllers
 
         // Manage claims users (POST) -------------------------------------------------------------------------
         [HttpPost]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> ManageClaimsUsers(List<ClaimsUsersViewModel> model, string type)
         {
             if (String.IsNullOrEmpty(type))
@@ -253,6 +258,7 @@ namespace CareersListing.Controllers
 
         // Manage user claims (GET)
         [HttpGet]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> ManageUserClaims(string userId)
         {
             // get user by Id
@@ -302,6 +308,7 @@ namespace CareersListing.Controllers
 
         // Manage user claims (POST) ----------------------------------------------------- 
         [HttpPost]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> ManageUserClaims(ManageUsersClaimsViewModel model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
@@ -338,6 +345,7 @@ namespace CareersListing.Controllers
 
         // DeleteRole (POST) 
         [HttpPost]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -364,6 +372,7 @@ namespace CareersListing.Controllers
 
         // Manage role users (GET) 
         [HttpGet]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> ManageRoleUsers(string roleId)
         {
             // get role by id
@@ -399,6 +408,7 @@ namespace CareersListing.Controllers
 
         // Manage role users (POST) -------------------------------------------------------------------------
         [HttpPost]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> ManageRoleUsers(List<RoleUsersViewModel> model, string roleId)
         {
             // get role by id
@@ -446,6 +456,7 @@ namespace CareersListing.Controllers
 
         // Create role (GET)
         [HttpGet]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> CreateRole(string Id)
         {
             if (!String.IsNullOrEmpty(Id))
@@ -464,6 +475,7 @@ namespace CareersListing.Controllers
 
         // Create role (POST) -------------------------------------------------------------------------
         [HttpPost]
+        [Authorize(Policy = "AdminRole")]
         public async  Task<IActionResult> CreateRole(CreateRoleViewModel model)
         { 
             // if model is valid
@@ -519,6 +531,7 @@ namespace CareersListing.Controllers
 
         // List of Roles (GET)
         [HttpGet]
+        [Authorize(Policy = "AdminRole")]
         public IActionResult Roles()
         {
             var roles = _roleManager.Roles;
@@ -529,6 +542,7 @@ namespace CareersListing.Controllers
 
         // List of registered users (GET)
         [HttpGet]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> Users()
         {
             var model = new List<UsersViewModel>();
@@ -556,7 +570,8 @@ namespace CareersListing.Controllers
         //--------------------------------------------------------------------------------------------------------
 
         // Create user (GET)
-        [HttpGet] 
+        [HttpGet]
+        [Authorize(Policy = "AdminRole")]
         public IActionResult CreateUser()
         {
             return View();
@@ -564,6 +579,7 @@ namespace CareersListing.Controllers
 
         // Create user (POST)
         [HttpPost]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> CreateUser(CreateUserViewModel model)
         {
             if (ModelState.IsValid)
@@ -615,6 +631,7 @@ namespace CareersListing.Controllers
 
         // Delete user (POST)
         [HttpPost]
+        [Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
