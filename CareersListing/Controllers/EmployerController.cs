@@ -19,19 +19,127 @@ namespace CareersListing.Controllers
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ICompanyRepo _companyRepo;
         private readonly ILogger<EmployerController> _logger;
+        private readonly IVacancyRepo _vacancyRepo;
 
         public EmployerController(RoleManager<IdentityRole> roleManager,
                                         UserManager<ApplicationUser> userManager,
                                         IHostingEnvironment hostingEnvironment,
-                                        ICompanyRepo companyRepo, ILogger<EmployerController> logger)
+                                        ICompanyRepo companyRepo, ILogger<EmployerController> logger,
+                                        IVacancyRepo vacancyRepo)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
             _companyRepo = companyRepo;
             _logger = logger;
+            _vacancyRepo = vacancyRepo;
         }
         // ----------------------------------------------------------------------------------------
+
+        // Vacancies (GET)
+        [HttpGet]
+        public async Task<IActionResult> Vacancies()
+        {
+            JobVacancyViewModel model = new JobVacancyViewModel();
+            List<ListCompaniesViewModel> listOfCompanies = new List<ListCompaniesViewModel>();
+            List<ListOfJobVacancies> listOfVacancies = new List<ListOfJobVacancies>();
+
+            var companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
+            var vacancies = await _vacancyRepo.GetAllVacanciesByEmployer(_userManager.GetUserId(User));
+
+            // add the list of companies to ViewBag.CompanyList
+            foreach (var company in companies)
+            {
+                var row = new ListCompaniesViewModel
+                {
+                    Id = company.Id,
+                    Name = company.Name,
+                };
+
+                listOfCompanies.Add(row);
+            }
+
+            // add list of job vacancies to model
+            foreach(var vacancy in vacancies)
+            {
+                var row = new ListOfJobVacancies
+                {
+                    Id = vacancy.Id,
+                    JobTitle = vacancy.JobTitle,
+                    Company = vacancy.Company,
+                    Location = vacancy.Location,
+                    Salaries = vacancy.SalaryScale,
+                    Duration = vacancy.JobDuration,
+                    DateExpired = vacancy.DateExpired
+                };
+                model.Vacancies.Add(row);
+            }
+
+            ViewBag.CompanyList = listOfCompanies;
+            return View(model);
+        }
+        // Company (POST) ---------------------------------------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> Vacancies(JobVacancyViewModel model, int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                var vacancy = new Vacancy
+                {
+                   CompanyId = model.CompanyId,
+                   EmployerId = _userManager.GetUserId(User),
+                   JobTitle = model.JobTitle,
+                   JobDuration = model.JobDuration,
+                   JobFunction = model.JobFunction,
+                   Industry = model.Industry,
+                   Location = model.Location,
+                   SalaryScale = model.SalaryScale,
+                   DateExpired = model.DateExpired,
+                   DatePosted = model.DatePosted,
+                   Description = model.Description
+                };
+
+                // id value is binding from the edit view 
+                bool result;
+                if (id.HasValue)
+                {
+                    vacancy.Id = (int)id;
+                    result = await _vacancyRepo.UpdateVacancy(vacancy);
+                }
+                else
+                {
+                    result = await _vacancyRepo.AddVacancy(vacancy);
+                }
+
+                if (!result)
+                {
+                    _logger.LogError($"Error saving vacancy to database!");
+                    ViewBag.ErrorMessage = "Failed to save vacancy to database!";
+                }
+                return RedirectToAction("Vacancies");
+            };
+            return View(model);
+        }
+        //--------------------------------------------------------------------------------------------------------
+
+        // Delete company (POST)
+        [HttpPost]
+        public async Task<IActionResult> DeleteVacancy(int id)
+        {
+            var vacancy = await _vacancyRepo.GetVacancy(id);
+            if (vacancy != null)
+            {
+                var result = await _vacancyRepo.DeleteVacancy(vacancy);
+                if (result)
+                {
+                    return RedirectToAction("Vacancy");
+                }
+                _logger.LogError($"Error deleting vacancy!");
+                ViewBag.ErrorMessage = "Failed to delete vacancy!";
+            }
+            return View();
+        }
+        //--------------------------------------------------------------------------------------------------------
 
         // Company (GET)
         [HttpGet]
@@ -59,7 +167,7 @@ namespace CareersListing.Controllers
             }
 
             // add the list of companies to model
-            var companies = await _companyRepo.GetAllCompanies();
+            var companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
             foreach (var company in companies)
             {
                 var row = new ListCompaniesViewModel
@@ -110,8 +218,8 @@ namespace CareersListing.Controllers
                 
                 if (!result)
                 {
-                    _logger.LogError($"Error saving to database!");
-                    ViewBag.ErrorMessage = "Failed to save to database!";
+                    _logger.LogError($"Error saving company to database!");
+                    ViewBag.ErrorMessage = "Failed to save company to database!";
                 }
                 return RedirectToAction("Company");
             };

@@ -29,6 +29,7 @@ namespace CareersListing.Models
 
         public ICollection<JobApplication> JobApplication { get; set; }
         public ICollection<Company> Company { get; set; }
+        public ICollection<Vacancy> Vacancy { get; set; }
 
         public ApplicationUser()
         {

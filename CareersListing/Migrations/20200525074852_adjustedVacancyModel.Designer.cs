@@ -4,14 +4,16 @@ using CareersListing.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CareersListing.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200525074852_adjustedVacancyModel")]
+    partial class adjustedVacancyModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,8 +167,6 @@ namespace CareersListing.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("EmployerId");
-
                     b.Property<string>("Industry")
                         .IsRequired();
 
@@ -186,15 +186,9 @@ namespace CareersListing.Migrations
 
                     b.Property<string>("SalaryScale");
 
-                    b.Property<string>("applicationUrl")
-                        .IsRequired();
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
-
-                    b.HasIndex("EmployerId");
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Vacancies");
                 });
@@ -323,7 +317,7 @@ namespace CareersListing.Migrations
                         .HasForeignKey("ApplicantId");
 
                     b.HasOne("CareersListing.Models.Vacancy", "Vacancy")
-                        .WithMany()
+                        .WithMany("JobApplication")
                         .HasForeignKey("VacancyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -331,13 +325,9 @@ namespace CareersListing.Migrations
             modelBuilder.Entity("CareersListing.Models.Vacancy", b =>
                 {
                     b.HasOne("CareersListing.Models.Company", "Company")
-                        .WithOne("Vacancies")
-                        .HasForeignKey("CareersListing.Models.Vacancy", "CompanyId")
+                        .WithMany("Vacancies")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CareersListing.Models.ApplicationUser", "Employer")
-                        .WithMany("Vacancy")
-                        .HasForeignKey("EmployerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

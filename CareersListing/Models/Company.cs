@@ -37,7 +37,7 @@ namespace CareersListing.Models
         [Required]
         public DateTime DateRegistered { get; set; }
 
-        public ICollection<Vacancy> Vacancies { get; set; }
+        public Vacancy Vacancies { get; set; }
 
     }
 }

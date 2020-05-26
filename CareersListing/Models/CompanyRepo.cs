@@ -18,13 +18,13 @@ namespace CareersListing.Models
         // get all companies
         public async Task<ICollection<Company>> GetAllCompanies()
         {
-            return await _context.Companies.ToListAsync();
+            return await _context.Companies.OrderByDescending(c => c.Id).ToListAsync();
         }
 
         // filter companies by employer
         public async Task<ICollection<Company>> GetAllCompaniesByEmployer(string EmployerId)
         {
-            return await _context.Companies.Where(e => e.EmployerId == EmployerId).ToListAsync();
+            return await _context.Companies.Where(e => e.EmployerId == EmployerId).OrderByDescending(c => c.Id).ToListAsync();
         }
 
         // get single company

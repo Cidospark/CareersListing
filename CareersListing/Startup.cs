@@ -52,6 +52,7 @@ namespace CareersListing
             services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(5));
 
             services.AddScoped<ICompanyRepo, CompanyRepo>();
+            services.AddScoped<IVacancyRepo, VacancyRepo>();
             services.AddMvc();
         }
 
