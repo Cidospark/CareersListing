@@ -193,17 +193,17 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
-                                                    <span asp-validation-for="DatePosted" class="text-danger"></span>
+                                                    <span asp-validation-for="applicationUrl" class="text-danger"></span>
                                                     <div class="form-group">
-                                                        <label asp-for="DatePosted"></label>
-                                                        <input asp-for="DatePosted" value="@DateTime.Now" placeholder="Date Posted" class="form-control" />
+                                                        <label asp-for="applicationUrl"></label>
+                                                        <input asp-for="applicationUrl" placeholder="Date Posted" class="form-control" />
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <span asp-validation-for="DateExpired" class="text-danger"></span>
                                                     <div class="form-group">
                                                         <label asp-for="DateExpired"></label>
-                                                        <input asp-for="DateExpired" placeholder="mm/dd/yyyy 0:00:00 am/pm" class="form-control" />
+                                                        <input asp-for="DateExpired" value="" placeholder="mm/dd/yyyy 0:00:00 am/pm" class="form-control" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -230,8 +230,80 @@
                             <!-- /.card -->
                         </div>
                     </div>
-                    <div class="tab-pane fade" style="min-height:400px;" id="product-comments" role="tabpanel" aria-labelledby="product-comments-tab">
-                        Job list
+                    <div class="tab-pane fade mt-2" style="min-height:400px;" id="product-comments" role="tabpanel" aria-labelledby="product-comments-tab">
+                        @if (Model.Vacancies.Count > 0)
+                        {
+                            <table class="table projects">
+                                <thead>
+                                    <tr class="bg-gradient-gray text-white-50" style="">
+                                        <th style="width: 5%;" class="">#</th>
+                                        <th style="width: 14%;">
+                                            JOB TITLE
+                                        </th>
+                                        <th style="width: 14%;">
+                                            COMPANY
+                                        </th>
+                                        <th style="width: 14%;" class="">
+                                            SALARY
+                                        </th>
+                                        <th style="width: 14%;" class="">
+                                            EXPIRY DATE
+                                        </th>
+                                        <th style="width: 14%;" class="">
+                                            LOCATION
+                                        </th>
+                                        <th style="width: 25%;" class="text-center">
+                                            MANAGE
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-muted">
+                                    @foreach (var vacancy in Model.Vacancies)
+                                    {
+                                        sn += 1;
+                                        <tr>
+                                            <td class="">@sn</td>
+                                            <td>
+                                                <div>@vacancy.JobTitle</div>
+                                            </td>
+                                            <td class="">
+                                                <a asp-action="company" asp-route-id="@vacancy.Company.Id">@vacancy.Company.Name</a>
+                                            </td>
+                                            <td class="">
+                                                @vacancy.Salaries
+                                            </td>
+                                            <td class="">
+                                                @vacancy.DateExpired
+                                            </td>
+                                            <td class="">
+                                                <div class="text-capitalize">@vacancy.Location</div>
+                                            </td>
+                                            <td>
+                                                <div class="text-center">
+                                                    <form method="post" asp-action="DeleteVacancy" asp-controller="Employer" asp-route-id="@vacancy.Id">
+                                                        <a asp-action="vacancy" asp-controller="Employer" asp-route-id="@vacancy.Id"
+                                                           style="font-size:14px;" class="btn btn-sm btn-primary m-1"> Edit </a>
+
+                                                        <button type="submit" class="btn btn-sm btn-danger m-1" style="font-size:14px;"
+                                                                onclick="return confirm('Please confirm your action to delete : @vacancy.JobTitle');">
+                                                            Delete
+                                                        </button>
+
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div style="font-size:26px; padding-top:100px;" class="text-center text-black-50">No vacancy record added yet!</div>
+                            <div class="text-center">
+                                <i class="fa fa-briefcase text-black-50" style="font-size:70px;"></i>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

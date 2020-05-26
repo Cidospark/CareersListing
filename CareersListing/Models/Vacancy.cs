@@ -11,6 +11,8 @@ namespace CareersListing.Models
         public int Id { get; set; }
         public Company Company { get; set; }
         public int CompanyId { get; set; }
+        public ApplicationUser Employer { get; set; }
+        public string EmployerId { get; set; }
 
         [Required]
         [MaxLength(100, ErrorMessage = "Job title must not be more than 100 characters")]
@@ -33,12 +35,14 @@ namespace CareersListing.Models
         public string JobDuration { get; set; }
 
         [Required]
+        public string applicationUrl { get; set; }
+
+        [Required]
         public DateTime DatePosted { get; set; }
 
         [Required]
         public DateTime DateExpired { get; set; }
 
-        public ICollection<JobApplication> JobApplication { get; set; }
 
     }
 }

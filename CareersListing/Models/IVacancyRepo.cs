@@ -9,7 +9,7 @@ namespace CareersListing.Models
     {
         Task<Vacancy> GetVacancy(int? Id);
         Task<ICollection<Vacancy>> GetAllVacancies();
-        Task<ICollection<Vacancy>> GetAllVacanciesByEmployer(int CompanyId);
+        Task<ICollection<Vacancy>> GetAllVacanciesByEmployer(string EmployerId);
         Task<bool> AddVacancy(Vacancy vacancy);
         Task<bool> UpdateVacancy(Vacancy vacancy);
         Task<bool> DeleteVacancy(Vacancy vacancy);

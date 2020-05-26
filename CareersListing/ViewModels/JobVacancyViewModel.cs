@@ -12,13 +12,16 @@ namespace CareersListing.ViewModels
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Company")]
         public int CompanyId { get; set; }
 
         [Required]
+        [Display(Name ="Job Title")]
         [MaxLength(100, ErrorMessage = "Job title must not be more than 100 characters")]
         public string JobTitle { get; set; }
 
         [Required]
+        [Display(Name = "Job Function")]
         public string JobFunction { get; set; }
 
         [Required]
@@ -28,16 +31,24 @@ namespace CareersListing.ViewModels
         public string Location { get; set; }
 
         public string Description { get; set; }
+
+        [Display(Name = "Salary")]
         public string SalaryScale { get; set; }
 
         [Required]
+        [Display(Name = "Duration")]
         [MaxLength(20, ErrorMessage = "Job duration must not be more than 20 characters")]
         public string JobDuration { get; set; }
+
+        [Required]
+        [Display(Name = "Application Form Url")]
+        public string applicationUrl { get; set; }
 
         [Required]
         public DateTime DatePosted { get; set; }
 
         [Required]
+        [Display(Name = "Expiry date")]
         public DateTime DateExpired { get; set; }
 
         public List<ListOfJobVacancies> Vacancies { get; set; }
@@ -54,7 +65,7 @@ namespace CareersListing.ViewModels
         public int Id { get; set; }
         public string JobTitle { get; set; }
 
-        public Company CompanyName { get; set; }
+        public Company Company { get; set; }
 
         public string Salaries { get; set; }
 

@@ -532,7 +532,7 @@ namespace CareersListing.Controllers
         public async Task<IActionResult> Users()
         {
             var model = new List<UsersViewModel>();
-            var users = _userManager.Users;
+            var users = _userManager.Users.OrderByDescending(u => u.DateRegistered);
 
             foreach(var user in users)
             {

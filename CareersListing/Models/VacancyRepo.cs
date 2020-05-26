@@ -16,9 +16,9 @@ namespace CareersListing.Models
         }
 
         
-        public async Task<ICollection<Vacancy>> GetAllVacanciesByEmployer(int CompanyId)
+        public async Task<ICollection<Vacancy>> GetAllVacanciesByEmployer(string EmployerId)
         {
-            return await _context.Vacancies.Where(v => v.CompanyId == CompanyId).ToListAsync();
+            return await _context.Vacancies.Where(v => v.EmployerId == EmployerId).OrderByDescending(v => v.Id).ToListAsync();
         }
 
         public async Task<ICollection<Vacancy>> GetAllVacancies()

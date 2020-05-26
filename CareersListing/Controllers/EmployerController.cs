@@ -42,9 +42,12 @@ namespace CareersListing.Controllers
         {
             JobVacancyViewModel model = new JobVacancyViewModel();
             List<ListCompaniesViewModel> listOfCompanies = new List<ListCompaniesViewModel>();
+            List<ListOfJobVacancies> listOfVacancies = new List<ListOfJobVacancies>();
 
-            // add the list of companies to model
             var companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
+            var vacancies = await _vacancyRepo.GetAllVacanciesByEmployer(_userManager.GetUserId(User));
+
+            // add the list of companies to ViewBag.CompanyList
             foreach (var company in companies)
             {
                 var row = new ListCompaniesViewModel
@@ -54,6 +57,22 @@ namespace CareersListing.Controllers
                 };
 
                 listOfCompanies.Add(row);
+            }
+
+            // add list of job vacancies to model
+            foreach(var vacancy in vacancies)
+            {
+                var row = new ListOfJobVacancies
+                {
+                    Id = vacancy.Id,
+                    JobTitle = vacancy.JobTitle,
+                    Company = vacancy.Company,
+                    Location = vacancy.Location,
+                    Salaries = vacancy.SalaryScale,
+                    Duration = vacancy.JobDuration,
+                    DateExpired = vacancy.DateExpired
+                };
+                model.Vacancies.Add(row);
             }
 
             ViewBag.CompanyList = listOfCompanies;
@@ -68,11 +87,12 @@ namespace CareersListing.Controllers
                 var vacancy = new Vacancy
                 {
                    CompanyId = model.CompanyId,
+                   EmployerId = _userManager.GetUserId(User),
                    JobTitle = model.JobTitle,
                    JobDuration = model.JobDuration,
                    JobFunction = model.JobFunction,
                    Industry = model.Industry,
-                   Location = model.Industry,
+                   Location = model.Location,
                    SalaryScale = model.SalaryScale,
                    DateExpired = model.DateExpired,
                    DatePosted = model.DatePosted,
@@ -102,6 +122,24 @@ namespace CareersListing.Controllers
         }
         //--------------------------------------------------------------------------------------------------------
 
+        // Delete company (POST)
+        [HttpPost]
+        public async Task<IActionResult> DeleteVacancy(int id)
+        {
+            var vacancy = await _vacancyRepo.GetVacancy(id);
+            if (vacancy != null)
+            {
+                var result = await _vacancyRepo.DeleteVacancy(vacancy);
+                if (result)
+                {
+                    return RedirectToAction("Vacancy");
+                }
+                _logger.LogError($"Error deleting vacancy!");
+                ViewBag.ErrorMessage = "Failed to delete vacancy!";
+            }
+            return View();
+        }
+        //--------------------------------------------------------------------------------------------------------
 
         // Company (GET)
         [HttpGet]
