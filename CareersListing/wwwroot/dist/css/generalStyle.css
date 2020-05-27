@@ -1,5 +1,6 @@
 ﻿body {
     margin:0px;
+    min-width:300px;
 }
 
 .slider-div {
@@ -11,7 +12,14 @@
     font-size:24px; 
     color:#0056B3; 
     margin-right:40px;
-}.premium{
+    display:none;
+}
+.sitelogo {
+    display: block;
+    font-size:25px;
+}
+
+ .premium{
     opacity:0.75 !important;
     cursor:pointer;
 }
@@ -50,7 +58,7 @@
     display:block;
 }
 .slider-area .title{
-    font-size:40px;
+    font-size:27px;
     font-weight:bold;
     margin-bottom:-10px !important;
     margin-top:-10px !important;
@@ -165,7 +173,58 @@
     align-items:center;
     justify-content:center;
 }
+.grouped-btns a {
+    height:50px !important;
+    line-height:35px;
+    padding:0px 32px;
+}
+#applicant:hover, #employer:hover {
+    transition: background .5s linear;
+}
+#applicant:hover + #employer {
+    background:transparent !important;
+    color:blue;
+}
+.grouped-btns{
+    height:40px;
+    border:1px solid blue;
+    display: inline-block;
+    overflow:hidden;
+    border-radius:4px;
+    width:250px;
+    background:#fff;
+    margin: 0px auto;
+}
+.signup-box {
+    background: url(../../images/assets/bg-blue2.jpg) no-repeat  center left;
+    background-size:cover;
+    text-align:center;
+    width:100% !important;
+}
+.partners-box img{
+    width:100%;
+}
+.partners-box row div{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100px;
+    padding: 20px 0px;
+}
 
+@media all and (min-width:350px) {
+    .sitename {
+        display: block;
+    }
+
+    .sitelogo {
+        display: none;
+    }
+    
+    .slider-area .title {
+        font-size: 40px;
+    }
+}
 @media all and (min-width:350px) {
     .slider-area .title {
         font-size: 30px;
