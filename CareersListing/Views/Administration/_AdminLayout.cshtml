@@ -117,47 +117,52 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item has-treeview">
-                            <a asp-action="Users" asp-controller="Administration" class="nav-link">
-                                <i class="fa fa-users nav-icon"></i>
-                                <p>Registered Users</p>
-                            </a>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-cog"></i>
-                                <p>
-                                    Settings
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-action="Roles" asp-controller="Administration" class="nav-link">
-                                        <i class="far fa-circle nav-icon text-primary"></i>
-                                        <p>Roles</p>
-                                    </a>
-                                    <a asp-action="ClaimsList" asp-controller="Administration" class="nav-link">
-                                        <i class="far fa-circle nav-icon text-warning"></i>
-                                        <p>Claims</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-item has-treeview">
-                            <a asp-action="Company" asp-controller="Employer" class="nav-link">
-                                <i class="fa fa-building nav-icon"></i>
-                                <p>Your Company(s)</p>
-                            </a>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a asp-action="Vacancies" asp-controller="Employer" class="nav-link">
-                                <i class="fa fa-briefcase nav-icon"></i>
-                                <p>Vacancies</p>
-                            </a>
-                        </li>
-                    </ul>
+                        @if ((await authService.AuthorizeAsync(User, "AdminRole")).Succeeded)
+                        {
+                            <li class="nav-item has-treeview">
+                                <a asp-action="Users" asp-controller="Administration" class="nav-link">
+                                    <i class="fa fa-users nav-icon"></i>
+                                    <p>Registered Users</p>
+                                </a>
+                            </li>
+                        }
+                        @if ((await authService.AuthorizeAsync(User, "AdminRole")).Succeeded)
+                        {
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-cog"></i>
+                                    <p>
+                                        Settings
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a asp-action="Roles" asp-controller="Administration" class="nav-link">
+                                            <i class="far fa-circle nav-icon text-primary"></i>
+                                            <p>Roles</p>
+                                        </a>
+                                        <a asp-action="ClaimsList" asp-controller="Administration" class="nav-link">
+                                            <i class="far fa-circle nav-icon text-warning"></i>
+                                            <p>Claims</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                            <li class="nav-item has-treeview">
+                                <a asp-action="Company" asp-controller="Employer" class="nav-link">
+                                    <i class="fa fa-building nav-icon"></i>
+                                    <p>Company</p>
+                                </a>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a asp-action="Vacancies" asp-controller="Employer" class="nav-link">
+                                    <i class="fa fa-briefcase nav-icon"></i>
+                                    <p>Vacancy</p>
+                                </a>
+                            </li>
+                        </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
 

@@ -1,6 +1,7 @@
 ﻿using CareersListing.Models;
 using CareersListing.Utilities;
 using CareersListing.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace CareersListing.Controllers
 {
+    [Authorize(Roles = "Employer, Super Admin, Admin")]
     public class EmployerController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -43,9 +45,21 @@ namespace CareersListing.Controllers
             JobVacancyViewModel model = new JobVacancyViewModel();
             List<ListCompaniesViewModel> listOfCompanies = new List<ListCompaniesViewModel>();
             List<ListOfJobVacancies> listOfVacancies = new List<ListOfJobVacancies>();
-
-            var companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
-            var vacancies = await _vacancyRepo.GetAllVacanciesByEmployer(_userManager.GetUserId(User));
+            
+            var user = await _userManager.GetUserAsync(User);
+            ICollection<Company> companies = null;
+            ICollection<Vacancy> vacancies = null;
+            if (await _userManager.IsInRoleAsync(user, "Super Admin") || await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                companies = await _companyRepo.GetAllCompanies();
+                vacancies = await _vacancyRepo.GetAllVacancies();
+            }
+            else 
+            { 
+                companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
+                vacancies = await _vacancyRepo.GetAllVacanciesByEmployer(_userManager.GetUserId(User));
+            }
+            
 
             // add the list of companies to ViewBag.CompanyList
             foreach (var company in companies)
@@ -167,7 +181,17 @@ namespace CareersListing.Controllers
             }
 
             // add the list of companies to model
-            var companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
+            var user = await _userManager.GetUserAsync(User);
+            ICollection<Company> companies = null;
+            if (await _userManager.IsInRoleAsync(user, "Super Admin") || await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+               companies = await _companyRepo.GetAllCompanies();
+            }
+            else
+            {
+                companies = await _companyRepo.GetAllCompaniesByEmployer(_userManager.GetUserId(User));
+            }
+            
             foreach (var company in companies)
             {
                 var row = new ListCompaniesViewModel

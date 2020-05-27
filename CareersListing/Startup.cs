@@ -48,6 +48,16 @@ namespace CareersListing
             // Customize the lifespan of email token generated in the app to 3 days instead of the default 5 hours
             services.Configure<CustomEmailConfirmationTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromDays(3));
 
+            services.AddAuthorization(options =>  {
+                options.AddPolicy("AdminRole", policy => policy.RequireAssertion(context => context.User.IsInRole("Super Admin") 
+                                                        || context.User.IsInRole("Admin"))
+                );
+
+                options.AddPolicy("EmployerRole", policy => policy.RequireRole("Employer"));
+                options.AddPolicy("Applicant", policy => policy.RequireRole("Applicant"));
+
+            });
+
             // set all lifespan of all tokens generated in the app to 5 hours
             services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(5));
 
