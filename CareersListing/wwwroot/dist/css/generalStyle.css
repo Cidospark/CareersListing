@@ -202,8 +202,8 @@
     width:100% !important;
 }
 
-.partners-logo{
-    display:flex;
+.partners-logo {
+    display: flex;
 }
 .partners-logo div{
     border:1px solid #eee;
@@ -215,6 +215,44 @@
     width:100% !important;
     position:relative;
 }
+.footer-box {
+    background: #0041B1;
+    color:#ffffff;
+}
+.footer-tablets{
+    display: flex;
+    flex-direction:column;
+}
+.footer-tablets > div{
+    color:#ffffff;
+    width: 100%;
+    box-sizing:border-box;
+    padding:20px;
+    padding-top:0px;
+}
+
+.footer-links div:first-child{
+    font-weight:bold;
+    font-size:22px;
+}
+.footer-links div{
+    display:flex;
+    justify-content:space-between;
+    padding:5px;
+}
+.footer-links div a{color:white;}
+.footer-links div a:hover{
+    color:#ccc;
+}
+.socials a {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background: #fff;
+    color: #0041B1;
+}
+
 
 @media all and (min-width:350px) {
     .sitename {
@@ -263,8 +301,27 @@
     .section-sub-heading-desc {
         font-size: 18px;
     }
+
 }
 @media all and (min-width:770px){
+    .footer-tablets > div:first-child {
+        width: 40%;
+        min-width: 300px;
+    }
+
+    .footer-tablets {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-direction:row;
+    }
+
+    .footer-tablets > div {
+        color: #ffffff;
+        width: 40%;
+        box-sizing: border-box;
+        padding:0px;
+    }
     .partners-logo div img {
         width: 50% !important;
         position: relative;
@@ -303,24 +360,24 @@
         justify-content: space-between;
     }
 
-        .dm-flex .menu {
-            display: flex;
-            flex-flow: row;
-            background: transparent;
-        }
+    .dm-flex .menu {
+        display: flex;
+        flex-flow: row;
+        background: transparent;
+    }
 
-            .dm-flex .menu a {
-                padding: 0px 15px;
-                color: rgba(16, 99, 141, 0.74);
-                border-top: none;
-                font-weight: normal;
-                background: transparent;
-                line-height: 40px;
-            }
+    .dm-flex .menu a {
+        padding: 0px 15px;
+        color: rgba(16, 99, 141, 0.74);
+        border-top: none;
+        font-weight: normal;
+        background: transparent;
+        line-height: 40px;
+    }
 
-                .dm-flex .menu a:hover {
-                    color: #777;
-                }
+    .dm-flex .menu a:hover {
+        color: #777;
+    }
 
     .login-btn {
         display: inline-block;
