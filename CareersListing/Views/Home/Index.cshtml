@@ -1,4 +1,5 @@
-﻿@{
+﻿@model HomeViewModel
+@{
     ViewBag.Title = "Home";
     Layout = "_PublicLayout";
 }
@@ -165,85 +166,48 @@
         </div>
 
         <!--Recent jobs-->
-        <div class="recent-posts p-4 ">
-            <div class="container">
-                <div class="title-wrap">
-                    <div class="title text-center p-4 pb-5">
-                        <h2 class="section-sub-heading-title">Most Recent Jobs</h2>
+        @if(Model.NumberOfListings > 0)
+        {
+            <div class="recent-posts p-4 ">
+                <div class="container">
+                    <div class="title-wrap">
+                        <div class="title text-center p-4 pb-5">
+                            <h2 class="section-sub-heading-title">Most Recent Jobs</h2>
+                        </div>
                     </div>
-                </div>
-                <div class="row post-cover bg-white text-black-50 ">
-                    <div class="col-md-6 d-flex align-items-center flex-nowrap post-row mt-3 mb-3">
-                        <div class="post-box col-3">
-                            <div class="logo-cover">
-                                <div class="logo-cover-inner"><i class="fa fa-briefcase fa-2x text-light"></i></div>
+                    @foreach(var listing in Model.Listings)
+                    {
+                        <div class="row post-cover bg-white text-black-50 ">
+                            <div class="col-md-6 d-flex align-items-center flex-nowrap post-row mt-3 mb-3">
+                                <div class="post-box col-3">
+                                    <div class="logo-cover">
+                                        <div class="logo-cover-inner"><i class="fa fa-briefcase fa-2x text-light"></i></div>
+                                    </div>
+                                    <div><a href="#">@listing.Company.Name</a></div>
+                                </div>
+                                <div class="post-box col-9">
+                                    <div><div class="badge badge-btn badge-info text-capitalize">@listing.Duration</div></div>
+                                    <div><h5 class="text-capitalize">@listing.JobTitle</h5></div>
+                                    <div class="text-capitalize">In : @listing.Industry </div>
+                                    <div><small style="color:#aaa">@listing.DaysAgo</small></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex flex-nowrap post-row mt-3 mb-3">
+                                <div class="d-flex align-items-center flex-wrap justify-content-start post-box col-6">
+                                    <div><h4 class="text-capitalize">@listing.Location,<br/> <small style="color:#aaa">Nigeria</small></h4></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-end col-6">
+                                    <div class="mr-2"><a href="#" class="btn btn-outline-primary" style="width:120px;">More details</a></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="post-box col-9">
-                            <div><div class="badge badge-btn badge-info">Full-time</div></div>
-                            <div><h5>Web Designer UI/UX</h5></div>
-                            <div><a href="#">Saifa Technologies</a></div>
-                            <div>IT & Technology</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex flex-nowrap post-row mt-3 mb-3">
-                        <div class="d-flex align-items-center flex-wrap justify-content-start post-box col-6">
-                            <div><h4>Lagos, <span class="text-muted">Nigeria</span></h4></div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-end col-6">
-                            <div class="mr-2"><a href="#" class="btn btn-outline-primary" style="width:120px;">More details</a></div>
-                        </div>
-                    </div>
+                    }
+                   
                 </div>
-                <div class="row post-cover bg-white text-black-50 ">
-                    <div class="col-md-6 d-flex align-items-center flex-nowrap post-row mt-3 mb-3">
-                        <div class="post-box col-3">
-                            <div class="logo-cover">
-                                <div class="logo-cover-inner"><i class="fa fa-briefcase fa-2x text-light"></i></div>
-                            </div>
-                        </div>
-                        <div class="post-box col-9">
-                            <div><div class="badge badge-btn badge-info">Full-time</div></div>
-                            <div><h5>Web Designer UI/UX</h5></div>
-                            <div><a href="#">Saifa Technologies</a></div>
-                            <div>IT & Technology</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex flex-nowrap post-row mt-3 mb-3">
-                        <div class="d-flex align-items-center flex-wrap justify-content-start post-box col-6">
-                            <div><h4>Lagos, <span class="text-muted">Nigeria</span></h4></div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-end col-6">
-                            <div class="mr-2"><a href="#" class="btn btn-outline-primary" style="width:120px;">More details</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row post-cover bg-white text-black-50 ">
-                    <div class="col-md-6 d-flex align-items-center flex-nowrap post-row mt-3 mb-3">
-                        <div class="post-box col-3">
-                            <div class="logo-cover">
-                                <div class="logo-cover-inner"><i class="fa fa-briefcase fa-2x text-light"></i></div>
-                            </div>
-                        </div>
-                        <div class="post-box col-9">
-                            <div><div class="badge badge-btn badge-info">Full-time</div></div>
-                            <div><h5>Web Designer UI/UX</h5></div>
-                            <div><a href="#">Saifa Technologies</a></div>
-                            <div>IT & Technology</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex flex-nowrap post-row mt-3 mb-3">
-                        <div class="d-flex align-items-center flex-wrap justify-content-start post-box col-6">
-                            <div><h4>Lagos, <span class="text-muted">Nigeria</span></h4></div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-end col-6">
-                            <div class="mr-2"><a href="#" class="btn btn-outline-primary" style="width:120px;">More details</a></div>
-                        </div>
-                    </div>
-                </div>
+                <div class="text-center p-3"><a href="#" class="btn btn-success">View more jobs</a></div>
             </div>
-            <div class="text-center p-3"><a href="#" class="btn btn-success">View more jobs</a></div>
-        </div>
+        }
+        
 
         <!--Signup-->
         <div class="signup-box p-3 pt-5 pb-5 border">

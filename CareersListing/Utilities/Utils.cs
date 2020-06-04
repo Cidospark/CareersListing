@@ -89,5 +89,39 @@ namespace CareersListing.Utilities
 
             return userAccType;
         }
+
+        public static string GetDayAgo(DateTime date)
+        {
+            int now = DateTime.UtcNow.Day;
+            int someDay = date.Day;
+            int dayAgo = now - someDay;
+            string ago = "";
+            int duration = 0;
+
+            if(dayAgo >= 365)
+            {
+                duration = dayAgo / 365;
+                ago = duration == 1? "year" : "years";
+            }else if(dayAgo >= 31)
+            {
+                duration = dayAgo / 31;
+                ago = duration == 1 || duration == 30 ? "month" : "months";
+            }
+            else if(dayAgo >= 7)
+            {
+                duration = dayAgo / 7;
+                ago = duration == 1 ? "week" : "weeks";
+            }else if(dayAgo >= 1)
+            {
+                ago = duration == 1 ? "day" : "days";
+                duration = dayAgo;
+            }
+            else
+            {
+                return "lessthan a day";
+            }
+
+            return $"Posted {duration.ToString()} {ago} ago";
+        }
     }
 }

@@ -23,7 +23,12 @@ namespace CareersListing.Models
 
         public async Task<ICollection<Vacancy>> GetAllVacancies()
         {
-            return await _context.Vacancies.ToListAsync();
+            return await _context.Vacancies.OrderByDescending(v => v.Id).ToListAsync();
+        }
+
+        public async Task<ICollection<Vacancy>> GetAllRecentVacancies()
+        {
+            return await _context.Vacancies.Where(v => v.DateExpired > DateTime.Now).OrderByDescending(v => v.Id).ToListAsync();
         }
 
         public async Task<Vacancy> GetVacancy(int? Id)
