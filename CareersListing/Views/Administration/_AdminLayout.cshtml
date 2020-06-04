@@ -40,8 +40,11 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-action="Index" asp-controller="Home" class="nav-link">Home</a>
+                </li>
             </ul>
-
+            
             <!-- SEARCH FORM -->
             <form class="form-inline ml-3">
                 <div class="input-group input-group-sm">
@@ -172,14 +175,14 @@
 
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper" style="background:#ddd">
+        <div class="content-wrapper pl-3 pr-3" style="background:#ddd;">
             <div>
 
                 <div class="">
                     <!-- Content Header (Page header) -->
                     <section class="content-header">
-                        <div class="container-fluid">
-                            <div class="row ml-5 mr-5">
+                        <div class="">
+                            <div class="row">
                                 <div class="col-sm-6">
                                     <h1>@ViewBag.Title</h1>
                                 </div>

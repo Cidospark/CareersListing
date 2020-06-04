@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> signInManager;
+@inject UserManager<ApplicationUser> userManager;
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -6,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title  | CareersListing</title>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
@@ -29,8 +31,8 @@
 </head>
 <body>
     <div>
-        <div class="">
-            <header>
+        <div class="navv">
+            <header >
                 <div class="container">
                     <div class="col-12 d-flex justify-content-between">
                         <div class="p-2 title-logo col-left">
@@ -55,9 +57,31 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
+                                @if (!signInManager.IsSignedIn(User))
+                                {
+                                    <a asp-action="Login" asp-controller="Account" class="btn btn-outline-primary mr-2 login-btn">Login</a>
+                                }
+                                else
+                                {
+                                    <div class="user-state text-black-50" id="user-state">
+                                        <div class="loggedIn-user pt-1">
+                                            <p><i class="fa fa-user"></i>&nbsp; @userManager.GetUserAsync(User).Result.LastName <i class="fa fa-caret-down"></i> </p>
+                                            <div class="loggedIn-user-options border display-none animated2">
+                                                <div class="ml-2"><a asp-action="Profile" asp-controller="Administration" asp-route-id="@userManager.GetUserId(User)">Edit Profile</a></div>
+                                                <div class="dropdown-divider"></div>
+                                                <div class="ml-2">
+                                                    <form method="post" asp-action="Logout" asp-controller="Account">
+                                                        <button type="submit" class="nav-link bg-transparent border-0 p-0" style="width:auto;">
+                                                            <a>Logout</a>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                                 <div class="btn btn-outline-primary mr-2 nav-btn"><i class="fa fa-bars"></i></div>
-                                <a asp-action="Login" asp-controller="Account" class="btn btn-outline-primary mr-2 login-btn">Login</a>
-                                <div><a asp-action="Index" asp-controller="Home" class="btn btn-primary premium">Go Premium</a></div>
+                                <div><a asp-action="Index" asp-controller="Home" class="btn btn-primary premium" style="white-space:nowrap">Go Premium</a></div>
                             </div>
                         </div>
                     </div>
