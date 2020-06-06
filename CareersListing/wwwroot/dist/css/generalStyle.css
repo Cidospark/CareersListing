@@ -101,6 +101,16 @@
     padding-top:0px !important;
 }
 
+.frm-job-search .input-group {
+    padding: 0px !important;
+    margin: 0px !important;
+    margin-bottom:10px !important;
+}
+.frm-job-search .search-btn{
+    white-space:nowrap;
+    overflow:hidden;
+    border:1px solid #0041B1;
+}
 .frm-job-search select {
     -moz-appearance: none;
     text-indent: 0.01px;
@@ -110,13 +120,18 @@
     background: url(../../images/assets/arrow-dwn.png) no-repeat 95% 55%;
     padding: 5px 25px;
     padding-left: 0px;
-    color:#777;
-    padding-left:5px;
+    color: #777;
+    padding-left: 5px;
+    min-height:45px !important;
 }
 .frm-job-search .selects{
     background:#fff;
     border-radius:4px;
 }
+.frm-job-search .search-btn span {
+    display: inline-block;
+}
+
 .dm-flex {
     position: relative;
     display: flex;
@@ -331,6 +346,10 @@
     }
 
 
+    .frm-job-search .search-btn span {
+        display: none;
+    }
+
     .section-sub-heading-title {
         font-size: 38px !important;
     }
@@ -441,13 +460,13 @@
         left:0px;
     }
     .frm-job-search .search-btn{
-        background:#0056B3;
+        background:blue;
     }
-    .frm-job-search .search-btn:hover {
-        background: blue;
-    }
+        .frm-job-search .search-btn:hover {
+            background: #0056B3;
+        }
     .frm-job-search .selects{
-        border:1px solid blue;
+        /*border:1px solid blue;*/
     }
 }
 @media all and (min-width:970px) {

@@ -1,0 +1,93 @@
+﻿@model JobViewModel
+@{
+    ViewBag.Title = "Job";
+    Layout = "_PublicLayout";
+
+    var photo = "~/images/logos/" + Model.Company.Logo;
+}
+
+
+    <div style="background:#F4F6F9;">
+
+        <!--Signup-->
+        <div class="signup-box p-3 pt-5 pb-5 border">
+            <div class="container">
+                <div class="mb-4"><h1 style="font-weight:bold; color:skyblue;">
+                        <span class="text-capitalize"><i class="fa fa-building"></i> @Model.Industry</span>
+                </div>
+                <partial name="../Shared/_SearchPartial.cshtml" />
+            </div>
+        </div>
+
+        <!--jobs-->
+       
+            <div class="recent-posts p-4 ">
+                <div class="container">
+                    <div class="row post-cover bg-white text-black-50 mt-4 mb-4">
+                        <div class="col-md-8 flex-nowrap post-row pb-3">
+                            <div class="d-flex align-items-center p-2 pt-4">
+                                <div class="post-box col-sm-3">
+                                    <div class="logo-cover">
+                                        <div class="logo-cover-inner">
+                                            @if(Model.Company.Logo == null)
+                                            {
+                                                <i class="fa fa-briefcase fa-2x text-light"></i>
+                                            }
+                                            else
+                                            {
+                                                <img src="@photo" alt="@Model.Company.Name"  asp-append-version="true" />
+                                            }
+                                            
+                                        </div>
+                                    </div>
+                                    <div class=""><a href="#"> @Model.Company.Name</a></div>
+                                </div>
+                                <div class="post-box col-sm-9">
+                                    <div><h2 class="text-capitalize">@Model.JobTitle</h2></div>
+                                    <div class="row col-sm-10 mb-3">
+                                        <div class="text-capitalize col-6"><i class="fa fa-building"></i> @Model.Industry </div>
+                                        <div><div class="badge badge-btn badge-info text-capitalize">@Model.JobDuration</div></div>
+                                    </div>
+                                    <div class="row col-sm-10 mb-3">
+                                        <div class=" col-sm-6"><small style="color:#aaa"><i class="fa fa-clock"></i> @Model.DaysAgo</small></div>
+                                        <div class=" col-sm-6 text-capitalize"><small style="color:#aaa"><i class="fa fa-map-marker-alt"></i> @Model.Location</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pl-3 pr-3">
+                                @Model.Description
+                            </div>
+                        </div>
+                        <div class="col-md-4 post-row mt-3 mb-3 ">
+                            <div>
+                                <div class="p-3">
+                                    <h3>Application Deadline</h3> <span class="text-muted">@Model.DateExpired</span>
+                                </div>
+                                <div class="p-3 mb-10">
+                                    <form>
+                                        <button class="btn btn-success col-12">Apply Now</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h3>Please Share</h3>
+                                <div class="d-flex">
+                                    <a href="#"><i class="fa fa-facebook mr-2 fa-2x"></i></a>
+                                    <a href="#"><i class="fa fa-whatsapp-square mr-2 fa-2x"></i></a>
+                                    <a href="#"><i class="fa fa-twitter-square mr-2 fa-2x"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        
+
+
+        <partial name="../Shared/_footerPartial.cshtml" />
+
+    </div>
+@section Scripts {
+    <script src="~/dist/js/HomeJS.js"></script>
+}
