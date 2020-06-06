@@ -50,7 +50,7 @@
                                             <div><a asp-action="Register" asp-controller="Account" asp-route-accType="employer"><i class="fa fa-star"></i> Employer</a></div>
                                         </div>
                                     </div>
-                                    <div><a asp-action="Index" asp-controller="Home">Listings</a></div>
+                                    <div><a asp-action="Jobs" asp-controller="Home">Listings</a></div>
                                     <div><a asp-action="Index" asp-controller="Home">About</a></div>
                                     <div><a asp-action="Index" asp-controller="Home">Services</a></div>
                                     <div><a asp-action="Index" asp-controller="Home">Contact</a></div>
@@ -67,7 +67,7 @@
                                         <div class="loggedIn-user pt-1">
                                             <p><i class="fa fa-user"></i>&nbsp; @userManager.GetUserAsync(User).Result.LastName <i class="fa fa-caret-down"></i> </p>
                                             <div class="loggedIn-user-options border display-none animated2">
-                                                <div class="ml-2"><a asp-action="Profile" asp-controller="Administration" asp-route-id="@userManager.GetUserId(User)">Edit Profile</a></div>
+                                                <div class="ml-2"><a asp-action="Profile" asp-controller="Administration" asp-route-id="@userManager.GetUserId(User)">My Profile</a></div>
                                                 <div class="dropdown-divider"></div>
                                                 <div class="ml-2">
                                                     <form method="post" asp-action="Logout" asp-controller="Account">

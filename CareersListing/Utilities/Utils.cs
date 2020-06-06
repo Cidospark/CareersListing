@@ -118,7 +118,7 @@ namespace CareersListing.Utilities
             }
             else
             {
-                return "lessthan a day";
+                return "less than a day";
             }
 
             return $"Posted {duration.ToString()} {ago} ago";
