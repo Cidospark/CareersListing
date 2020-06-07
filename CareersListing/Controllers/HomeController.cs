@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CareersListing.Models;
 using CareersListing.Utilities;
 using CareersListing.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +18,17 @@ namespace CareersListing.Controllers
         private readonly IVacancyRepo _vacancyRepo;
         private readonly ICompanyRepo _companyRepo;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IJobApplicationRepo _jobApplicationRepo;
 
-        public HomeController(IVacancyRepo vacancyRepo, ICompanyRepo companyRepo, UserManager<ApplicationUser> userManager)
+        public HomeController(IVacancyRepo vacancyRepo, 
+            ICompanyRepo companyRepo, 
+            UserManager<ApplicationUser> userManager,
+            IJobApplicationRepo jobApplicationRepo)
         {
             _vacancyRepo = vacancyRepo;
             _companyRepo = companyRepo;
             _userManager = userManager;
+            _jobApplicationRepo = jobApplicationRepo;
         }
 
         // GET: /<controller>/
@@ -99,7 +105,7 @@ namespace CareersListing.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Job(int id)
+        public async Task<IActionResult> Job(int id, int? status)
         {
             var job = await _vacancyRepo.GetVacancy(id);
             if (job == null)
@@ -107,7 +113,9 @@ namespace CareersListing.Controllers
                 ViewBag.ErrorMessage = $"User with id : {id} was not found!";
                 return View("NotFound");
             }
-            
+            var currentUserId = _userManager.GetUserId(User);
+            var isAppliedFor = await _jobApplicationRepo.ApplicationExists(currentUserId, id);
+
             var model = new JobViewModel
             {
                 Id = job.Id,
@@ -121,7 +129,8 @@ namespace CareersListing.Controllers
                 SalaryScale = job.SalaryScale,
                 DaysAgo = Utils.GetDayAgo(job.DateExpired),
                 JobDuration = job.JobDuration,
-                DateExpired = job.DateExpired.ToLongDateString()
+                DateExpired = job.DateExpired.ToLongDateString(),
+                ApplicationExists = isAppliedFor
             };
 
             var company = await _companyRepo.GetCompany(job.CompanyId);
@@ -132,6 +141,13 @@ namespace CareersListing.Controllers
             if(employer != null)
                 model.Employer = employer;
 
+            if(status == 1)
+            {
+                ViewBag.ResultMessage = "Congratutions! You have applied for this job.";
+            }else if (status == -1)
+            {
+                ViewBag.ResultMessage = "Sorry! Your application failed. Please try again.";
+            }
             return View(model);
         }
 
@@ -170,5 +186,31 @@ namespace CareersListing.Controllers
             return View(model);
         }
 
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Apply(int id)
+        {
+            // exit if job has been applied for by current user?
+            var currentUserId = _userManager.GetUserId(User);
+            var isAppliedFor = await _jobApplicationRepo.ApplicationExists(currentUserId, id);
+            if (isAppliedFor)
+                return RedirectToAction("Job", new { id });
+
+            // add application record to database
+            var model = new JobApplication
+            {
+                ApplicantId = currentUserId,
+                VacancyId = id,
+                DateRegistered = DateTime.Now
+            };
+            var result = await _jobApplicationRepo.AddApplication(model);
+            if (!result)
+            {
+                return RedirectToAction("Job", new { id, status = -1 });
+            }
+
+            return RedirectToAction("Job", new { id, status = 1});
+        }
     }
 }
