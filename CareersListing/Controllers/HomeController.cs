@@ -122,7 +122,7 @@ namespace CareersListing.Controllers
                 DaysAgo = Utils.GetDayAgo(job.DateExpired),
                 JobDuration = job.JobDuration,
                 DateExpired = job.DateExpired.ToLongDateString()
-        };
+            };
 
             var company = await _companyRepo.GetCompany(job.CompanyId);
             if(company != null)
@@ -137,9 +137,38 @@ namespace CareersListing.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Search(int id)
+        public async Task<IActionResult> Search(HomeViewModel model)
         {
-            return View();
+            var searchResult = await _vacancyRepo.SearchVacancy(model.JobFunction, model.Industry, model.Location);
+            if(searchResult == null)
+            {
+                model.NumberOfListings = 0;
+                return View(model);
+            }
+
+            foreach (var row in searchResult)
+            {
+
+                var listing = new ListingViewModel
+                {
+                    Id = row.Id,
+                    CompanyId = row.CompanyId,
+                    JobTitle = row.JobTitle,
+                    DaysAgo = Utils.GetDayAgo(row.DateExpired),
+                    Industry = row.Industry,
+                    Duration = row.JobDuration,
+                    Location = row.Location
+                };
+
+                var company = await _companyRepo.GetCompany(row.CompanyId);
+                listing.Company = company;
+
+                model.Listings.Add(listing);
+            }
+            model.NumberOfListings = searchResult.Count();
+            model.NumberOfRegisteredCompanies = _companyRepo.GetAllCompanies().Result.Count();
+            return View(model);
         }
+
     }
 }

@@ -1,8 +1,9 @@
-﻿<div>
-    <form class="mt-4 frm-job-search">
+﻿@model HomeViewModel
+<div>
+    <form class="mt-4 frm-job-search" method="post" asp-action="search" asp-controller="home">
         <div class="row">
             <div class="input-group selects col-sm-10">
-                <select class="form-control">
+                <select class="form-control" asp-for="JobFunction">
                     <option value="">--- Job Functions ---</option>
                     <option value="accounting-auditing">Accounting, Auditing &amp; Finance</option>
                     <option value="administrative">Administrative &amp; Office</option>
@@ -35,7 +36,7 @@
                     <option value="trades-services">Trades &amp; Services</option>
                     <option value="transport-logistics">Transport &amp; Logistics</option>
                 </select>
-                <select class="form-control">
+                <select class="form-control" asp-for="Industry">
                     <option value="">--- Industries ---</option>
                     <option value="advertising-marketing">Advertising &amp; Marketing</option>
                     <option value="agriculture-fishing">Agriculture, Fishing &amp; Forestry</option>
@@ -63,7 +64,7 @@
                     <option value="technology">Technology</option>
                     <option value="tourism-travel">Travel, Tourism &amp; Leisure</option>
                 </select>
-                <select class="form-control">
+                <select class="form-control" asp-for="Location">
                     <option value="">--- Locations ---</option>
                     <option value="abia">Abia</option>
                     <option value="abuja">Abuja</option>

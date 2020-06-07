@@ -14,8 +14,20 @@ namespace CareersListing.Models
         {
             _context = context;
         }
-
         
+        public async Task<ICollection<Vacancy>> SearchVacancy(string jf, string ind, string lc)
+        {
+            if (!String.IsNullOrEmpty(jf) || !String.IsNullOrEmpty(ind) || !String.IsNullOrEmpty(lc))
+            {
+               return await _context.Vacancies.Where(v => v.JobFunction == jf || v.Industry == ind || v.Location == lc)
+                    .OrderByDescending(v => v.Id).ToListAsync();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public async Task<ICollection<Vacancy>> GetAllVacanciesByEmployer(string EmployerId)
         {
             return await _context.Vacancies.Where(v => v.EmployerId == EmployerId).OrderByDescending(v => v.Id).ToListAsync();
@@ -61,5 +73,6 @@ namespace CareersListing.Models
             entry.State = EntityState.Modified;
             return await Save();
         }
+
     }
 }

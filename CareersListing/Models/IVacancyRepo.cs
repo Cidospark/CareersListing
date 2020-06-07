@@ -8,6 +8,7 @@ namespace CareersListing.Models
     public interface IVacancyRepo
     {
         Task<Vacancy> GetVacancy(int? Id);
+        Task<ICollection<Vacancy>> SearchVacancy (string jf, string ind, string lc);
         Task<ICollection<Vacancy>> GetAllVacancies();
         Task<ICollection<Vacancy>> GetAllRecentVacancies();
         Task<ICollection<Vacancy>> GetAllVacanciesByEmployer(string EmployerId);
