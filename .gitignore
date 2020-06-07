@@ -247,3 +247,4 @@ paket-files/
 obj
 .vscode
 bin
+.dockerignore

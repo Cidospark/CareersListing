@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CareersListing.ViewModels
 {
-    public class JobViewModel
+    public class JobViewModel : HomeViewModel
     {
         public int Id { get; set; }
         public Company Company { get; set; }
@@ -15,13 +15,7 @@ namespace CareersListing.ViewModels
         public string EmployerId { get; set; }
 
         public string JobTitle { get; set; }
-
-        public string JobFunction { get; set; }
-
-        public string Industry { get; set; }
-
-        public string Location { get; set; }
-
+        
         public string Description { get; set; }
         public string SalaryScale { get; set; }
 

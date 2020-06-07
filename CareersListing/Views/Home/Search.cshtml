@@ -1,0 +1,93 @@
+﻿@model HomeViewModel
+@{
+    ViewBag.Title = "Home";
+    Layout = "_PublicLayout";
+}
+
+
+<div style="background:#F4F6F9;">
+    
+        <div class="signup-box p-3 pt-5 pb-5 border">
+            <div class="container">
+                <div class="mb-4"><h1 style="font-weight:bold; color:skyblue;">
+                       Searched Result(s)
+                    </h1>
+                </div>
+                <partial name="../Shared/_SearchPartial.cshtml" />
+            </div>
+        </div>
+
+    <!--Searched jobs-->
+        <div class="">
+            @if (Model.NumberOfListings > 0)
+            {
+                <div class="recent-posts p-4 ">
+                    <div class="container">
+                        <div class="title-wrap">
+                            <div class="title text-center p-4 pb-5">
+                                <h2 class="section-sub-heading-title">@Model.NumberOfListings Found</h2>
+                            </div>
+                        </div>
+                        @foreach (var listing in Model.Listings)
+                        {
+                            var photo = "~/images/logos/" + @listing.Company.Logo;
+                            <div class="row post-cover bg-white text-black-50 ">
+                                <div class="col-md-6 d-flex align-items-center flex-nowrap post-row mt-3 mb-3">
+                                    <div class="post-box col-3">
+                                        <div class="logo-cover">
+                                            <div class="logo-cover-inner">
+                                                @if (listing.Company.Logo == null)
+                                                {
+                                                    <i class="fa fa-briefcase fa-2x text-light"></i>
+                                                }
+                                                else
+                                                {
+                                                    <img src="@photo" alt="@listing.Company.Name" asp-append-version="true" />
+                                                }
+                                            </div>
+                                        </div>
+                                        <div><a href="#">@listing.Company.Name</a></div>
+                                    </div>
+                                    <div class="post-box col-9">
+                                        <div><div class="badge badge-btn badge-info text-capitalize">@listing.Duration</div></div>
+                                        <div><h5 class="text-capitalize">@listing.JobTitle</h5></div>
+                                        <div class="text-capitalize">In : @listing.Industry </div>
+                                        <div><small style="color:#aaa">@listing.DaysAgo</small></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-flex flex-nowrap post-row mt-3 mb-3">
+                                    <div class="d-flex align-items-center flex-wrap justify-content-start post-box col-6">
+                                        <div><h4 class="text-capitalize">@listing.Location,<br /> <small style="color:#aaa">Nigeria</small></h4></div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-end col-6">
+                                        <div class="mr-2">
+                                            <a asp-action="Job" asp-controller="home" asp-route-id="@listing.Id" class="btn btn-outline-primary" style="width:120px;">More details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <partial name="../Shared/_PaginationPartial.cshtml" />
+                </div>
+            }
+            else
+            {
+                <div class="container" style="min-height:200px;">
+                        <div class="title-wrap">
+                            <div class="title text-center p-4 pb-5">
+                                <h2 class="section-sub-heading-title">0 Found</h2>
+                            </div>
+                        </div>
+                </div>
+            }
+        </div>
+
+
+    <partial name="../Shared/_FooterPartial.cshtml" />
+
+</div>
+@section Scripts {
+    <script src="~/dist/js/HomeJS.js"></script>
+}
