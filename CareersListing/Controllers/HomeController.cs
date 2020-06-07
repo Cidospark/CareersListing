@@ -187,6 +187,11 @@ namespace CareersListing.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult Apply(int? id)
+        {
+            return RedirectToAction("Job", new { id });
+        }
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Apply(int id)
