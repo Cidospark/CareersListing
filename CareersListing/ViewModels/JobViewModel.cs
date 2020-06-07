@@ -19,6 +19,8 @@ namespace CareersListing.ViewModels
         public string Description { get; set; }
         public string SalaryScale { get; set; }
 
+        public bool ApplicationExists { get; set; }
+
         public string JobDuration { get; set; }
 
         public string applicationUrl { get; set; }

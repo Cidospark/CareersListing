@@ -71,9 +71,20 @@
                                     <h3>Application Deadline</h3> <span class="text-muted">@Model.DateExpired</span>
                                 </div>
                                 <div class="p-3 mb-10">
-                                    <form>
-                                        <button class="btn btn-success col-12">Apply Now</button>
-                                    </form>
+                                    @if (Model.ApplicationExists)
+                                    {
+                                        <div class="text-success d-flex align-items-center">
+                                            <i class="fa fa-check-circle fa-2x"></i> &nbsp; APPLIED!
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" asp-action="apply" asp-controller="home" asp-route-id="@Model.Id">
+                                            <button class="btn btn-success col-12">Apply Now</button>
+                                        </form>
+                                        <div class="text-teal">@ViewBag.ResultMessage</div>
+                                    }
+
                                 </div>
                             </div>
                             <div class="p-3">

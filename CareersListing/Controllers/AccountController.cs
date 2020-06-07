@@ -241,6 +241,11 @@ namespace CareersListing.Controllers
                     }
                     else
                     {
+                        var currentUserRole = await _userManager.GetRolesAsync(user);
+                        if (currentUserRole.Contains("Applicant"))
+                        {
+                            return RedirectToAction("Jobs", "home");
+                        }
                         return RedirectToAction("Dashboard","Administration");
                     }
                 }

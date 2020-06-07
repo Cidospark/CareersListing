@@ -63,6 +63,7 @@ namespace CareersListing
 
             services.AddScoped<ICompanyRepo, CompanyRepo>();
             services.AddScoped<IVacancyRepo, VacancyRepo>();
+            services.AddScoped<IJobApplicationRepo, JobApplicationRepo>();
             services.AddMvc();
         }
 
