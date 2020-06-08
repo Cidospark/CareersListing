@@ -5,12 +5,12 @@ and then go to actual employer's website to apply.
 
 ### Get Started with this app.
 
-#### On Windows using Viisual studio IDE
+### On Windows using Viisual studio IDE
 Clone this repo and run the solution file, Preferably using visual studio 2019. 
 Simply by clicking the soliution file in the package named ('CareersListing.sln'). 
 Viisual studio IDE will open the solution file, and the internal server IIS will open it in your default browser 
 
-#### On Windows Or Linux using using VSCODE or (Other editor of choice)
+### On Windows Or Linux using using VSCODE or (Other editor of choice)
 Clone this repo and 
 1. Change directory to the folder that contains the '.csproj file', ('CareersListing.csproj').
 2. Open the folder containting the solution file in VSCode text editor (Preferably) or other text editor of choice.
