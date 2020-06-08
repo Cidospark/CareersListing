@@ -2,8 +2,6 @@
 A job listing website where employers can post job vacancies and applicants can indicate interest 
 and then go to actual employer's website to apply.    
 
-![sample image](wwwroot/images/sample.png)
-
 ### Get Started with this app.
 
 ### On Windows using Visual studio IDE
