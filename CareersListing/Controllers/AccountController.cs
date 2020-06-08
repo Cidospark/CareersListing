@@ -232,7 +232,7 @@ namespace CareersListing.Controllers
                 }
 
                 // sign in
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, true);
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     if (!String.IsNullOrEmpty(ReturnUrl))
@@ -250,10 +250,10 @@ namespace CareersListing.Controllers
                     }
                 }
 
-                if (result.IsLockedOut)
-                {
-                    return View("AccountLockedout");
-                }
+                // if (result.IsLockedOut)
+                // {
+                //     return View("AccountLockedout");
+                // }
 
                 ModelState.AddModelError("", "Invalid Attempt");
 
