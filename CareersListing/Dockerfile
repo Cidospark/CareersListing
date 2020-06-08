@@ -1,6 +1,6 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+# Get base SDK Image from Microsoft
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env 
 WORKDIR /app
-COPY . .
 
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet CareersListing.dll
+
 
